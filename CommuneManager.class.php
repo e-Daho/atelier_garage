@@ -1,5 +1,5 @@
 <?php
-class VoitureManager
+class CommuneManager
 {
 	private $_db;
 
@@ -10,102 +10,70 @@ class VoitureManager
 	
 	public function setDb($db){$this->_db = $db;}
 
-	public function add(Voiture $voiture)
+	public function add(Commune $commune)
 	{
-		$q = $this->_db->prepare('INSERT INTO voiture SET immatriculation = :immatriculation, marque = :marque, type = :type, annee= :annee, kilometrage = :kilometrage, date_arrivee = :date_arrivee, proprietaire = :proprietaire');
+		$q = $this->_db->prepare('INSERT INTO commune SET nom = :nom, nombre = :nombre');
 
-		$q->bindValue(':immatriculation',$voiture->immatriculation(),PDO::PARAM_STR);
-		$q->bindValue(':marque',$voiture->marque(),PDO::PARAM_STR);
-		$q->bindValue(':type',$voiture->type(),PDO::PARAM_STR);
-		$q->bindValue(':annee',$voiture->annee(),PDO::PARAM_INT);
-		$q->bindValue(':kilometrage',$voiture->kilometrage(),PDO::PARAM_INT);
-		$q->bindValue(':date_arrivee',$voiture->date_arrivee(),PDO::PARAM_INT);
-		$q->bindValue(':proprietaire',$voiture->proprietaire(),PDO::PARAM_INT);
+		$q->bindValue(':nom',$commune->nom(),PDO::PARAM_STR);
+		$q->bindValue(':nombre',$commune->nombre(),PDO::PARAM_STR);
 		$q->execute();
 		return self::ACTION_REUSSIE;
 	}
 
 	public function count()
 	{
-		return $this->_db->query('SELECT COUNT(*) FROM voiture')->fetchColumn();
+		return $this->_db->query('SELECT COUNT(*) FROM commune')->fetchColumn();
 	}
 
-	public function delete(Voiture $voiture)
+	public function delete(Commune $commune)
 	{
-		$q = $this->_db->prepare('DELETE FROM voiture WHERE immatriculation = :immatriculation');
-		$q->execute([':immatriculation' => $voiture->immatriculation()]);
+		$q = $this->_db->prepare('DELETE FROM commune WHERE nom = :nom');
+		$q->execute([':nom' => $commune->nom()]);
 		return self::ACTION_REUSSIE;
 	}
 
-	public function exists(Voiture $voiture)
+	public function exists(Commune $commune)
 	{    
-		$q = $this->_db->prepare('SELECT COUNT(*) FROM voiture WHERE immatriculation = :immatriculation');
-		$q->execute([':immatriculation' => $voiture->immatriculation()]);
+		$q = $this->_db->prepare('SELECT COUNT(*) FROM commune WHERE nom = :nom');
+		$q->execute([':nom' => $commune->nom()]);
     
 		return (bool) $q->fetchColumn();
 	}
 
   
-	public function get($immatriculation)
+	public function get($nom)
 	{
-		$q = $this->_db->prepare('SELECT immatriculation, marque, type, annee, kilometrage, date_arrivee, proprietaire FROM voiture WHERE immatriculation = :immatriculation');	
-		$q->execute([':immatriculation' => $immatriculation]);
+		$q = $this->_db->prepare('SELECT nom, nombre FROM commune WHERE nom = :nom');	
+		$q->execute([':nom' => $nom]);
 
-		$voiture = $q->fetch(PDO::FETCH_ASSOC);
+		$commune = $q->fetch(PDO::FETCH_ASSOC);
 		
-		return new Voiture($voiture);
+		return new Commune($commune);
 	}
   
-	public function getList($immatriculation, $marque, $type, $annee, $kilometrage, $date_arrivee, $proprietaire, $reparateur)
+	public function getList()
 	{
-		$voitures = [];
+		$communes = [];
 		
-		$q = $this->_db->prepare('
-			SELECT vo.immatriculation, vo.marque, vo.type, vo.annee, vo.kilometrage, vo.date_arrivee, vo.proprietaire, IFNULL(re.technicien,\'done\')
-			FROM voiture vo LEFT JOIN repare re ON vo.immatriculation = re.voiture
-			WHERE immatriculation LIKE :immatriculation
-			AND marque LIKE :marque
-			AND type LIKE :type 
-			AND annee LIKE :annee 
-			AND kilometrage LIKE :kilometrage 
-			AND date_arrivee LIKE :date_arrivee  
-			AND proprietaire LIKE :proprietaire
-			AND technicien LIKE :technicien 
-			ORDER BY date_arrivee
-');
-
-
-    		$q->bindParam(':immatriculation', $immatriculation, PDO::PARAM_STR);
-    		$q->bindParam(':marque', $marque, PDO::PARAM_STR);
-		$q->bindParam(':type', $type, PDO::PARAM_STR);
-		$q->bindParam(':annee', $annee, PDO::PARAM_INT);
-		$q->bindParam(':kilometrage', $kilometrage, PDO::PARAM_STR); 
-		$q->bindParam(':date_arrivee', $date_arrivee,PDO::PARAM_INT);
-		$q->bindParam(':proprietaire', $proprietaire, PDO::PARAM_INT);  
-		$q->bindParam(':technicien', $reparateur, PDO::PARAM_INT);   
+		$q = $this->_db->prepare('SELECT * FROM commune');
 		$q->execute();
 	    
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
 		{
-			$voitures[] = new Voiture($donnees); 
+			$communes[] = new Commune($donnees); 
 		}
-		return $voitures;
+		return $communes;
 	}
 	
   
-	public function update(Voiture $voiture)
+	public function update(Commune $commune)
 	{
-		if($this->exists($voiture))
+		if($this->exists($commune))
 		{
-			$q = $this->_db->prepare('UPDATE voiture SET marque = :marque, type = :type, annee= :annee, kilometrage = :kilometrage, date_arrivee = :date_arrivee, proprietaire = :proprietaire WHERE immatriculation = :immatriculation');
+			$q = $this->_db->prepare('UPDATE commune SET nombre = :nombre WHERE nom = :nom');
 		    
-			$q->bindValue(':marque',$voiture->marque(),PDO::PARAM_STR);
-			$q->bindValue(':type',$voiture->type(),PDO::PARAM_STR);
-			$q->bindValue(':annee',$voiture->annee(),PDO::PARAM_INT);
-			$q->bindValue(':kilometrage',$voiture->kilometrage(),PDO::PARAM_STR);
-			$q->bindValue(':date_arrivee',$voiture->date_arrivee(),PDO::PARAM_INT);
-			$q->bindValue(':proprietaire',$voiture->proprietaire(),PDO::PARAM_INT);
-			$q->bindValue(':immatriculation',$voiture->immatriculation(),PDO::PARAM_STR);
+			$q->bindValue(':nombre',$commune->nombre(),PDO::PARAM_STR);
+			$q->bindValue(':nom',$commune->nom(),PDO::PARAM_STR);
 		    
 			$q->execute();
 			return self::ACTION_REUSSIE;
