@@ -9,8 +9,8 @@ spl_autoload_register('chargerClasse');
 
 
 require_once ROOT_PATH.'/application/UtilisateurControleur.php';
-require_once ROOT_PATH.'/application/VoitureManager.php';
-require_once ROOT_PATH.'/application/VoitureControleur.php';
+require_once ROOT_PATH.'/application/VoitureManager.class.php';
+require_once ROOT_PATH.'/application/VoitureControleur.class.php';
 require_once ROOT_PATH.'/application/Display.php';
 require_once ROOT_PATH.'/application/connexion.php';
 
