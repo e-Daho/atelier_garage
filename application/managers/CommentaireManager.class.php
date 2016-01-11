@@ -16,7 +16,7 @@ class CommentaireManager
 
 		$q->bindValue(':voiture',$commentaire->voiture(),PDO::PARAM_STR);
 		$q->bindValue(':technicien',$commentaire->technicien(),PDO::PARAM_INT);
-		$q->bindValue(':date',$commentaire->date(),PDO::PARAM_INT);
+		$q->bindValue(':date',$commentaire->date()->format('Y-m-d H:i:s'),PDO::PARAM_STR);
 		$q->bindValue(':texte',$commentaire->texte(),PDO::PARAM_STR);
 		$q->execute();
 		return self::ACTION_REUSSIE;
@@ -32,7 +32,7 @@ class CommentaireManager
 		$q = $this->_db->prepare('DELETE FROM commentaire WHERE (voiture = :voiture AND technicien = :technicien AND date = :date)');
 		$q->bindValue(':voiture',$commentaire->voiture(),PDO::PARAM_STR);
 		$q->bindValue(':technicien',$commentaire->technicien(),PDO::PARAM_INT);
-		$q->bindValue(':date',$commentaire->date(),PDO::PARAM_INT);
+		$q->bindValue(':date',$commentaire->date()->format('Y-m-d H:i:s'),PDO::PARAM_STR);
 		$q->execute();
 		return self::ACTION_REUSSIE;
 	}
@@ -42,14 +42,14 @@ class CommentaireManager
 		$q = $this->_db->prepare('SELECT COUNT(*) FROM commentaire WHERE (voiture = :voiture AND technicien = :technicien AND date = :date)');
 		$q->bindValue(':voiture',$commentaire->voiture(),PDO::PARAM_STR);
 		$q->bindValue(':technicien',$commentaire->technicien(),PDO::PARAM_INT);
-		$q->bindValue(':date',$commentaire->date(),PDO::PARAM_INT);
+		$q->bindValue(':date',$commentaire->date()->format('Y-m-d H:i:s'),PDO::PARAM_STR);
 		$q->execute();
     
 		return (bool) $q->fetchColumn();
 	}
-
+	
   
-	public function getList($voiture, $technicien, $date)
+	/*public function getList($voiture, $technicien, $date)
 	{
 		$commentaires = [];
 		
@@ -57,7 +57,7 @@ class CommentaireManager
 
     		$q->bindParam(':voiture', $voiture, PDO::PARAM_STR);
     		$q->bindParam(':technicien', $technicien, PDO::PARAM_INT);
-		$q->bindParam(':date', $date, PDO::PARAM_INT);
+		$q->bindParam(':date', $date, PDO::PARAM_STR);
 		$q->execute();
 	    
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
@@ -65,8 +65,8 @@ class CommentaireManager
 			$commentaires[] = new Commentaire($donnees); 
 		}
 		return $commentaires;
-	}
-	
+	}*/
+
   
 	public function update(Commentaire $commentaire)
 	{
@@ -76,7 +76,7 @@ class CommentaireManager
 		    
 			$q->bindValue(':voiture',$commentaire->voiture(),PDO::PARAM_STR);
 			$q->bindValue(':technicien',$commentaire->technicien(),PDO::PARAM_INT);
-			$q->bindValue(':date',$commentaire->date(),PDO::PARAM_INT);
+			$q->bindValue(':date',$commentaire->date()->format('Y-m-d H:i:s'),PDO::PARAM_STR);
 			$q->bindValue(':texte',$commentaire->texte(),PDO::PARAM_STR);
 		    
 			$q->execute();
