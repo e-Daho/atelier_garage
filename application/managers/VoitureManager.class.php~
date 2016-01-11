@@ -20,7 +20,7 @@ class VoitureManager
 		$q->bindValue(':type',$voiture->type(),PDO::PARAM_STR);
 		$q->bindValue(':annee',$voiture->annee(),PDO::PARAM_INT);
 		$q->bindValue(':kilometrage',$voiture->kilometrage(),PDO::PARAM_INT);
-		$q->bindValue(':date_arrivee',$voiture->date_arrivee(),PDO::PARAM_INT);
+		$q->bindValue(':date_arrivee',$voiture->date_arrivee(),PARAM_STR);
 		$q->bindValue(':proprietaire',$voiture->proprietaire(),PDO::PARAM_INT);
 		$q->execute();
 		return self::ACTION_REUSSIE;
@@ -56,9 +56,12 @@ class VoitureManager
 		$q->execute([':immatriculation' => $immatriculation]);
 
 		$voiture = $q->fetch(PDO::FETCH_ASSOC);
-		
-		return empty($voiture) ? : new Voiture($voiture);
+
+		if(is_bool($voiture)){
 			return;
+		}
+
+		return new Voiture($voiture);
 	}
   
 	# retourne untableau de voitures

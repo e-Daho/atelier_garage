@@ -34,7 +34,7 @@ class Voiture
 	public function setType($type){$this->_type = $type;}
 	public function setAnnee($annee){$this->_annee = $annee;}
 	public function setKilometrage($kilometrage){$this->_kilometrage = $kilometrage;}
-	public function setDate_arrivee($date_arrivee){$this->_date_arrivee = $date_arrivee;}
+	public function setDate_arrivee($date_arrivee){$this->_date_arrivee = $date_arrivee ?: date('Y-m-d');}
 	public function setProprietaire($proprietaire){$this->_proprietaire = $proprietaire;}
 }
 ?>
