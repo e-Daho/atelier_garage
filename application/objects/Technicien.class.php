@@ -27,5 +27,13 @@ class Technicien
 	public function setNom($nom){$this->_nom = $nom;}
 	public function setPrenom($prenom){$this->_prenom = $prenom;}
 	public function setNombre($nombre){$this->_nombre = $nombre;}
+
+	//A ajouter
+	/*public function commente($voiture, $text){}
+	public function modifieCommentaire($commentaire){}
+	public function supprimeCommentaire($commentaire){}
+	public function lireCommentaire($voiture,$technicien,$date){} 
+	public function repare($voiture, $type){}
+	public function reparationFinie($voiture){}*/
 }
 ?>
