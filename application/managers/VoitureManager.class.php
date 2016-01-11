@@ -57,8 +57,7 @@ class VoitureManager
 
 		$voiture = $q->fetch(PDO::FETCH_ASSOC);
 		
-		return empty($voiture) ? : new Voiture($voiture);
-			return;
+		return empty($voiture) ? null : new Voiture($voiture);
 	}
   
 	# retourne untableau de voitures
