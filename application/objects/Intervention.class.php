@@ -23,5 +23,6 @@ class Intervention
 
 	public function setId($id){$this->_id = $id;}
 	public function setNom($nom){$this->_nom = $nom;}
-	public function setPrix($prix){$this->_prix = $prix->;}
+	public function setPrix($prix){$this->_prix = $prix;}
+}
 ?>
