@@ -12,7 +12,7 @@
 /** name below.                         **/
 /*****************************************/
 
-var containerTag = 'INPUT';
+var containerTag = 'DIV';
 
 var compatible = (
 	document.getElementById && document.getElementsByTagName && document.createElement

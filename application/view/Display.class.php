@@ -125,7 +125,9 @@ class Display{
 							<input type="text" class="table-cell" name="annee" placeholder="Année : " >
 							<input type="text" class="table-cell" name="kilometrage" placeholder="Kilométrage : " >
 							<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " >
-							</div><select name="proprietaire">
+						</div>
+							<label for="proprietaire">Propriétaire : </label>
+							<select name="proprietaire">
 								<option value="" rel="none">Non sélectionné</option>
 								<option value="" rel="other_client">Autre</option>';
 		$liste_clients = $this->_clientControleur->getList();
@@ -133,33 +135,13 @@ class Display{
 			$out.='				<option value="'.$client->numero().'" rel="none">'.$client->numero().'</option>';
 		}
 		$out.='				</select>';
-		$out.='			
-						<input  rel="other_client" type="text" class="table-cell" name="proprietaire_input" placeholder="Proprietaire : " >
-						<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
-					</form>
-				</div>';
-		return $out;
-	}
-	
-	public function ajouterVoiture(){
-		$this->_voitureControleur->addVoiture();
-	}
-	
-	public function formModifierVoiture(){
-		//[TODO]  Liste des client préchargée dans une liste déroulante + autre
-		//[TODO] recharger les données connues de la voiture
-		
-		$out='	<h1>Ajouter une voiture</h1>
-				<div class="pageRecherche">
-					<form action="?page=ajouterVoiture" id="getListVoitures_form" method="post" >
-						<div class="table">
-							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " >
-							<input type="text" class="table-cell" name="marque" placeholder="Marque : " >
-							<input type="text" class="table-cell" name="type" placeholder="Type : " >
-							<input type="text" class="table-cell" name="annee" placeholder="Année : " >
-							<input type="text" class="table-cell" name="kilometrage" placeholder="Kilométrage : " >
-							<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " >
-							<input type="text" class="table-cell" name="proprietaire" placeholder="Propriétaire : " >
+		$out.='			<div rel="other_client" class="table"><div>
+							<p>Nouveau client : </p>
+							<input  type="text" class="table-cell" name="numero" placeholder="Numero : " ></div><div>
+							<input  type="text" class="table-cell" name="nom" placeholder="Nom : " >
+							<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " ></div><div>
+							<input  type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
+							<input  type="text" class="table-cell" name="referent" placeholder="Referent : " ></div>
 						</div>
 						<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
 					</form>
@@ -167,10 +149,67 @@ class Display{
 		return $out;
 	}
 	
+	public function ajouterVoiture(){
+		//[TODO] msg de confirmation
+		$this->_voitureControleur->addVoiture();
+		$out='';
+		
+		//header ('Location: ?page=afficherVoitures');
+		//exit();
+	}
+	
+	public function formModifierVoiture(){
+		//[TODO]  Liste des client préchargée dans une liste déroulante + autre
+		//[TODO] recharger les données connues de la voiture
+		$voiture = $this->_voitureControleur->get($_GET['immatriculation']);
+		$out='	<h1>Ajouter une voiture</h1>
+				<div class="pageRecherche">
+					<form action="?page=modifierVoiture" id="getListVoitures_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " value="'.$voiture->immatriculation().'" >
+							<input type="text" class="table-cell" name="marque" placeholder="Marque : " value="'.$voiture->marque().'" >
+							<input type="text" class="table-cell" name="type" placeholder="Type : " value="'.$voiture->type().'" ></div><div>
+							<input type="text" class="table-cell" name="annee" placeholder="Année : " value="'.$voiture->annee().'" >
+							<input type="text" class="table-cell" name="kilometrage" placeholder="Kilométrage : " value="'.$voiture->kilometrage().'" >
+							<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " value="'.$voiture->date_arrivee().'" >
+						</div>
+							<label for="proprietaire">Propriétaire : </label>
+							<select name="proprietaire">
+								<option value="" rel="none">Non sélectionné</option>
+								<option value="" rel="other_client">Autre</option>';
+		$liste_clients = $this->_clientControleur->getList();
+		foreach ($liste_clients as $client){
+			$selector = ($voiture->proprietaire()==$client->numero())?'selected':'';
+			$out.='				<option value="'.$client->numero().'" rel="none" '.$selector.'>'.$client->numero().'</option>';
+		}
+		$out.='				</select>';
+		$out.='			<div rel="other_client" class="table"><div>
+							<p>Nouveau client : </p>
+							<input  type="text" class="table-cell" name="numero" placeholder="Numero : " ></div><div>
+							<input  type="text" class="table-cell" name="nom" placeholder="Nom : " >
+							<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " ></div><div>
+							<input  type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
+							<input  type="text" class="table-cell" name="referent" placeholder="Referent : " ></div>
+						</div>
+						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
 	public function modifierVoiture(){
+		//[TODO] msg de confirmation
 		$this->_voitureControleur->editVoiture();
 	}
 	
+	public function supprimerVoiture(){
+		//[TODO] msg de confirmation
+		$voiture = $this->_voitureControleur->get($_GET['immatriculation']);
+		$this->_voitureControleur->deleteVoiture($voiture);
+	}
 	
+	public function afficherClients(){
+		
+	}
 }
 ?>

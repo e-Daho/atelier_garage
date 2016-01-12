@@ -32,11 +32,11 @@ try {
 //instancie les managers, les controleurs, et la vue
 $utilisateurControleur = new UtilisateurControleur($bdd);
 
-$voitureManager = new VoitureManager($bdd);
 $clientManager = new ClientManager($bdd);
+$voitureManager = new VoitureManager($bdd);
 
-$voitureControleur = new VoitureControleur($voitureManager);
 $clientControleur = new ClientControleur($clientManager);
+$voitureControleur = new VoitureControleur($voitureManager, $clientControleur);
 
 $display = new Display($utilisateurControleur, $voitureControleur, $clientControleur);
 	
@@ -70,6 +70,7 @@ switch($page){
 		$out = $utilisateurControleur->deconnexion();
 		break;
 		
+	//voitures
 	case 'afficherVoitures':
 		$out = $display->afficherVoitures();
 		break;
@@ -78,6 +79,20 @@ switch($page){
 		break;
 	case 'ajouterVoiture':
 		$out = $display->ajouterVoiture();
+		break;
+	case 'formModifierVoiture':
+		$out = $display->formModifierVoiture();
+		break;
+	case 'modifierVoiture':
+		$out = $display->modifierVoiture();
+		break;
+	case 'supprimerVoiture':
+		$out = $display->supprimerVoiture();
+		break;
+		
+	//clients
+	case 'afficherClients':
+		$out = $display->afficherClients();
 		break;
 
 
