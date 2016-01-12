@@ -44,54 +44,23 @@ $clientManager = new ClientManager($db);
 //echo $clientManager->exists($client);
 
 //on test le get
-$client = $clientManager->get('20');
+/*$client = $clientManager->get('20');
 if(empty($client))
 {echo "c'est vide";}
 else
-{print_r($client);}
+{print_r($client);}*/
 
 //on test update
-$client->setAdresse('Paris');
+/*$client->setAdresse('Paris');
 $client->setReferent('daho');
-$resultat = $clientManager->update($client);
-echo (string)$resultat;
+$resultat = $clientManager->update($client);*/
+//echo (string)$resultat;
 
 //on test getList
 //on rempli d'abord la bdd
-/*$clients = [];
-$clients[] = new Client([
-	'numero'=>'abc-456-69',
-	'nom'=>'peugeot',
-	'prenom'=>'sport',
-	'adresse'=>2005,
-	'referent'=>'1000',
-	'date_arrivee'=>new DateTime("2012-07-08 11:14:15.638276"),
-	'proprietaire'=>'djoka']);
 
-$clients[] = new Client([
-	'numero'=>'abc-123-38',
-	'nom'=>'peugeot',
-	'prenom'=>'sport',
-	'adresse'=>1993,
-	'referent'=>'120000',
-	'date_arrivee'=>new DateTime("2012-07-08 11:14:15.638276"),
-	'proprietaire'=>'002']);
-
-$clients[] = new Client([
-	'numero'=>'def-123-38',
-	'nom'=>'renault',
-	'prenom'=>'citadine',
-	'adresse'=>2003,
-	'referent'=>'8000',
-	'date_arrivee'=>new DateTime("2012-07-08 11:14:15.638276"),
-	'proprietaire'=>'192']);
-
-$clientManager->add($clients[0]);
-$clientManager->add($clients[1]);
-$clientManager->add($clients[2]);
-*/
-//on test la requete
-//print_r($clientManager->getList('abc%','%','%','%','%','%','%','%'));
+//on test la requete getList
+print_r($clientManager->getList('%','%a%','%','%','%','adresse'));
 //print_r($clientManager->getList('%','%','%','%','%','%','%','2'));
 
 ?>

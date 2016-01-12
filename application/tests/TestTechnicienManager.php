@@ -51,7 +51,7 @@ else
 {print_r($technicien);}*/
 
 //on test le getList
-$list = $technicienManager->getList('%','%','%tho%');
+$list = $technicienManager->getList('%','%','%tho%','nom');
 print_r($list);
 
 //on test update
