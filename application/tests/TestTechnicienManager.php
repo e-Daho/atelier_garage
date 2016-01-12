@@ -21,17 +21,18 @@ catch(Exception $e)
 $technicien = new Technicien([
 	'numero'=>'213456',
 	'nom'=>'weber',
-	'prenom'=>'cecile'
+	'prenom'=>'cecile',
+	'nombre'=>0
 	]);
 	
-print_r($technicien);
+//print_r($technicien);
 
 //on cree le manager
 $technicienManager = new TechnicienManager($db);
 //print_r($nomManager);
 
 //on rajoute un technicien en bdd
-$technicienManager->add($technicien);
+//$technicienManager->add($technicien);
 
 //on compte, doit retourner 1
 //echo $technicienManager->count();
@@ -48,6 +49,10 @@ if(empty($technicien))
 {echo "c'est vide";}
 else
 {print_r($technicien);}*/
+
+//on test le getList
+$list = $technicienManager->getList('%','%','%tho%');
+print_r($list);
 
 //on test update
 /*$technicien->setNom('lol');

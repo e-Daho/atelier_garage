@@ -63,7 +63,7 @@ class VoitureManager
 	}
   
 	# retourne untableau de voitures
-	/*public function getList($immatriculation, $marque, $type, $annee, $kilometrage, $date_arrivee, $proprietaire, $reparateur)
+	public function getList($immatriculation, $marque, $type, $annee, $kilometrage, $date_arrivee, $proprietaire, $reparateur)
 	{
 		$voitures = [];
 		
@@ -80,7 +80,7 @@ class VoitureManager
 			AND vo.date_arrivee LIKE :date_arrivee  
 			AND vo.proprietaire LIKE :proprietaire
 			AND ((re.technicien LIKE :technicien) '.$bonus.')
-			ORDER BY date_arrivee
+			ORDER BY date_arrivee DESC
 ');
 
 
@@ -99,7 +99,7 @@ class VoitureManager
 			$voitures[] = new Voiture($donnees); 
 		}
 		return $voitures;
-	}*/
+	}
 	
   	# prend une voiture en argument, retourne 1 si l'action est réussie, 0 sinon
 	public function update(Voiture $voiture)
