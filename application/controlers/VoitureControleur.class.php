@@ -42,11 +42,25 @@ class VoitureControleur{
 		//[TODO] Vérifier que tout les champs requis sont présents
 		//[TODO] Si date vide -> date de jour
 		//[TODO] page intermédiare de msg de confirmation
+		//[TODO] gestion des clients et de "autre"
 		
-		if (!empty($_POST['immatriculation']) AND !empty($_POST['proprietaire'])) { $this->_voitureManager->add(new Voiture($_POST));}
+		if (!empty($_POST['immatriculation']) AND !empty($_POST['proprietaire'])) {
+			$voiture = new Voiture($_POST);
+			if (!$this->_voitureManager->exists($voiture)) {
+				if (empty($_POST['date_arrivee'])){
+					$_POST['date_arrivee']=1900-01-01;
+				}
+				$this->_voitureManager->add($voiture);
+				
+				header ('Location: ?page=afficherVoitures');
+				exit();
+			} else {
+				$out='Erreur : cette immatriculation est déjà prise ! ';
+			}
+		}else{
+			$out='Erreur : vous ne devriez pas être ici !';
+		}
 		
-		header ('Location: ?page=afficherVoitures');
-		exit();
 	}
 	
 	public function editVoiture(){

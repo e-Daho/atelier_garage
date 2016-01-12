@@ -4,9 +4,10 @@ class Display{
 	private $_voitureControleur;
 	private $_utilisateurControleur;
 	
-	public function __construct(UtilisateurControleur $utilisateurControleur, VoitureControleur $voitureControleur){
+	public function __construct(UtilisateurControleur $utilisateurControleur, VoitureControleur $voitureControleur, ClientControleur $clientControleur){
 		$this->_voitureControleur=$voitureControleur;
 		$this->_utilisateurControleur=$utilisateurControleur;
+		$this->_clientControleur=$clientControleur;
 	}
 	
 	public function accueil(){
@@ -62,8 +63,15 @@ class Display{
 							<input type="text" class="table-cell" name="type" placeholder="Type : " >
 							<input type="text" class="table-cell" name="annee" placeholder="Année : " >
 							<input type="text" class="table-cell" name="kilometrage" placeholder="Kilométrage : " >
-							<input type="text" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " >
-							<input type="text" class="table-cell" name="proprietaire" placeholder="Propriétaire : " >
+							<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " >
+							<select name="proprietaire">
+								<option value="" >Non sélectionné</option>';
+		$liste_clients = $this->_clientControleur->getList();
+		foreach ($liste_clients as $client){
+			$out.='				<option value="'.$client->numero().'" >'.$client->numero().'</option>';
+		}
+		$out.='				</select>';
+		$out.='
 							<input type="text" class="table-cell" name="reparateur" placeholder="Réparateur : " >
 						</div>
 						<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
@@ -106,20 +114,27 @@ class Display{
 	}
 	
 	public function formAjouterVoiture(){
-		//[TODO]  Liste des client préchargée dans une liste déroulante + autre
-		
+		//[TODO]  Liste des client préchargée dans une liste déroulante + autre		
 		$out='	<h1>Ajouter une voiture</h1>
 				<div class="pageRecherche">
 					<form action="?page=ajouterVoiture" id="getListVoitures_form" method="post" >
 						<div class="table">
 							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " >
 							<input type="text" class="table-cell" name="marque" placeholder="Marque : " >
-							<input type="text" class="table-cell" name="type" placeholder="Type : " >
+							<input type="text" class="table-cell" name="type" placeholder="Type : " ></div><div>
 							<input type="text" class="table-cell" name="annee" placeholder="Année : " >
 							<input type="text" class="table-cell" name="kilometrage" placeholder="Kilométrage : " >
 							<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " >
-							<input type="text" class="table-cell" name="proprietaire" placeholder="Propriétaire : " >
-						</div>
+							</div><select name="proprietaire">
+								<option value="" rel="none">Non sélectionné</option>
+								<option value="" rel="other_client">Autre</option>';
+		$liste_clients = $this->_clientControleur->getList();
+		foreach ($liste_clients as $client){
+			$out.='				<option value="'.$client->numero().'" rel="none">'.$client->numero().'</option>';
+		}
+		$out.='				</select>';
+		$out.='			
+						<input  rel="other_client" type="text" class="table-cell" name="proprietaire_input" placeholder="Proprietaire : " >
 						<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
 					</form>
 				</div>';

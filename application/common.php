@@ -8,11 +8,19 @@ function chargerClasse($classe){
 spl_autoload_register('chargerClasse');
 
 
-require_once ROOT_PATH.'/application/objects/Voiture.class.php';
 require_once ROOT_PATH.'/application/controlers/UtilisateurControleur.class.php';
+
+require_once ROOT_PATH.'/application/objects/Voiture.class.php';
+require_once ROOT_PATH.'/application/objects/Client.class.php';
+
 require_once ROOT_PATH.'/application/managers/VoitureManager.class.php';
+require_once ROOT_PATH.'/application/managers/ClientManager.class.php';
+
 require_once ROOT_PATH.'/application/controlers/VoitureControleur.class.php';
+require_once ROOT_PATH.'/application/controlers/ClientControleur.class.php';
+
 require_once ROOT_PATH.'/application/view/Display.class.php';
+
 require_once ROOT_PATH.'/application/connexion.php';
 
 
@@ -23,9 +31,14 @@ try {
 
 //instancie les managers, les controleurs, et la vue
 $utilisateurControleur = new UtilisateurControleur($bdd);
+
 $voitureManager = new VoitureManager($bdd);
+$clientManager = new ClientManager($bdd);
+
 $voitureControleur = new VoitureControleur($voitureManager);
-$display = new Display($utilisateurControleur, $voitureControleur);
+$clientControleur = new ClientControleur($clientManager);
+
+$display = new Display($utilisateurControleur, $voitureControleur, $clientControleur);
 	
 	
 //recupère le nom de la page demandee, ou redirige vers accueil s'il n'y en a pas
