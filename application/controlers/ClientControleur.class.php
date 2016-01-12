@@ -31,9 +31,10 @@ class ClientControleur{
 		$referant = '%';
 		if (!empty($_POST['referant'])) {$referant.=$_POST['referant'].'%';}	
 		
-		//$liste_clients = $this->_clientManager->getList($numero, $nom, $prenom, $adresse, $referant);
-		$liste_clients = [];
-		$liste_clients[] = new Client([	'numero'=>'12345',	'nom'=>'PERROT','prenom'=>'thomas',	'adresse'=>'paris',	'referent'=>'marc']);
+		$liste_clients = $this->_clientManager->getList($numero, $nom, $prenom, $adresse, $referant, 'numero');
+		print_r($liste_clients);
+		//$liste_clients = [];
+		//$liste_clients[] = new Client([	'numero'=>'12345',	'nom'=>'PERROT','prenom'=>'thomas',	'adresse'=>'paris',	'referent'=>'marc']);
 		return $liste_clients;
 	}
 	
