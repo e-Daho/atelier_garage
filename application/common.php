@@ -8,10 +8,11 @@ function chargerClasse($classe){
 spl_autoload_register('chargerClasse');
 
 
-require_once ROOT_PATH.'/application/UtilisateurControleur.php';
-require_once ROOT_PATH.'/application/VoitureManager.class.php';
-require_once ROOT_PATH.'/application/VoitureControleur.class.php';
-require_once ROOT_PATH.'/application/Display.php';
+require_once ROOT_PATH.'/application/objects/Voiture.class.php';
+require_once ROOT_PATH.'/application/controlers/UtilisateurControleur.class.php';
+require_once ROOT_PATH.'/application/managers/VoitureManager.class.php';
+require_once ROOT_PATH.'/application/controlers/VoitureControleur.class.php';
+require_once ROOT_PATH.'/application/view/Display.class.php';
 require_once ROOT_PATH.'/application/connexion.php';
 
 
@@ -22,7 +23,7 @@ try {
 
 //instancie les managers, les controleurs, et la vue
 $utilisateurControleur = new UtilisateurControleur($bdd);
-$voitureManager = new VoitureManager();
+$voitureManager = new VoitureManager($bdd);
 $voitureControleur = new VoitureControleur($voitureManager);
 $display = new Display($utilisateurControleur, $voitureControleur);
 	
@@ -56,11 +57,14 @@ switch($page){
 		$out = $utilisateurControleur->deconnexion();
 		break;
 		
-	case 'getListVoitures':
-		$out = $voitureControleur->getList();
-		break;
 	case 'afficherVoitures':
 		$out = $display->afficherVoitures();
+		break;
+	case 'formAjouterVoiture':
+		$out = $display->formAjouterVoiture();
+		break;
+	case 'ajouterVoiture':
+		$out = $display->ajouterVoiture();
 		break;
 
 

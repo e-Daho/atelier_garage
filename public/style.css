@@ -1,6 +1,6 @@
 body
 {
-    background-color: grey;			/*met l'image de fond*/
+    background-color: #D0CDCC;			/*met l'image de fond*/
 	background-attachment : fixed;				/*l'image ne se scroll pas avec la page*/
 	background-size:auto 100%;
 	background-repeat : no-repeat;				/*l'image ne se répète pas*/
@@ -126,9 +126,30 @@ header h1
   max-height: 15em;
 }
 
+/*FOOTER*/
+/*____________________________________________________*/
+footer
+{
+	text-align: center;
+	color: white;
+	margin-top: 75px;
+}
+
 
 /*CONTENU*/
 /*____________________________________________________*/
+
+.contenu
+{
+	width: 860px;
+	min-height: 460px;
+	padding : 20px;
+	vertical-align: top;
+	border-radius: 10px;
+	background-color: #f7f5f3;
+	box-shadow: 0px 20px 50px #1c1a19;	
+}
+
 #page_connexion_form{
 	text-align : center;
 }
@@ -156,27 +177,35 @@ header h1
 	text-align : center;
 }
 
-
-/*FOOTER*/
-/*____________________________________________________*/
-footer
-{
-	text-align: center;
-	color: white;
-	margin-top: 75px;
+.pageRecherche > form, table{
+	width : 100%;
+	text-align : center;
 }
 
+.pageRecherche input {
+	height: 30px;
+	width : 170px;
+	font-size: 1em;
+    box-shadow: 0px 2px 5px grey;
+    border-radius: 5px;
+	text-align: center;	
+	margin : 5px;
+	background-color : white;
+}
+.pageRecherche th{
+	background-color : grey;
+	color : white;
+}
+.pageRecherche td, th{
+	height: 30px;
+	width : 170px;
+	font-size: 1em;
+    box-shadow: 0px 2px 5px #1c1a19;
+	text-align: center;
+}
+.pageRecherche tr:nth-child(even) {background: #DCC}
+.pageRecherche tr:nth-child(odd) {background: #FFF}
 
-/*CONTENU*/
-/*____________________________________________________*/
-
-.contenu
-{
-	width: 860px;
-	min-height: 460px;
-	padding : 20px;
-	vertical-align: top;
-	border-radius: 10px;
-	background-color: #706b64;
-	box-shadow: 0px 20px 50px #1c1a19;	
+.alignRight{
+	text-align : right;
 }
