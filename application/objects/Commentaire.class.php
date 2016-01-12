@@ -23,9 +23,14 @@ class Commentaire
 	public function date(){return $this->_date;}
 	public function texte(){return $this->_texte;}
 
-	public function setNumero($voiture){$this->_voiture = $voiture;}
-	public function setNom($technicien){$this->_technicien = $technicien;}
-	public function setPrenom($date){$this->_date = $date;}
-	public function setNombre($texte){$this->_texte = $texte;}
+	public function setVoiture($voiture){$this->_voiture = $voiture;}
+	public function setTechnicien($technicien){$this->_technicien = $technicien;}
+	public function setDate($date){
+		if(empty($date)){
+			$date = new DateTime();
+			$this->_date = $date->format('Y-m-d H:i:s');
+		}
+		return $this->_date = $date;}
+	public function setTexte($texte){$this->_texte = $texte;}
 }
 ?>

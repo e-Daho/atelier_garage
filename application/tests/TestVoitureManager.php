@@ -6,21 +6,28 @@
         <title>TestVoitureManager</title>
 
 <?php
-	require('Voiture.class.php');
-	require('VoitureManager.class.php');
+	require('../objects/Voiture.class.php');
+	require('../managers/VoitureManager.class.php');
 
-$db = new PDO('mysql:host=localhost;dbname=atelier_garage', 'root', '');
+try
+{
+	$db = new PDO('mysql:host=127.0.0.1; port=3307;dbname=atelier_garage', 'root', 'toor');
+}
+catch(Exception $e)
+{
+	die('Erreur : '.$e->getMessage());
+}
 
 $voiture = new Voiture([
-	'immatriculation'=>'abc-789-38',
+	'immatriculation'=>'xyz-789-38',
 	'marque'=>'peugeot',
 	'type'=>'sport',
 	'annee'=>1993,
 	'kilometrage'=>'120000',
-	'date_arrivee'=>1995,
+	'date_arrivee' => '',
 	'proprietaire'=>0001]);
 	
-//	print_r($voiture);
+print_r($voiture);
 
 //on cree le manager
 $voitureManager = new VoitureManager($db);
@@ -39,8 +46,8 @@ $voitureManager = new VoitureManager($db);
 //echo $voitureManager->exists($voiture);
 
 //on test le get
-/*$voiture = $voitureManager->get('abc-123-38');
-if(empty($voiture))
+//$voiture = $voitureManager->get('11');
+/*if(empty($voiture))
 {echo "c'est vide";}
 else
 {print_r($voiture);}*/
@@ -49,7 +56,7 @@ else
 /*$voiture->setProprietaire(19);
 $voiture->setDate_arrivee('2025');
 $resultat = $voitureManager->update($voiture);
-echo (string)$resultat;*/
+echo (string)$resultat;
 /*
 //on test getList
 //on rempli d'abord la bdd
@@ -87,7 +94,7 @@ $voitureManager->add($voitures[2]);
 */
 //on test la requete
 //print_r($voitureManager->getList('abc%','%','%','%','%','%','%','%'));
-print_r($voitureManager->getList('%','%','%','%','%','%','%','2'));
+//print_r($voitureManager->getList('%','%','%','%','%','%','%','2'));
 
 ?>
 

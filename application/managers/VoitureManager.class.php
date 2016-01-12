@@ -10,6 +10,7 @@ class VoitureManager
 	
 	public function setDb($db){$this->_db = $db;}
 
+	# prend une voiture en argument, retourne 1
 	public function add(Voiture $voiture)
 	{
 		$q = $this->_db->prepare('INSERT INTO voiture SET immatriculation = :immatriculation, marque = :marque, type = :type, annee= :annee, kilometrage = :kilometrage, date_arrivee = :date_arrivee, proprietaire = :proprietaire');
@@ -21,15 +22,19 @@ class VoitureManager
 		$q->bindValue(':kilometrage',$voiture->kilometrage(),PDO::PARAM_INT);
 		$q->bindValue(':date_arrivee',$voiture->date_arrivee(),PDO::PARAM_INT);
 		$q->bindValue(':proprietaire',$voiture->proprietaire(),PDO::PARAM_INT);
+		
 		$q->execute();
+		
 		return self::ACTION_REUSSIE;
 	}
-
+	
+	# retourne le nombre de voitures en bdd (int)
 	public function count()
 	{
 		return $this->_db->query('SELECT COUNT(*) FROM voiture')->fetchColumn();
 	}
-
+	
+	# prend une voiture en argument, retourne 1 si l'action est réussie
 	public function delete(Voiture $voiture)
 	{
 		$q = $this->_db->prepare('DELETE FROM voiture WHERE immatriculation = :immatriculation');
@@ -37,6 +42,7 @@ class VoitureManager
 		return self::ACTION_REUSSIE;
 	}
 
+	# prend une voiture en argument, retourne un booléen
 	public function exists(Voiture $voiture)
 	{    
 		$q = $this->_db->prepare('SELECT COUNT(*) FROM voiture WHERE immatriculation = :immatriculation');
@@ -45,7 +51,7 @@ class VoitureManager
 		return (bool) $q->fetchColumn();
 	}
 
-  
+  	# prend une immatriculation en argument (string), retourne une voiture si elle existe
 	public function get($immatriculation)
 	{
 		$q = $this->_db->prepare('SELECT immatriculation, marque, type, annee, kilometrage, date_arrivee, proprietaire FROM voiture WHERE immatriculation = :immatriculation');	
@@ -53,10 +59,11 @@ class VoitureManager
 
 		$voiture = $q->fetch(PDO::FETCH_ASSOC);
 		
-		return new Voiture($voiture);
+		return empty($voiture) ? null : new Voiture($voiture);
 	}
   
-	public function getList($immatriculation, $marque, $type, $annee, $kilometrage, $date_arrivee, $proprietaire, $reparateur)
+	# retourne untableau de voitures
+	/*public function getList($immatriculation, $marque, $type, $annee, $kilometrage, $date_arrivee, $proprietaire, $reparateur)
 	{
 		$voitures = [];
 		
@@ -92,9 +99,9 @@ class VoitureManager
 			$voitures[] = new Voiture($donnees); 
 		}
 		return $voitures;
-	}
+	}*/
 	
-  
+  	# prend une voiture en argument, retourne 1 si l'action est réussie, 0 sinon
 	public function update(Voiture $voiture)
 	{
 		if($this->exists($voiture))

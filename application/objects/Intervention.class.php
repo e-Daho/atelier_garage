@@ -1,9 +1,9 @@
 <?php
-class Technicien
+class Intervention
 {
-	private $_numero;
+	private $_id;
 	private $_nom;
-	private $_prenom;
+	private $_prix;
 
 	public function __construct(array $donnees){$this->hydrate($donnees);}
 	
@@ -17,12 +17,12 @@ class Technicien
 		}
 	}	
 
-	public function numero(){return $this->_numero;}
+	public function id(){return $this->_id;}
 	public function nom(){return $this->_nom;}
-	public function prenom(){return $this->_prenom;}
-	
-	public function setNumero($numero){$this->_numero = $numero;}
+	public function prix(){return $this->_prix;}
+
+	public function setId($id){$this->_id = $id;}
 	public function setNom($nom){$this->_nom = $nom;}
-	public function setPrenom($prenom){$this->_prenom = $prenom;}
+	public function setPrix($prix){$this->_prix = $prix;}
 }
 ?>

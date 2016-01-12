@@ -6,7 +6,7 @@
         <title>TestVoiture</title>
 
 <?php
-require('Voiture.class.php');
+require('../objects/Voiture.class.php');
 
 $voiture = new Voiture([
 	'immatriculation'=>'abc-123-38',

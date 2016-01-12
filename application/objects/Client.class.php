@@ -30,6 +30,5 @@ class Client
 	public function setPrenom($prenom){$this->_prenom = $prenom;}
 	public function setAdresse($adresse){$this->_adresse = $adresse;}
 	public function setReferent($referent){$this->_referent = $referent;}
-
 }
 ?>
