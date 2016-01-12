@@ -80,7 +80,7 @@ class VoitureManager
 			AND vo.date_arrivee LIKE :date_arrivee  
 			AND vo.proprietaire LIKE :proprietaire
 			AND ((re.technicien LIKE :technicien) '.$bonus.')
-			ORDER BY date_arrivee
+			ORDER BY date_arrivee DESC
 ');
 
 

@@ -20,6 +20,13 @@ class TechnicienManager
 		
 		$q->execute();
 		
+		$technicien->hydrate([
+			'numero'=>$technicien->numero(), 
+			'nom'=>$technicien->nom(), 
+			'prenom'=>$technicien->prenom(),
+			'nombre'=>0
+			]);
+		
 		return self::ACTION_REUSSIE;
 	}
 
@@ -46,12 +53,82 @@ class TechnicienManager
   
 	public function get($numero)
 	{
-		$q = $this->_db->prepare('SELECT numero, nom, prenom FROM technicien WHERE numero = :numero');	
+		$q = $this->_db->prepare('
+			SELECT numero, nom, prenom, nombre 
+			FROM (
+				SELECT technicien, COUNT(dateFin) as nombre
+				FROM repare
+				GROUP BY technicien
+                	) T
+			INNER JOIN technicien
+			ON T.technicien = technicien.numero
+			WHERE technicien.numero = :numero
+		');
+			
 		$q->execute([':numero' => $numero]);
 
 		$technicien = $q->fetch(PDO::FETCH_ASSOC);
 		
-		return new Technicien($technicien);
+		return empty($technicien) ? NULL : new Technicien($technicien);
+	}
+	
+	public function getAll()
+	{
+		$techniciens = [];
+    
+		$q = $this->_db->prepare('
+			SELECT numero, nom, prenom, nombre 
+			FROM (
+				SELECT technicien, COUNT(dateFin) as nombre
+				FROM repare
+				GROUP BY technicien
+                	) T
+			INNER JOIN technicien
+			ON T.technicien = technicien.numero
+		');
+		
+		$q->execute();
+		    
+		while ($technicien = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$techniciens[] = new Technicien($technicien);
+				
+		}
+		    
+		return $techniciens;
+	}
+	
+	public function getList($numero, $nom, $prenom)
+	{
+		$techniciens = [];
+
+		$q = $this->_db->prepare('
+			SELECT numero, nom, prenom, nombre
+			FROM (
+				SELECT technicien, COUNT(dateFin) as nombre
+				FROM repare
+				GROUP BY technicien
+                	) T
+			INNER JOIN technicien
+			ON T.technicien = technicien.numero
+			WHERE numero LIKE :numero
+			AND nom LIKE :nom
+			AND prenom LIKE :prenom
+			ORDER BY nom
+		');
+
+
+    		$q->bindParam(':numero', $numero, PDO::PARAM_INT);
+    		$q->bindParam(':nom', $nom, PDO::PARAM_STR);
+		$q->bindParam(':prenom', $prenom, PDO::PARAM_STR);
+	 
+		$q->execute();
+	    
+		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$techniciens[] = new Technicien($donnees); 
+		}
+		return $techniciens;
 	}
 	
   
