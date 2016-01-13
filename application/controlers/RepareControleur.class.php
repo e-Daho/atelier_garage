@@ -7,8 +7,8 @@ class RepareControleur{
 		$this->_repareManager=$repareManager;
 	}
 	
-	public function get($technicien, $voiture){
-		return $this->_repareManager->get($technicien, $voiture);
+	public function get($technicien, $voiture, $dateDebut){
+		return $this->_repareManager->get($technicien, $voiture, $dateDebut);
 	}
 	
 	public function getList(){

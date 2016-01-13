@@ -470,7 +470,7 @@ class Display{
 	}
 	
 	public function formModifierRepare(){
-		$repare = $this->_repareControleur->get($_GET['numero']);
+		$repare = $this->_repareControleur->get($_GET['technicien'],$_GET['voiture'],$_GET['dateDebut']);
 		print_r($repare);
 		$out='	<h1>Modifier une réparation</h1>
 				<div class="pageRecherche">
@@ -493,7 +493,7 @@ class Display{
 	}
 	
 	public function supprimerRepare(){
-		$repare = $this->_repareControleur->get($_GET['technicien'],$_GET['voiture']);
+		$repare = $this->_repareControleur->get($_GET['technicien'],$_GET['voiture'],$_GET['dateDebut']);
 		return $this->_repareControleur->deleteRepare($repare);
 	}
 	
@@ -561,11 +561,8 @@ class Display{
 				<div class="pageRecherche">
 					<form action="?page=modifierFacture" id="getListFactures_form" method="post" >
 						<div class="table">
-							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " value="'.$facture->idFacture().'">
-							<input type="text" class="table-cell" name="technicien" placeholder="Technicien : " value="'.$facture->technicien().'" required="required"  disabled="disabled"  >
-							<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " value="'.$facture->voiture().'" required="required"   disabled="disabled" ></div><div>
-							<input type="date" class="table-cell" name="dateDebut" placeholder="Date de début : " value="'.$facture->dateDebut().'" required="required"   disabled="disabled" >
-							<input type="date" class="table-cell" name="dateFin" placeholder="Date de fin : " value="'.$facture->dateFin().'" >
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " required="required" value="'.$facture->idFacture().'"  disabled="disabled"  >
+							<input type="text" class="table-cell" name="prixTotal" placeholder="Prix Total : " value="'.$facture->prixTotal().'">
 						</div>
 						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
 					</form>
@@ -578,7 +575,7 @@ class Display{
 	}
 	
 	public function supprimerFacture(){
-		$facture = $this->_factureControleur->get($_GET['technicien'],$_GET['voiture']);
+		$facture = $this->_factureControleur->get($_GET['idFacture']);
 		return $this->_factureControleur->deleteFacture($facture);
 	}
 	
