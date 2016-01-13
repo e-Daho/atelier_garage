@@ -7,8 +7,9 @@ class Display{
 	private $_repareControleur;
 	private $_factureControleur;
 	private $_interventionControleur;
+	private $_facture_interventionControleur;
 	
-	public function __construct(UtilisateurControleur $utilisateurControleur, VoitureControleur $voitureControleur, ClientControleur $clientControleur, TechnicienControleur $technicienControleur, RepareControleur $repareControleur, FactureControleur $factureControleur, InterventionControleur $interventionControleur){
+	public function __construct(UtilisateurControleur $utilisateurControleur, VoitureControleur $voitureControleur, ClientControleur $clientControleur, TechnicienControleur $technicienControleur, RepareControleur $repareControleur, FactureControleur $factureControleur, InterventionControleur $interventionControleur, Facture_InterventionControleur $facture_interventionControleur){
 		$this->_voitureControleur=$voitureControleur;
 		$this->_utilisateurControleur=$utilisateurControleur;
 		$this->_clientControleur=$clientControleur;
@@ -16,6 +17,7 @@ class Display{
 		$this->_repareControleur=$repareControleur;
 		$this->_factureControleur=$factureControleur;
 		$this->_interventionControleur=$interventionControleur;
+		$this->_facture_interventionControleur=$facture_interventionControleur;
 		
 	}
 	
