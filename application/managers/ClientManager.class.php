@@ -60,7 +60,7 @@ class ClientManager
 		return empty($client) ? null : new Client($client);
 	}
   
-	# retourne untableau de clients
+	# retourne un tableau de clients
 	public function getList($numero, $nom, $prenom, $adresse, $referent, $critereTri)
 	{
 		$clients = [];
@@ -74,7 +74,6 @@ class ClientManager
 			AND referent LIKE :referent
 			ORDER BY :critereTri
 		');
-
 
     		$q->bindParam(':numero', $numero, PDO::PARAM_INT);
     		$q->bindParam(':nom', $nom, PDO::PARAM_STR);

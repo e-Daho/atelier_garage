@@ -60,7 +60,8 @@ $resultat = $clientManager->update($client);*/
 //on rempli d'abord la bdd
 
 //on test la requete getList
-print_r($clientManager->getList('%','%a%','%','%','%','adresse'));
+$rep = $clientManager->getList('%','%','%','%','%','adresse');
+print_r($rep);
 //print_r($clientManager->getList('%','%','%','%','%','%','%','2'));
 
 ?>
