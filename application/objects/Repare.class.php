@@ -6,7 +6,6 @@ class Repare
 	private $_voiture;
 	private $_dateDebut;
 	private $_dateFin;
-	private $_prixTotal;
 	
 	public function __construct(array $donnees){$this->hydrate($donnees);}
 	
@@ -25,13 +24,11 @@ class Repare
 	public function voiture(){return $this->_voiture;}
 	public function dateDebut(){return $this->_dateDebut;}
 	public function dateFin(){return $this->_dateFin;}
-	public function prixTotal(){return $this->_prixTotal;}
 
 	public function setIdFacture($idFacture){$this->_idFacture = $idFacture;}
 	public function setTechnicien($technicien){$this->_technicien = $technicien;}
 	public function setVoiture($voiture){$this->_voiture = $voiture;}
-	public function setDateDebut($dateDebut){$this->_dateDebut = $dateDebut;}
-	public function setDateFin($dateFin){$this->_dateFin = $dateFin;}
-	public function setPrixTotal($prixTotal){$this->_prixTotal = $prixTotal;}
+	public function setDateDebut($dateDebut){$this->_dateDebut = $dateDebut ?: date('Y-m-d');}
+	public function setDateFin($dateFin){$this->_dateFin = $dateFin ?: null;}
 }
 ?>
