@@ -119,7 +119,7 @@ class Display{
 				<div class="pageRecherche">
 					<form action="?page=ajouterVoiture" id="getListVoitures_form" method="post" >
 						<div class="table">
-							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " >
+							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " required="required" >
 							<input type="text" class="table-cell" name="marque" placeholder="Marque : " >
 							<input type="text" class="table-cell" name="type" placeholder="Type : " ></div><div>
 							<input type="text" class="table-cell" name="annee" placeholder="Année : " >
@@ -127,7 +127,7 @@ class Display{
 							<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " >
 						</div>
 							<label for="proprietaire">Propriétaire : </label>
-							<select name="proprietaire">
+							<select name="proprietaire" required="required" >
 								<option value="" rel="none">Non sélectionné</option>
 								<option value="" rel="other_client">Autre</option>';
 		$liste_clients = $this->_clientControleur->getList();
@@ -137,9 +137,9 @@ class Display{
 		$out.='				</select>';
 		$out.='			<div rel="other_client" class="table"><div>
 							<p>Nouveau client : </p>
-							<input  type="text" class="table-cell" name="numero" placeholder="Numero : " ></div><div>
-							<input  type="text" class="table-cell" name="nom" placeholder="Nom : " >
-							<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " ></div><div>
+							<input  type="text" class="table-cell" name="numero" placeholder="Numero : " required="required" ></div><div>
+							<input  type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
+							<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " required="required" ></div><div>
 							<input  type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
 							<input  type="text" class="table-cell" name="referent" placeholder="Referent : " ></div>
 						</div>
@@ -166,7 +166,7 @@ class Display{
 				<div class="pageRecherche">
 					<form action="?page=modifierVoiture" id="getListVoitures_form" method="post" >
 						<div class="table">
-							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " value="'.$voiture->immatriculation().'" >
+							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " value="'.$voiture->immatriculation().'" required="required" >
 							<input type="text" class="table-cell" name="marque" placeholder="Marque : " value="'.$voiture->marque().'" >
 							<input type="text" class="table-cell" name="type" placeholder="Type : " value="'.$voiture->type().'" ></div><div>
 							<input type="text" class="table-cell" name="annee" placeholder="Année : " value="'.$voiture->annee().'" >
@@ -174,7 +174,7 @@ class Display{
 							<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " value="'.$voiture->date_arrivee().'" >
 						</div>
 							<label for="proprietaire">Propriétaire : </label>
-							<select name="proprietaire">
+							<select name="proprietaire" required="required" >
 								<option value="" rel="none">Non sélectionné</option>
 								<option value="" rel="other_client">Autre</option>';
 		$liste_clients = $this->_clientControleur->getList();
@@ -185,9 +185,9 @@ class Display{
 		$out.='				</select>';
 		$out.='			<div rel="other_client" class="table"><div>
 							<p>Nouveau client : </p>
-							<input  type="text" class="table-cell" name="numero" placeholder="Numero : " ></div><div>
-							<input  type="text" class="table-cell" name="nom" placeholder="Nom : " >
-							<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " ></div><div>
+							<input  type="text" class="table-cell" name="numero" placeholder="Numero : " required="required" ></div><div>
+							<input  type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
+							<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " required="required" ></div><div>
 							<input  type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
 							<input  type="text" class="table-cell" name="referent" placeholder="Referent : " ></div>
 						</div>
@@ -246,13 +246,65 @@ class Display{
 							<td>'.$client->prenom().'</td>
 							<td>'.$client->adresse().'</td>
 							<td>'.$client->referent().'</td>
-							<td><a href="?page=formModifierClient&immatriculation='.$client->numero().'">Modifier</a></td>
-							<td><a href="?page=supprimerClient&immatriculation='.$client->numero().'" onclick="return verifjs_suppr();">Supprimer</a></td>
+							<td><a href="?page=formModifierClient&numero='.$client->numero().'">Modifier</a></td>
+							<td><a href="?page=supprimerClient&numero='.$client->numero().'" onclick="return verifjs_suppr();">Supprimer</a></td>
 						</tr>';
 		}
 		$out.='		</table>
 				</div>';
 		return $out;		
 	}
+	
+	public function formAjouterClient(){
+		//[TODO]  Liste des référents préchargée dans une liste déroulante + autre		
+		$out='	<h1>Ajouter un client</h1>
+				<div class="pageRecherche">
+					<form action="?page=ajouterClient" id="getListClients_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " required="required"  >
+							<input type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
+							<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " required="required" ></div><div>
+							<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
+							<input type="text" class="table-cell" name="referent" placeholder="Référent : " >
+						</div>
+						<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function ajouterClient(){
+		//[TODO] msg de confirmation
+		$this->_clientControleur->addClient();
+	}
+	
+	public function formModifierClient(){
+		//[TODO]  Liste des référents préchargée dans une liste déroulante + autre
+		//[TODO] recharger les données connues du client
+		$client = $this->_clientControleur->get($_GET['numero']);
+		print_r($client->numero());
+		$out='	<h1>Modifier un client</h1>
+				<div class="pageRecherche">
+					<form action="?page=modifierClient" id="getListClients_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$client->numero().'" required="required" >
+							<input type="text" class="table-cell" name="nom" placeholder="Nom : " value="'.$client->nom().'" required="required" >
+							<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " value="'.$client->prenom().'" required="required" ></div><div>
+							<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " value="'.$client->adresse().'">
+							<input type="text" class="table-cell" name="referent" placeholder="Référent : " value="'.$client->referent().'">
+						</div>
+						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function modifierClient(){
+		//[TODO] msg de confirmation
+		$this->_clientControleur->editClient();
+	}
+	
+	
+	
 }
 ?>

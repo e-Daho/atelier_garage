@@ -14,6 +14,10 @@ class ClientControleur{
 		$this->_clientManager=$clientManager;
 	}
 	
+	public function get($numero){
+		return $this->_clientManager->get($numero);
+	}
+	
 	public function getList(){
 		//[TODO] enlever le NULL
 		$numero = '%';
