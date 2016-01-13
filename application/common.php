@@ -94,6 +94,21 @@ switch($page){
 	case 'afficherClients':
 		$out = $display->afficherClients();
 		break;
+	case 'formAjouterClient':
+		$out = $display->formAjouterClient();
+		break;
+	case 'ajouterClient':
+		$out = $display->ajouterClient();
+		break;
+	case 'formModifierClient':
+		$out = $display->formModifierClient();
+		break;
+	case 'modifierClient':
+		$out = $display->modifierClient();
+		break;
+	case 'supprimerClient':
+		$out = $display->supprimerClient();
+		break;
 
 
 	default:	//cas où le nom de la page ne correspond à aucun cas precedent.
