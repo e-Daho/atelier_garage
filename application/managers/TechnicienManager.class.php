@@ -54,13 +54,13 @@ class TechnicienManager
 	public function get($numero)
 	{
 		$q = $this->_db->prepare('
-			SELECT numero, nom, prenom, nombre 
+			SELECT numero, nom, prenom,  IFNULL(nombre,0) as nombre 
 			FROM (
 				SELECT technicien, COUNT(dateFin) as nombre
 				FROM repare
 				GROUP BY technicien
                 	) T
-			INNER JOIN technicien
+			RIGHT JOIN technicien
 			ON T.technicien = technicien.numero
 			WHERE technicien.numero = :numero
 		');
@@ -103,13 +103,13 @@ class TechnicienManager
 		$techniciens = [];
 
 		$q = $this->_db->prepare('
-			SELECT numero, nom, prenom, nombre
+			SELECT numero, nom, prenom, IFNULL(nombre,0) as nombre
 			FROM (
 				SELECT technicien, COUNT(dateFin) as nombre
 				FROM repare
 				GROUP BY technicien
                 	) T
-			INNER JOIN technicien
+			RIGHT JOIN technicien
 			ON T.technicien = technicien.numero
 			WHERE numero LIKE :numero
 			AND nom LIKE :nom

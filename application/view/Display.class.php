@@ -5,13 +5,15 @@ class Display{
 	private $_utilisateurControleur;
 	private $_technicienControleur;
 	private $_repareControleur;
+	private $_factureControleur;
 	
-	public function __construct(UtilisateurControleur $utilisateurControleur, VoitureControleur $voitureControleur, ClientControleur $clientControleur, TechnicienControleur $technicienControleur, RepareControleur $repareControleur){
+	public function __construct(UtilisateurControleur $utilisateurControleur, VoitureControleur $voitureControleur, ClientControleur $clientControleur, TechnicienControleur $technicienControleur, RepareControleur $repareControleur, FactureControleur $factureControleur){
 		$this->_voitureControleur=$voitureControleur;
 		$this->_utilisateurControleur=$utilisateurControleur;
 		$this->_clientControleur=$clientControleur;
 		$this->_technicienControleur=$technicienControleur;
 		$this->_repareControleur=$repareControleur;
+		$this->_factureControleur=$factureControleur;
 		
 	}
 	
@@ -54,6 +56,7 @@ class Display{
 					<a href="?page=afficherClients">Clients</a>
 					<a href="?page=afficherTechniciens">Techniciens</a>
 					<a href="?page=afficherRepares">Réparations</a>
+					<a href="?page=afficherFactures">Factures</a>
 				</div>';
 		print_r($_SESSION);
 		return $out;
@@ -398,7 +401,7 @@ class Display{
 	}
 	
 	
-	//Réparation
+	//Réparations
 	public function afficherRepares(){
 		$out='	<h1>Recherche parmi les réparations</h1>
 				<div class="pageRecherche">
@@ -418,7 +421,7 @@ class Display{
 					</div>
 				</div>';
 		$liste_repares=$this->_repareControleur->getList();
-		$out.='		<h1>Liste des repares</h1>
+		$out.='		<h1>Liste des réparations</h1>
 					<table>
 						<tr>
 							<th>Id Facture</th>
@@ -446,7 +449,7 @@ class Display{
 	}
 	
 	public function formAjouterRepare(){	
-		$out='	<h1>Ajouter un repare</h1>
+		$out='	<h1>Ajouter une réparation</h1>
 				<div class="pageRecherche">
 					<form action="?page=ajouterRepare" id="getListRepares_form" method="post" >
 						<div class="table">
@@ -469,7 +472,7 @@ class Display{
 	public function formModifierRepare(){
 		$repare = $this->_repareControleur->get($_GET['numero']);
 		print_r($repare);
-		$out='	<h1>Modifier un repare</h1>
+		$out='	<h1>Modifier une réparation</h1>
 				<div class="pageRecherche">
 					<form action="?page=modifierRepare" id="getListRepares_form" method="post" >
 						<div class="table">
@@ -495,6 +498,89 @@ class Display{
 	}
 	
 	
+	//Factures
+	public function afficherFactures(){
+		$out='	<h1>Recherche parmi les factures</h1>
+				<div class="pageRecherche">
+					<form action="?page=afficherFactures" id="getListFactures_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " >
+							<input type="text" class="table-cell" name="prixTotal" placeholder="Prix Total : " >
+						<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
+					</form>
+					<div class="alignRight">
+						<form action="?page=formAjouterFacture" method="post" >
+							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+						</form>
+					</div>
+				</div>';
+		$liste_factures=$this->_factureControleur->getList();
+		$out.='		<h1>Liste des factures</h1>
+					<table>
+						<tr>
+							<th>Id Facture</th>
+							<th>Prix Total</th>
+							<th></th>
+							<th></th>
+						</tr>';
+		foreach ($liste_factures as $facture){
+		$out.='			<tr>
+							<td>'.$facture->idFacture().'</td>
+							<td>'.$facture->prixTotal().'</td>
+							<td><a href="?page=formModifierFacture&idFacture='.$facture->idFacture().'">Modifier</a></td>
+							<td><a href="?page=supprimerFacture&idFacture='.$facture->idFacture().'" onclick="return verifjs_suppr();">Supprimer</a></td>
+						</tr>';
+		}
+		$out.='		</table>
+				</div>';
+		return $out;		
+	}
+	
+	public function formAjouterFacture(){	
+		$out='	<h1>Ajouter un facture</h1>
+				<div class="pageRecherche">
+					<form action="?page=ajouterFacture" id="getListFactures_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " required="required"  >
+							<input type="text" class="table-cell" name="prixTotal" placeholder="Prix Total : ">
+						</div>
+						<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function ajouterFacture(){
+		return $this->_factureControleur->addFacture();
+	}
+	
+	public function formModifierFacture(){
+		$facture = $this->_factureControleur->get($_GET['numero']);
+		print_r($facture);
+		$out='	<h1>Modifier un facture</h1>
+				<div class="pageRecherche">
+					<form action="?page=modifierFacture" id="getListFactures_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " value="'.$facture->idFacture().'">
+							<input type="text" class="table-cell" name="technicien" placeholder="Technicien : " value="'.$facture->technicien().'" required="required"  disabled="disabled"  >
+							<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " value="'.$facture->voiture().'" required="required"   disabled="disabled" ></div><div>
+							<input type="date" class="table-cell" name="dateDebut" placeholder="Date de début : " value="'.$facture->dateDebut().'" required="required"   disabled="disabled" >
+							<input type="date" class="table-cell" name="dateFin" placeholder="Date de fin : " value="'.$facture->dateFin().'" >
+						</div>
+						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function modifierFacture(){
+		return $this->_factureControleur->editFacture();
+	}
+	
+	public function supprimerFacture(){
+		$facture = $this->_factureControleur->get($_GET['technicien'],$_GET['voiture']);
+		return $this->_factureControleur->deleteFacture($facture);
+	}
 	
 	
 	
