@@ -65,7 +65,8 @@ class ClientManager
 	{
 		$clients = [];
 
-		$q = $this->_db->prepare('SELECT numero, nom, prenom, adresse, referent
+		$q = $this->_db->prepare('
+			SELECT numero, nom, prenom, adresse, referent
 			FROM client
 			WHERE numero LIKE :numero
 			AND nom LIKE :nom

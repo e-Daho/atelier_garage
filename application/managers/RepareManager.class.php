@@ -13,7 +13,10 @@ class RepareManager
 	# prend un repare en argument, retourne 1
 	public function add(Repare $repare)
 	{
-		$q = $this->_db->prepare('INSERT INTO repare SET technicien = :technicien, voiture = :voiture, idFacture = :idFacture, dateDebut= :dateDebut, dateFin = :dateFin');
+		$q = $this->_db->prepare('
+			INSERT INTO repare 
+			SET technicien = :technicien, voiture = :voiture, idFacture = :idFacture, dateDebut= :dateDebut, dateFin = :dateFin
+		');
 
 		$q->bindValue(':technicien',$repare->technicien(),PDO::PARAM_INT);
 		$q->bindValue(':voiture',$repare->voiture(),PDO::PARAM_STR);
@@ -35,7 +38,10 @@ class RepareManager
 	# prend un repare en argument, le supprime en base de données, retourne 1 si l'action est réussie
 	public function delete(Repare $repare)
 	{
-		$q = $this->_db->prepare('DELETE FROM repare WHERE (technicien = :technicien AND voiture = :voiture AND dateDebut = :dateDebut)');
+		$q = $this->_db->prepare('
+			DELETE FROM repare 
+			WHERE (technicien = :technicien AND voiture = :voiture AND dateDebut = :dateDebut)
+		');
 		
 		$q->bindValue(':technicien',$repare->technicien(),PDO::PARAM_INT);
 		$q->bindValue(':voiture',$repare->voiture(),PDO::PARAM_STR);
@@ -49,7 +55,11 @@ class RepareManager
 	# prend un repare en argument, retourne un booléen
 	public function exists(Repare $repare)
 	{    
-		$q = $this->_db->prepare('SELECT COUNT(*) FROM repare WHERE (technicien = :technicien AND voiture = :voiture AND dateDebut = :dateDebut)');
+		$q = $this->_db->prepare('
+			SELECT COUNT(*)
+			FROM repare 
+			WHERE (technicien = :technicien AND voiture = :voiture AND dateDebut = :dateDebut)
+		');
 		
 		$q->bindValue(':technicien',$repare->technicien(),PDO::PARAM_INT);
 		$q->bindValue(':voiture',$repare->voiture(),PDO::PARAM_STR);
@@ -63,7 +73,11 @@ class RepareManager
   	# prend un technicien, une voiture et une facture en argument, retourne un repare si il existe
 	public function get($technicien, $voiture, $dateDebut)
 	{
-		$q = $this->_db->prepare('SELECT * FROM repare WHERE (technicien = :technicien AND voiture = :voiture AND dateDebut = :dateDebut)');
+		$q = $this->_db->prepare('
+			SELECT * 
+			FROM repare 
+			WHERE (technicien = :technicien AND voiture = :voiture AND dateDebut = :dateDebut)
+		');
 			
 		$q->bindValue(':technicien',$technicien,PDO::PARAM_INT);
 		$q->bindValue(':voiture',$voiture,PDO::PARAM_STR);

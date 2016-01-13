@@ -10,17 +10,16 @@ class FactureManager
 	
 	public function setDb($db){$this->_db = $db;}
 
-	public function add(Facture $facture)
+	public function add(Facture_Intervention $fi)
 	{
-		$q = $this->_db->prepare('INSERT INTO facture SET prixTotal = :prixTotal');
+		$q = $this->_db->prepare('
+			INSERT INTO facture_intervention 
+			SET idFacture = :idFacture, idIntervention = :idIntervention');
 
-		$q->bindValue(':prixTotal',$facture->prixTotal(),PDO::PARAM_INT);	
+		$q->bindValue(':idFacture',$fi->idFacture(),PDO::PARAM_INT);
+		$q->bindValue(':idIntervention',$fi->idIntervention(),PDO::PARAM_INT);	
 		
 		$q->execute();
-		
-		$facture->hydrate([
-			'idFacture'=>$this->_db->lastInsertId(), 
-			'prixTotal'=>$facture->prixTotal()]);
 		
 		return self::ACTION_REUSSIE;
 	}
@@ -30,49 +29,65 @@ class FactureManager
 		return $this->_db->query('SELECT COUNT(*) FROM facture')->fetchColumn();
 	}
 
-	public function delete(Facture $facture)
+	public function delete(Facture_Intervention $fi)
 	{
-		$q = $this->_db->prepare('DELETE FROM facture WHERE idFacture = :idFacture');
+		$q = $this->_db->prepare('
+			DELETE FROM facture_intervention 
+			WHERE idFacture = :idFacture AND idIntervention = :idIntervention');
 		
-		$q->bindValue(':idFacture',$facture->idFacture(),PDO::PARAM_INT);
+		$q->bindValue(':idFacture',$fi->idFacture(),PDO::PARAM_INT);
+		$q->bindValue(':idIntervention',$fi->idIntervention(),PDO::PARAM_INT);
 		
 		$q->execute();
 		
 		return self::ACTION_REUSSIE;
 	}
 
-	public function exists(Facture $facture)
+	public function exists(Facture_Intervention $fi)
 	{    
-		$q = $this->_db->prepare('SELECT COUNT(*) FROM facture WHERE idFacture = :idFacture');
+		$q = $this->_db->prepare('
+			SELECT COUNT(*) 
+			FROM facture_intervention 
+			WHERE idFacture = :idFacture AND idIntervention = :idIntervention
+		');
 		
-		$q->bindValue(':idFacture',$facture->idFacture(),PDO::PARAM_INT);
+		$q->bindValue(':idFacture',$fi->idFacture(),PDO::PARAM_INT);
+		$q->bindValue(':idIntervention',$fi->idIntervention(),PDO::PARAM_INT);
 
 		$q->execute();
     
 		return (bool) $q->fetchColumn();
 	}
 	
-	public function get($idFacture)
+	public function get($idFacture, $idIntervention)
 	{
-		$q = $this->_db->prepare('SELECT idFacture, prixTotal FROM facture WHERE idFacture = :idFacture');	
-		$q->execute([':idFacture' => $idFacture]);
+		$q = $this->_db->prepare('
+			SELECT idFacture, idIntervention
+			FROM facture_intervention 
+			WHERE idFacture = :idFacture AND idIntervention = :idIntervention
+		');
+
+		$q->bindValue(':idFacture',$fi->idFacture(),PDO::PARAM_INT);
+		$q->bindValue(':idIntervention',$fi->idIntervention(),PDO::PARAM_INT);
 
 		$facture = $q->fetch(PDO::FETCH_ASSOC);
 		
-		return empty($facture) ? null : new Facture($facture);
+		return empty($facture) ? null : new Facture_Intervention($idFacture, $idIntervention);
 	}
 	
   
-	public function getList($idFacture, $prixTotal, $date)
-	{
-		$factures = [];
+	public function getList($idFacture)
+		$factures_details = [];
 		
 		$q = $this->_db->prepare('
-			SELECT * 
-			FROM facture
-			WHERE idFacture LIKE :idFacture 
-			AND prixTotal LIKE :prixTotal
-			ORDER BY idFacture');
+			SELECT *
+			FROM (
+				SELECT idFacture, prixTotal, idIntervention
+				FROM facture INNER JOIN facture_intervention
+				WHERE idFacture LIKE :idFacture
+			) T 
+			INNER JOIN intervention
+		');
 
     		$q->bindParam(':idFacture', $idFacture, PDO::PARAM_INT);
     		$q->bindParam(':prixTotal', $prixTotal, PDO::PARAM_INT);
@@ -87,7 +102,7 @@ class FactureManager
 	}
 
   
-	public function update(Facture $facture)
+	public function update(Facture_Intervention $facture)
 	{
 		if($this->exists($facture))
 		{
