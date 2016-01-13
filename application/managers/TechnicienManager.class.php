@@ -77,12 +77,13 @@ class TechnicienManager
 		$techniciens = [];
     
 		$q = $this->_db->prepare('
-			SELECT numero, nom, prenom, IFNULL(nombre,0) as nombre
+			SELECT numero, nom, prenom, IFNULL(cnt,0) as nombre
 			FROM (
 				SELECT technicien, COUNT(dateFin) as cnt
 				FROM repare
 				GROUP BY technicien
                 	) T
+
 			RIGHT JOIN technicien
 			ON T.technicien = technicien.numero
 		');
@@ -103,7 +104,7 @@ class TechnicienManager
 		$techniciens = [];
 
 		$q = $this->_db->prepare('
-			SELECT numero, nom, prenom, IFNULL(nombre,0) as nombre
+			SELECT numero, nom, prenom, IFNULL(cnt,0) as nombre
 			FROM (
 				SELECT technicien, COUNT(dateFin) as cnt
 				FROM repare
