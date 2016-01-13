@@ -95,14 +95,16 @@ class RepareManager
 	{
 		$repares = [];
 
+		$bonus = empty($dateFin) ? '' : 'AND dateFin LIKE :dateFin'
+
 		$q = $this->_db->prepare('
-			SELECT technicien, voiture, idFacture, dateDebut, dateFin, date_arrivee
+			SELECT technicien, voiture, idFacture, dateDebut, dateFin
 			FROM repare
 			WHERE technicien LIKE :technicien
 			AND voiture LIKE :voiture
 			AND idFacture LIKE :idFacture 
 			AND dateDebut LIKE :dateDebut 
-			AND dateFin LIKE :dateFin 
+			' .$bonus. '
 			ORDER BY dateDebut
 		');
 
