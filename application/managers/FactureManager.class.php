@@ -69,8 +69,8 @@ class FactureManager
 		return empty($facture) ? null : new Facture($facture);
 	}
 	
-  	# prend en agument un idFacture, un prix total ou une date, et retourne un array de factures
-	public function getList($idFacture, $prixTotal, $date)
+  	# prend en agument un idFacture ou un prix total et retourne un array de factures
+	public function getList($idFacture, $prixTotal)
 	{
 		$factures = [];
 		
