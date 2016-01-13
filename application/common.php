@@ -15,18 +15,21 @@ require_once ROOT_PATH.'/application/objects/Client.class.php';
 require_once ROOT_PATH.'/application/objects/Technicien.class.php';
 require_once ROOT_PATH.'/application/objects/Repare.class.php';
 require_once ROOT_PATH.'/application/objects/Facture.class.php';
+require_once ROOT_PATH.'/application/objects/Intervention.class.php';
 
 require_once ROOT_PATH.'/application/managers/VoitureManager.class.php';
 require_once ROOT_PATH.'/application/managers/ClientManager.class.php';
 require_once ROOT_PATH.'/application/managers/TechnicienManager.class.php';
 require_once ROOT_PATH.'/application/managers/RepareManager.class.php';
 require_once ROOT_PATH.'/application/managers/FactureManager.class.php';
+require_once ROOT_PATH.'/application/managers/InterventionManager.class.php';
 
 require_once ROOT_PATH.'/application/controlers/VoitureControleur.class.php';
 require_once ROOT_PATH.'/application/controlers/ClientControleur.class.php';
 require_once ROOT_PATH.'/application/controlers/TechnicienControleur.class.php';
 require_once ROOT_PATH.'/application/controlers/RepareControleur.class.php';
 require_once ROOT_PATH.'/application/controlers/FactureControleur.class.php';
+require_once ROOT_PATH.'/application/controlers/InterventionControleur.class.php';
 
 require_once ROOT_PATH.'/application/view/Display.class.php';
 
@@ -46,14 +49,16 @@ $voitureManager = new VoitureManager($bdd);
 $technicienManager = new TechnicienManager($bdd);
 $repareManager = new RepareManager($bdd);
 $factureManager = new FactureManager($bdd);
+$interventionManager = new InterventionManager($bdd);
 
 $clientControleur = new ClientControleur($clientManager);
 $voitureControleur = new VoitureControleur($voitureManager, $clientControleur);
 $technicienControleur = new TechnicienControleur($technicienManager);
 $repareControleur = new RepareControleur($repareManager);
 $factureControleur = new FactureControleur($factureManager);
+$interventionControleur = new InterventionControleur($interventionManager);
 
-$display = new Display($utilisateurControleur, $voitureControleur, $clientControleur, $technicienControleur, $repareControleur, $factureControleur);
+$display = new Display($utilisateurControleur, $voitureControleur, $clientControleur, $technicienControleur, $repareControleur, $factureControleur, $interventionControleur);
 	
 	
 //recupère le nom de la page demandee, ou redirige vers accueil s'il n'y en a pas
@@ -149,26 +154,6 @@ switch($page){
 	case 'afficherRepares':
 		$out = $display->afficherRepares();
 		break;
-	/*case 'formAjouterRepare':
-		$out = $display->formAjouterRepare();
-		break;
-	case 'ajouterRepare':
-		$out = $display->ajouterRepare();
-		break;
-	case 'formModifierRepare':
-		$out = $display->formModifierRepare();
-		break;
-	case 'modifierRepare':
-		$out = $display->modifierRepare();
-		break;
-	case 'supprimerRepare':
-		$out = $display->supprimerRepare();
-		break;*/
-		
-	//factures
-	/*case 'afficherFactures':
-		$out = $display->afficherFactures();
-		break;
 	case 'formAjouterRepare':
 		$out = $display->formAjouterRepare();
 		break;
@@ -183,7 +168,47 @@ switch($page){
 		break;
 	case 'supprimerRepare':
 		$out = $display->supprimerRepare();
+		break;
+		
+	//factures
+	/*case 'afficherFactures':
+		$out = $display->afficherFactures();
+		break;
+	case 'formAjouterFacture':
+		$out = $display->formAjouterFacture();
+		break;
+	case 'ajouterFacture':
+		$out = $display->ajouterFacture();
+		break;
+	case 'formModifierFacture':
+		$out = $display->formModifierFacture();
+		break;
+	case 'modifierFacture':
+		$out = $display->modifierFacture();
+		break;
+	case 'supprimerFacture':
+		$out = $display->supprimerFacture();
 		break;*/
+		
+	//interventions
+	case 'afficherInterventions':
+		$out = $display->afficherInterventions();
+		break;
+	case 'formAjouterIntervention':
+		$out = $display->formAjouterIntervention();
+		break;
+	case 'ajouterIntervention':
+		$out = $display->ajouterIntervention();
+		break;
+	case 'formModifierIntervention':
+		$out = $display->formModifierIntervention();
+		break;
+	case 'modifierIntervention':
+		$out = $display->modifierIntervention();
+		break;
+	case 'supprimerIntervention':
+		$out = $display->supprimerIntervention();
+		break;
 
 
 	default:	//cas où le nom de la page ne correspond à aucun cas precedent.

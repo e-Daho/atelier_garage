@@ -7,8 +7,8 @@ class RepareControleur{
 		$this->_repareManager=$repareManager;
 	}
 	
-	public function get($technicien, $voiture){
-		return $this->_repareManager->get($technicien, $voiture);
+	public function get($technicien, $voiture, $dateDebut){
+		return $this->_repareManager->get($technicien, $voiture, $dateDebut);
 	}
 	
 	public function getList(){
@@ -27,9 +27,7 @@ class RepareControleur{
 		$_dateFin = '%';
 		if (!empty($_POST['_dateFin'])) {$_dateFin.=$_POST['_dateFin'].'%';}
 					
-		//$liste_repares = $this->_repareManager->getList($idFacture, $technicien, $voiture, $dateDebut, $_dateFin);
-		$liste_repares = [];
-		$liste_repares[] = new Repare([	'idFacture'=>'1',	'technicien'=>'213456',	'voiture'=>'123-456',	'dateDebut'=>'2016-01-13']);
+		$liste_repares = $this->_repareManager->getList($idFacture, $technicien, $voiture, $dateDebut, $_dateFin);
 		return $liste_repares;
 	}
 	
