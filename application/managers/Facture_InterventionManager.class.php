@@ -14,7 +14,8 @@ class FactureManager
 	{
 		$q = $this->_db->prepare('
 			INSERT INTO facture_intervention 
-			SET idFacture = :idFacture, idIntervention = :idIntervention');
+			SET idFacture = :idFacture, idIntervention = :idIntervention
+		');
 
 		$q->bindValue(':idFacture',$fi->idFacture(),PDO::PARAM_INT);
 		$q->bindValue(':idIntervention',$fi->idIntervention(),PDO::PARAM_INT);	
@@ -80,7 +81,7 @@ class FactureManager
 		$factures_details = [];
 		
 		$q = $this->_db->prepare('
-			SELECT *
+			SELECT idFacture, prixTotal, idIntervention, nom, prix
 			FROM (
 				SELECT idFacture, prixTotal, idIntervention
 				FROM facture INNER JOIN facture_intervention
@@ -90,13 +91,12 @@ class FactureManager
 		');
 
     		$q->bindParam(':idFacture', $idFacture, PDO::PARAM_INT);
-    		$q->bindParam(':prixTotal', $prixTotal, PDO::PARAM_INT);
 		
 			$q->execute();
 	    
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
 		{
-			$factures[] = new Facture($donnees); 
+			$factures_details[] = new Facture_Detail($donnees); 
 		}
 		return $factures;
 	}
