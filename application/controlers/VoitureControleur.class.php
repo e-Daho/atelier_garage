@@ -2,9 +2,15 @@
 class VoitureControleur{
 	
 	private $_voitureManager;
+	private $_clientControleur;
 	
-	public function __construct(VoitureManager $voitureManager){
+	public function __construct(VoitureManager $voitureManager, ClientControleur $clientControleur){
 		$this->_voitureManager=$voitureManager;
+		$this->_clientControleur=$clientControleur;
+	}
+	
+	public function get($immatriculation){
+		return $this->_voitureManager->get($immatriculation);
 	}
 	
 	public function getList(){
@@ -38,23 +44,51 @@ class VoitureControleur{
 	}
 	
 	public function addVoiture(){
-		//[TODO] Checker que l'immatriculation n'existe pas déjà
-		//[TODO] Vérifier que tout les champs requis sont présents
-		//[TODO] Si date vide -> date de jour
-		//[TODO] page intermédiare de msg de confirmation
-		
-		if (!empty($_POST['immatriculation']) AND !empty($_POST['proprietaire'])) { $this->_voitureManager->add(new Voiture($_POST));}
-		
-		header ('Location: ?page=afficherVoitures');
-		exit();
+		$out='';
+		if (!empty($_POST['immatriculation']) AND (!empty($_POST['proprietaire'])OR!empty($_POST['numero']))) {
+			if(!empty($_POST['numero'])){
+				$_POST['proprietaire']=$_POST['numero'];
+			}
+			$voiture = new Voiture($_POST);
+			$client = new Client($_POST);
+			
+			$this->_clientControleur->addClient($client);
+			
+			if (!$this->_voitureManager->exists($voiture)) {
+				$this->_voitureManager->add($voiture);
+			} else {
+				$out='Erreur : cette immatriculation est déjà prise ! ';
+			}
+		}else{
+			$out='Erreur : vous ne devriez pas être ici !';
+		}
+		return $out;
 	}
 	
-	public function editVoiture(){
-		
-		if (!empty($_POST['immatriculation']) AND !empty($_POST['proprietaire'])) { $this->_voitureManager->update(new Voiture($_POST));}
-		
-		header ('Location: ?page=afficherVoitures');
-		exit();
+	public function editVoiture(){		
+		$out='';
+		if (!empty($_POST['immatriculation']) AND (!empty($_POST['proprietaire'])OR!empty($_POST['numero']))) {
+			if(!empty($_POST['numero'])){
+				$_POST['proprietaire']=$_POST['numero'];
+			}
+			$voiture = new Voiture($_POST);
+			$client = new Client($_POST);
+			
+			$this->_clientControleur->addClient($client);
+			
+			if ($this->_voitureManager->exists($voiture)) {
+				$this->_voitureManager->update($voiture);
+			} else {
+				$out='Erreur : cette immatriculation n\'existe pas ! ';
+			}
+		}else{
+			$out='Erreur : vous ne devriez pas être ici !';
+		}
+		return $out;
+	}
+	
+	public function deleteVoiture($voiture){		
+		return $this->_voitureManager->delete($voiture);
 	}
 	
 }

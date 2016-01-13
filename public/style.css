@@ -182,7 +182,7 @@ footer
 	text-align : center;
 }
 
-.pageRecherche input {
+.pageRecherche input, select{
 	height: 30px;
 	width : 170px;
 	font-size: 1em;
