@@ -164,6 +164,7 @@ footer
 
 #tableau_de_bord{
 	display : table;
+	width : 100%;
         border-collapse: separate;
         border-spacing: 5px 8px; 
 }
@@ -172,7 +173,6 @@ footer
 	width : 150px;
 	height : 150px;
 	background-color : white;
-	float : left;
 	margin : 10px;
 	text-align : center;
 }
@@ -208,4 +208,8 @@ footer
 
 .alignRight{
 	text-align : right;
+}
+.largeCenter{
+	width : 100%;
+	text-align : center;
 }

@@ -2,14 +2,7 @@
 class ClientControleur{
 	
 	private $_clientManager;
-	
-	
-	private $_numero;
-	private $_nom;
-	private $_prenom;
-	private $_adresse;
-	private $_referent;
-	
+		
 	public function __construct(ClientManager $clientManager){
 		$this->_clientManager=$clientManager;
 	}
@@ -18,8 +11,7 @@ class ClientControleur{
 		return $this->_clientManager->get($numero);
 	}
 	
-	public function getList(){
-		//[TODO] enlever le NULL
+	public function getList($critereTri){
 		$numero = '%';
 		if (!empty($_POST['numero'])) {$numero.=$_POST['numero'].'%';}
 		
@@ -35,32 +27,52 @@ class ClientControleur{
 		$referant = '%';
 		if (!empty($_POST['referant'])) {$referant.=$_POST['referant'].'%';}	
 		
-		$liste_clients = $this->_clientManager->getList($numero, $nom, $prenom, $adresse, $referant, 'numero');
+		$liste_clients = $this->_clientManager->getList($numero, $nom, $prenom, $adresse, $referant, 'nom');
 		return $liste_clients;
 	}
 	
 	public function addClient(){
-		//[TODO] Checker que l'immatriculation n'existe pas déjà
-		//[TODO] Vérifier que tout les champs requis sont présents
-		//[TODO] Si date vide -> date de jour
-		//[TODO] page intermédiare de msg de confirmation
-		
-		if (!empty($_POST['numero'])) { $this->_clientManager->add(new Client($_POST));}
-		
-		//header ('Location: ?page=afficherClients');
-		//exit();
+		$out='';
+		if (!empty($_POST['numero']) ) {
+			$client = new Client($_POST);
+			
+			if (!$this->_clientManager->exists($client)) {
+				if($this->_clientManager->add($client)){
+					$out='Le client numéro '.$_POST['numero'].' a bien été ajouté.';
+				}else{
+					$out='OUPS ! Il y a eu un problème.'; 
+				}
+			} else {
+				$out='Erreur : ce numéro est déjà pris ! ';
+			}
+		}else{
+			$out='Erreur : vous ne devriez pas être ici !';
+		}
+		return $out;
 	}
 	
 	public function editClient(){
-		
-		if (!empty($_POST['numero']) ) { $this->_clientManager->update(new Client($_POST));}
-		
-		header ('Location: ?page=afficherClients');
-		exit();
+		$out='';
+		if (!empty($_POST['numero']) ) {
+			$client = new Client($_POST);
+			
+			if ($this->_clientManager->exists($client)) {
+				if($this->_clientManager->update($client)){
+					$out='Le client numéro '.$_POST['numero'].' a bien été modifié.';
+				}else{
+					$out='OUPS ! Il y a eu un problème.'; 
+				}
+			} else {
+				$out='Erreur : ce numéro n\'existe pas ! ';
+			}
+		}else{
+			$out='Erreur : vous ne devriez pas être ici !';
+		}
+		return $out;
 	}
 	
-	public function deleteClient($client){		
-		return $this->_clientManager->delete($client);
+	public function deleteClient($client){
+		return ($this->_clientManager->delete($client))?'Le client immatriculée '.$client->numero().' a bien été supprimé.':'OUPS ! Il y a eu un problème.'; 
 	}
 	
 }

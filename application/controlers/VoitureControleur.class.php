@@ -55,7 +55,11 @@ class VoitureControleur{
 			$this->_clientControleur->addClient($client);
 			
 			if (!$this->_voitureManager->exists($voiture)) {
-				$this->_voitureManager->add($voiture);
+				if($this->_voitureManager->add($voiture)){
+					$out='La voiture immatriculée '.$_POST['immatriculation'].' a bien été ajoutée.';
+				}else{
+					$out='OUPS ! Il y a eu un problème.'; 
+				}
 			} else {
 				$out='Erreur : cette immatriculation est déjà prise ! ';
 			}
@@ -77,7 +81,11 @@ class VoitureControleur{
 			$this->_clientControleur->addClient($client);
 			
 			if ($this->_voitureManager->exists($voiture)) {
-				$this->_voitureManager->update($voiture);
+				if($this->_voitureManager->update($voiture)){
+					$out='La voiture immatriculée '.$_POST['immatriculation'].' a bien été modifié.';
+				}else{
+					$out='OUPS ! Il y a eu un problème.'; 
+				}
 			} else {
 				$out='Erreur : cette immatriculation n\'existe pas ! ';
 			}
@@ -88,7 +96,7 @@ class VoitureControleur{
 	}
 	
 	public function deleteVoiture($voiture){		
-		return $this->_voitureManager->delete($voiture);
+		return ($this->_voitureManager->delete($voiture))?'La voiture immatriculée '.$voiture->immatriculation().' a bien été supprimée.':'OUPS ! Il y a eu un problème.'; 
 	}
 	
 }
