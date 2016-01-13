@@ -6,8 +6,8 @@
 				<nav id="navigation">
 					<ul>
 						<li><a href="?page=accueil">Accueil</a></li>
-						<li><a href="?page=voitures">Voitures</a></li>
-						<li><a href="?page=clients">Clients</a></li>
+						<li><a href="?page=afficherVoitures">Voitures</a></li>
+						<li><a href="?page=afficherClients">Clients</a></li>
 						<li><a href="?page=techniciens">Techniciens</a></li>
 						<li><a href="?page=contact">Contact</a></li>
 					</ul>

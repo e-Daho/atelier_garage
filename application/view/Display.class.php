@@ -46,7 +46,7 @@ class Display{
 		$out = '<h1>Tableau de bord</h1>
 				<div id="tableau_de_bord">
 					<a href="?page=afficherVoitures">Voitures</a>
-					<a href="?page=clients">Clients</a>
+					<a href="?page=afficherClients">Clients</a>
 					<a href="?page=techniciens">Techniciens</a>
 				</div>';
 		return $out;
@@ -209,7 +209,50 @@ class Display{
 	}
 	
 	public function afficherClients(){
-		
+		//[TODO]  Liste des client préchargée dans une liste déroulante
+		$out='	<h1>Recherche parmi les clients</h1>
+				<div class="pageRecherche">
+					<form action="?page=afficherClients" id="getListClients_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " >
+							<input type="text" class="table-cell" name="nom" placeholder="Nom : " >
+							<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " ></div><div>
+							<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
+							<input type="text" class="table-cell" name="referent" placeholder="Référent : " >
+						<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
+					</form>
+					<div class="alignRight">
+						<form action="?page=formAjouterClient" method="post" >
+							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+						</form>
+					</div>
+				</div>';
+		$liste_clients=$this->_clientControleur->getList();
+		$out.='		<h1>Liste des clients</h1>
+					<table>
+						<tr>
+							<th>Numéro</th>
+							<th>Nom</th>
+							<th>Prénom</th>
+							<th>Adresse</th>
+							<th>Référent</th>
+							<th></th>
+							<th></th>
+						</tr>';
+		foreach ($liste_clients as $client){
+		$out.='			<tr>
+							<td>'.$client->numero().'</td>
+							<td>'.$client->nom().'</td>
+							<td>'.$client->prenom().'</td>
+							<td>'.$client->adresse().'</td>
+							<td>'.$client->referent().'</td>
+							<td><a href="?page=formModifierClient&immatriculation='.$client->numero().'">Modifier</a></td>
+							<td><a href="?page=supprimerClient&immatriculation='.$client->numero().'" onclick="return verifjs_suppr();">Supprimer</a></td>
+						</tr>';
+		}
+		$out.='		</table>
+				</div>';
+		return $out;		
 	}
 }
 ?>
