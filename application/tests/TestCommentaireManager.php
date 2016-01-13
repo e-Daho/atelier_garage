@@ -8,6 +8,12 @@
 <?php
 	require('../objects/Commentaire.class.php');
 	require('../managers/CommentaireManager.class.php');
+	require('../objects/Voiture.class.php');
+	require('../managers/VoitureManager.class.php');
+	require('../objects/Technicien.class.php');
+	require('../managers/TechnicienManager.class.php');
+	require('../objects/Facture.class.php');
+	require('../managers/FactureManager.class.php');
 
 try
 {
@@ -18,23 +24,33 @@ catch(Exception $e)
 	die('Erreur : '.$e->getMessage());
 }
 
+$commentaireManager = new CommentaireManager($db);
+$technicienManager = new TechnicienManager($db);
+$voitureManager = new VoitureManager($db);
+
+$voiture = $voitureManager->get('abc-789-38');
+$technicien = $technicienManager->get(213456);
+
 $commentaire = new Commentaire([
-	'voiture'=>'xyz-789-38',
-	'technicien'=>7,
+	'voiture'=>$voiture->immatriculation(),
+	'technicien'=>$technicien->numero(),
 	'date'=>'',
 	'texte'=>'Cette voiture a l\'air en salle état']);
-	
-print_r($commentaire);
 
-//on cree le manager
-$commentaireManager = new CommentaireManager($db);
-//print_r($commentaireManager);
+print_r($commentaire);
 
 //on rajoute un commentaire en bdd
 $commentaireManager->add($commentaire);
 
 //on compte, doit retourner 1
-echo $commentaireManager->count();
+//echo $commentaireManager->count();
+
+//on test le get
+$commentaire = $commentaireManager->get($voiture,$technicien,'2016-01-13 17:21:32');
+if(empty($commentaire))
+{echo "c'est vide";}
+else
+{print_r($commentaire);}
 
 //on supprime la commentaire
 //$commentaireManager->delete($commentaire);
@@ -42,17 +58,10 @@ echo $commentaireManager->count();
 //on verifie si elle existe en bdd (doit retourner 1 si oui, 0 si non)
 //echo $commentaireManager->exists($commentaire);
 
-//on test le get
-//$commentaire = $commentaireManager->get('11');
-/*if(empty($commentaire))
-{echo "c'est vide";}
-else
-{print_r($commentaire);}*/
-
 //on test update
-$commentaire->setTexte('lol');
+/*$commentaire->setTexte('bonjour');
 $resultat = $commentaireManager->update($commentaire);
-echo (string)$resultat;
+echo (string)$resultat;*/
 
 ?>
 

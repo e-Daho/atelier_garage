@@ -63,15 +63,22 @@ class InterventionManager
 	}
 	
   
-	/*public function getList($id, $nom, $date)
+	public function getList($id, $nom, $prix)
 	{
 		$interventions = [];
 		
-		$q = $this->_db->prepare('SELECT * FROM intervention WHERE id LIKE :id AND nom LIKE :nom AND date LIKE :date ORDER BY date');
+		$q = $this->_db->prepare('
+						SELECT * 
+						FROM intervention 
+						WHERE id LIKE :id 
+						AND nom LIKE :nom 
+						AND prix LIKE :prix
+						ORDER BY prix
+		');
 
-    		$q->bindParam(':id', $id, PDO::PARAM_STR);
-    		$q->bindParam(':nom', $nom, PDO::PARAM_INT);
-		$q->bindParam(':date', $date, PDO::PARAM_STR);
+    	$q->bindParam(':id', $id, PDO::PARAM_INT);
+    	$q->bindParam(':nom', $nom, PDO::PARAM_STR);
+		$q->bindParam(':prix', $prix, PDO::PARAM_INT);
 		$q->execute();
 	    
 		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
@@ -79,7 +86,7 @@ class InterventionManager
 			$interventions[] = new Intervention($donnees); 
 		}
 		return $interventions;
-	}*/
+	}
 
   
 	public function update(Intervention $intervention)

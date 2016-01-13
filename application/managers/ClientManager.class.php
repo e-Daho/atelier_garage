@@ -49,7 +49,7 @@ class ClientManager
 		return (bool) $q->fetchColumn();
 	}
 
-  	# prend une numero en argument (string), retourne une client si il existe
+  	# prend une numero en argument, retourne une client si il existe
 	public function get($numero)
 	{
 		$q = $this->_db->prepare('SELECT numero, nom, prenom, adresse, referent FROM client WHERE numero = :numero');	
@@ -75,8 +75,8 @@ class ClientManager
 			ORDER BY :critereTri
 		');
 
-    		$q->bindParam(':numero', $numero, PDO::PARAM_INT);
-    		$q->bindParam(':nom', $nom, PDO::PARAM_STR);
+    	$q->bindParam(':numero', $numero, PDO::PARAM_INT);
+    	$q->bindParam(':nom', $nom, PDO::PARAM_STR);
 		$q->bindParam(':prenom', $prenom, PDO::PARAM_STR);
 		$q->bindParam(':adresse', $adresse, PDO::PARAM_STR);
 		$q->bindParam(':referent', $referent, PDO::PARAM_STR);

@@ -6,6 +6,7 @@ class Commentaire
 	private $_date;
 	private $_texte;
 
+	# prend en argument un immatriculation de voiture, un numéro de technicien, une date vide, et du texte (string)
 	public function __construct(array $donnees){$this->hydrate($donnees);}
 	
 	public function hydrate(array $donnees)
