@@ -3,11 +3,18 @@ class Display{
 	
 	private $_voitureControleur;
 	private $_utilisateurControleur;
+	private $_technicienControleur;
+	private $_repareControleur;
+	private $_factureControleur;
 	
-	public function __construct(UtilisateurControleur $utilisateurControleur, VoitureControleur $voitureControleur, ClientControleur $clientControleur){
+	public function __construct(UtilisateurControleur $utilisateurControleur, VoitureControleur $voitureControleur, ClientControleur $clientControleur, TechnicienControleur $technicienControleur, RepareControleur $repareControleur, FactureControleur $factureControleur){
 		$this->_voitureControleur=$voitureControleur;
 		$this->_utilisateurControleur=$utilisateurControleur;
 		$this->_clientControleur=$clientControleur;
+		$this->_technicienControleur=$technicienControleur;
+		$this->_repareControleur=$repareControleur;
+		$this->_factureControleur=$factureControleur;
+		
 	}
 	
 	public function accueil(){
@@ -44,14 +51,18 @@ class Display{
 	
 	public function tableau_de_bord(){
 		$out = '<h1>Tableau de bord</h1>
-				<div id="tableau_de_bord">
+				<div id="tableau_de_bord" class="largeCenter">
 					<a href="?page=afficherVoitures">Voitures</a>
 					<a href="?page=afficherClients">Clients</a>
-					<a href="?page=techniciens">Techniciens</a>
+					<a href="?page=afficherTechniciens">Techniciens</a>
+					<a href="?page=afficherRepares">Réparations</a>
+					<a href="?page=afficherFactures">Factures</a>
 				</div>';
+		print_r($_SESSION);
 		return $out;
 	}
 	
+	//Voitures
 	public function afficherVoitures(){
 		//[TODO]  Liste des client préchargée dans une liste déroulante
 		$out='	<h1>Recherche parmi les voitures</h1>
@@ -66,7 +77,7 @@ class Display{
 							<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " >
 							<select name="proprietaire">
 								<option value="" >Non sélectionné</option>';
-		$liste_clients = $this->_clientControleur->getList();
+		$liste_clients = $this->_clientControleur->getList('numero');
 		foreach ($liste_clients as $client){
 			$out.='				<option value="'.$client->numero().'" >'.$client->numero().'</option>';
 		}
@@ -130,7 +141,7 @@ class Display{
 							<select name="proprietaire" required="required" >
 								<option value="" rel="none">Non sélectionné</option>
 								<option value="" rel="other_client">Autre</option>';
-		$liste_clients = $this->_clientControleur->getList();
+		$liste_clients = $this->_clientControleur->getList('numero');
 		foreach ($liste_clients as $client){
 			$out.='				<option value="'.$client->numero().'" rel="none">'.$client->numero().'</option>';
 		}
@@ -150,23 +161,18 @@ class Display{
 	}
 	
 	public function ajouterVoiture(){
-		//[TODO] msg de confirmation
-		$this->_voitureControleur->addVoiture();
-		$out='';
-		
-		//header ('Location: ?page=afficherVoitures');
-		//exit();
+		return $this->_voitureControleur->addVoiture();
 	}
 	
 	public function formModifierVoiture(){
 		//[TODO]  Liste des client préchargée dans une liste déroulante + autre
 		//[TODO] recharger les données connues de la voiture
 		$voiture = $this->_voitureControleur->get($_GET['immatriculation']);
-		$out='	<h1>Ajouter une voiture</h1>
+		$out='	<h1>Modifier une voiture</h1>
 				<div class="pageRecherche">
 					<form action="?page=modifierVoiture" id="getListVoitures_form" method="post" >
 						<div class="table">
-							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " value="'.$voiture->immatriculation().'" required="required" >
+							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " value="'.$voiture->immatriculation().'" required="required" disabled="disabled" >
 							<input type="text" class="table-cell" name="marque" placeholder="Marque : " value="'.$voiture->marque().'" >
 							<input type="text" class="table-cell" name="type" placeholder="Type : " value="'.$voiture->type().'" ></div><div>
 							<input type="text" class="table-cell" name="annee" placeholder="Année : " value="'.$voiture->annee().'" >
@@ -177,7 +183,7 @@ class Display{
 							<select name="proprietaire" required="required" >
 								<option value="" rel="none">Non sélectionné</option>
 								<option value="" rel="other_client">Autre</option>';
-		$liste_clients = $this->_clientControleur->getList();
+		$liste_clients = $this->_clientControleur->getList('numero');
 		foreach ($liste_clients as $client){
 			$selector = ($voiture->proprietaire()==$client->numero())?'selected':'';
 			$out.='				<option value="'.$client->numero().'" rel="none" '.$selector.'>'.$client->numero().'</option>';
@@ -185,7 +191,7 @@ class Display{
 		$out.='				</select>';
 		$out.='			<div rel="other_client" class="table"><div>
 							<p>Nouveau client : </p>
-							<input  type="text" class="table-cell" name="numero" placeholder="Numero : " required="required" ></div><div>
+							<input  type="text" class="table-cell" name="numero" placeholder="Numero : " required="required" disabled="disabled" ></div><div>
 							<input  type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
 							<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " required="required" ></div><div>
 							<input  type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
@@ -198,16 +204,16 @@ class Display{
 	}
 	
 	public function modifierVoiture(){
-		//[TODO] msg de confirmation
-		$this->_voitureControleur->editVoiture();
+		return $this->_voitureControleur->editVoiture();
 	}
 	
 	public function supprimerVoiture(){
-		//[TODO] msg de confirmation
 		$voiture = $this->_voitureControleur->get($_GET['immatriculation']);
-		$this->_voitureControleur->deleteVoiture($voiture);
+		return $this->_voitureControleur->deleteVoiture($voiture);
 	}
 	
+	
+	//Clients
 	public function afficherClients(){
 		//[TODO]  Liste des client préchargée dans une liste déroulante
 		$out='	<h1>Recherche parmi les clients</h1>
@@ -227,7 +233,7 @@ class Display{
 						</form>
 					</div>
 				</div>';
-		$liste_clients=$this->_clientControleur->getList();
+		$liste_clients=$this->_clientControleur->getList('nom');
 		$out.='		<h1>Liste des clients</h1>
 					<table>
 						<tr>
@@ -274,20 +280,18 @@ class Display{
 	}
 	
 	public function ajouterClient(){
-		//[TODO] msg de confirmation
-		$this->_clientControleur->addClient();
+		return $this->_clientControleur->addClient();
 	}
 	
 	public function formModifierClient(){
 		//[TODO]  Liste des référents préchargée dans une liste déroulante + autre
 		//[TODO] recharger les données connues du client
 		$client = $this->_clientControleur->get($_GET['numero']);
-		print_r($client->numero());
 		$out='	<h1>Modifier un client</h1>
 				<div class="pageRecherche">
 					<form action="?page=modifierClient" id="getListClients_form" method="post" >
 						<div class="table">
-							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$client->numero().'" required="required" >
+							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$client->numero().'" required="required"  disabled="disabled" >
 							<input type="text" class="table-cell" name="nom" placeholder="Nom : " value="'.$client->nom().'" required="required" >
 							<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " value="'.$client->prenom().'" required="required" ></div><div>
 							<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " value="'.$client->adresse().'">
@@ -300,16 +304,286 @@ class Display{
 	}
 	
 	public function modifierClient(){
-		//[TODO] msg de confirmation
-		$this->_clientControleur->editClient();
+		return $this->_clientControleur->editClient();
 	}
 	
 	public function supprimerClient(){
-		//[TODO] msg de confirmation
 		$client = $this->_clientControleur->get($_GET['numero']);
-		print_r($client);
-		$this->_clientControleur->deleteClient($client);
+		return $this->_clientControleur->deleteClient($client);
 	}
+	
+	
+	//Techniciens
+	public function afficherTechniciens(){
+		//[TODO]  Liste des client préchargée dans une liste déroulante
+		$out='	<h1>Recherche parmi les techniciens</h1>
+				<div class="pageRecherche">
+					<form action="?page=afficherTechniciens" id="getListTechniciens_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " >
+							<input type="text" class="table-cell" name="nom" placeholder="Nom : " >
+							<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " ></div><div>
+						<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
+					</form>
+					<div class="alignRight">
+						<form action="?page=formAjouterTechnicien" method="post" >
+							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+						</form>
+					</div>
+				</div>';
+		$liste_techniciens=$this->_technicienControleur->getList();
+		$out.='		<h1>Liste des techniciens</h1>
+					<table>
+						<tr>
+							<th>Numéro</th>
+							<th>Nom</th>
+							<th>Prénom</th>
+							<th></th>
+							<th></th>
+						</tr>';
+		foreach ($liste_techniciens as $technicien){
+		$out.='			<tr>
+							<td>'.$technicien->numero().'</td>
+							<td>'.$technicien->nom().'</td>
+							<td>'.$technicien->prenom().'</td>
+							<td><a href="?page=formModifierTechnicien&numero='.$technicien->numero().'">Modifier</a></td>
+							<td><a href="?page=supprimerTechnicien&numero='.$technicien->numero().'" onclick="return verifjs_suppr();">Supprimer</a></td>
+						</tr>';
+		}
+		$out.='		</table>
+				</div>';
+		return $out;		
+	}
+	
+	public function formAjouterTechnicien(){	
+		$out='	<h1>Ajouter un technicien</h1>
+				<div class="pageRecherche">
+					<form action="?page=ajouterTechnicien" id="getListTechniciens_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " required="required"  >
+							<input type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
+							<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " required="required" >
+						</div>
+						<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function ajouterTechnicien(){
+		return $this->_technicienControleur->addTechnicien();
+	}
+	
+	public function formModifierTechnicien(){
+		$technicien = $this->_technicienControleur->get($_GET['numero']);
+		print_r($technicien);
+		$out='	<h1>Modifier un technicien</h1>
+				<div class="pageRecherche">
+					<form action="?page=modifierTechnicien" id="getListTechniciens_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$technicien->numero().'" required="required"  disabled="disabled" >
+							<input type="text" class="table-cell" name="nom" placeholder="Nom : " value="'.$technicien->nom().'" required="required" >
+							<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " value="'.$technicien->prenom().'" required="required" >
+						</div>
+						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function modifierTechnicien(){
+		return $this->_technicienControleur->editTechnicien();
+	}
+	
+	public function supprimerTechnicien(){
+		$technicien = $this->_technicienControleur->get($_GET['numero']);
+		return $this->_technicienControleur->deleteTechnicien($technicien);
+	}
+	
+	
+	//Réparations
+	public function afficherRepares(){
+		$out='	<h1>Recherche parmi les réparations</h1>
+				<div class="pageRecherche">
+					<form action="?page=afficherRepares" id="getListRepares_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " >
+							<input type="text" class="table-cell" name="technicien" placeholder="Technicien : " >
+							<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " ></div><div>
+							<input type="date" class="table-cell" name="dateDebut" placeholder="Date de début : " >
+							<input type="date" class="table-cell" name="dateFin" placeholder="Date de fin : " >
+						<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
+					</form>
+					<div class="alignRight">
+						<form action="?page=formAjouterRepare" method="post" >
+							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+						</form>
+					</div>
+				</div>';
+		$liste_repares=$this->_repareControleur->getList();
+		$out.='		<h1>Liste des réparations</h1>
+					<table>
+						<tr>
+							<th>Id Facture</th>
+							<th>Technicien</th>
+							<th>Voiture</th>
+							<th>Date de début</th>
+							<th>Date de fin</th>
+							<th></th>
+							<th></th>
+						</tr>';
+		foreach ($liste_repares as $repare){
+		$out.='			<tr>
+							<td>'.$repare->idFacture().'</td>
+							<td>'.$repare->technicien().'</td>
+							<td>'.$repare->voiture().'</td>
+							<td>'.$repare->dateDebut().'</td>
+							<td>'.$repare->dateFin().'</td>
+							<td><a href="?page=formModifierRepare&technicien='.$repare->technicien().'&voiture='.$repare->voiture().'">Modifier</a></td>
+							<td><a href="?page=supprimerRepare&technicien='.$repare->technicien().'&voiture='.$repare->voiture().'" onclick="return verifjs_suppr();">Supprimer</a></td>
+						</tr>';
+		}
+		$out.='		</table>
+				</div>';
+		return $out;		
+	}
+	
+	public function formAjouterRepare(){	
+		$out='	<h1>Ajouter une réparation</h1>
+				<div class="pageRecherche">
+					<form action="?page=ajouterRepare" id="getListRepares_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " >
+							<input type="text" class="table-cell" name="technicien" placeholder="Technicien : " required="required"  >
+							<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " required="required"  ></div><div>
+							<input type="date" class="table-cell" name="dateDebut" placeholder="Date de début : " required="required"  >
+							<input type="date" class="table-cell" name="dateFin" placeholder="Date de fin : " >
+						</div>
+						<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function ajouterRepare(){
+		return $this->_repareControleur->addRepare();
+	}
+	
+	public function formModifierRepare(){
+		$repare = $this->_repareControleur->get($_GET['numero']);
+		print_r($repare);
+		$out='	<h1>Modifier une réparation</h1>
+				<div class="pageRecherche">
+					<form action="?page=modifierRepare" id="getListRepares_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " value="'.$repare->idFacture().'">
+							<input type="text" class="table-cell" name="technicien" placeholder="Technicien : " value="'.$repare->technicien().'" required="required"  disabled="disabled"  >
+							<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " value="'.$repare->voiture().'" required="required"   disabled="disabled" ></div><div>
+							<input type="date" class="table-cell" name="dateDebut" placeholder="Date de début : " value="'.$repare->dateDebut().'" required="required"   disabled="disabled" >
+							<input type="date" class="table-cell" name="dateFin" placeholder="Date de fin : " value="'.$repare->dateFin().'" >
+						</div>
+						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function modifierRepare(){
+		return $this->_repareControleur->editRepare();
+	}
+	
+	public function supprimerRepare(){
+		$repare = $this->_repareControleur->get($_GET['technicien'],$_GET['voiture']);
+		return $this->_repareControleur->deleteRepare($repare);
+	}
+	
+	
+	//Factures
+	public function afficherFactures(){
+		$out='	<h1>Recherche parmi les factures</h1>
+				<div class="pageRecherche">
+					<form action="?page=afficherFactures" id="getListFactures_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " >
+							<input type="text" class="table-cell" name="prixTotal" placeholder="Prix Total : " >
+						<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
+					</form>
+					<div class="alignRight">
+						<form action="?page=formAjouterFacture" method="post" >
+							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+						</form>
+					</div>
+				</div>';
+		$liste_factures=$this->_factureControleur->getList();
+		$out.='		<h1>Liste des factures</h1>
+					<table>
+						<tr>
+							<th>Id Facture</th>
+							<th>Prix Total</th>
+							<th></th>
+							<th></th>
+						</tr>';
+		foreach ($liste_factures as $facture){
+		$out.='			<tr>
+							<td>'.$facture->idFacture().'</td>
+							<td>'.$facture->prixTotal().'</td>
+							<td><a href="?page=formModifierFacture&idFacture='.$facture->idFacture().'">Modifier</a></td>
+							<td><a href="?page=supprimerFacture&idFacture='.$facture->idFacture().'" onclick="return verifjs_suppr();">Supprimer</a></td>
+						</tr>';
+		}
+		$out.='		</table>
+				</div>';
+		return $out;		
+	}
+	
+	public function formAjouterFacture(){	
+		$out='	<h1>Ajouter un facture</h1>
+				<div class="pageRecherche">
+					<form action="?page=ajouterFacture" id="getListFactures_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " required="required"  >
+							<input type="text" class="table-cell" name="prixTotal" placeholder="Prix Total : ">
+						</div>
+						<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function ajouterFacture(){
+		return $this->_factureControleur->addFacture();
+	}
+	
+	public function formModifierFacture(){
+		$facture = $this->_factureControleur->get($_GET['numero']);
+		print_r($facture);
+		$out='	<h1>Modifier un facture</h1>
+				<div class="pageRecherche">
+					<form action="?page=modifierFacture" id="getListFactures_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " value="'.$facture->idFacture().'">
+							<input type="text" class="table-cell" name="technicien" placeholder="Technicien : " value="'.$facture->technicien().'" required="required"  disabled="disabled"  >
+							<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " value="'.$facture->voiture().'" required="required"   disabled="disabled" ></div><div>
+							<input type="date" class="table-cell" name="dateDebut" placeholder="Date de début : " value="'.$facture->dateDebut().'" required="required"   disabled="disabled" >
+							<input type="date" class="table-cell" name="dateFin" placeholder="Date de fin : " value="'.$facture->dateFin().'" >
+						</div>
+						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function modifierFacture(){
+		return $this->_factureControleur->editFacture();
+	}
+	
+	public function supprimerFacture(){
+		$facture = $this->_factureControleur->get($_GET['technicien'],$_GET['voiture']);
+		return $this->_factureControleur->deleteFacture($facture);
+	}
+	
+	
+	
 	
 }
 ?>

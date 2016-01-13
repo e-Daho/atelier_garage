@@ -8,8 +8,8 @@
 						<li><a href="?page=accueil">Accueil</a></li>
 						<li><a href="?page=afficherVoitures">Voitures</a></li>
 						<li><a href="?page=afficherClients">Clients</a></li>
-						<li><a href="?page=techniciens">Techniciens</a></li>
-						<li><a href="?page=contact">Contact</a></li>
+						<li><a href="?page=afficherTechniciens">Techniciens</a></li>
+						<li><a href="?page=afficherRepares">Réparations</a></li>
 					</ul>
 				</nav>
 				<nav id="utilisateur">
