@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost:3307
--- Généré le :  Mar 12 Janvier 2016 à 20:28
+-- Généré le :  Mer 13 Janvier 2016 à 11:41
 -- Version du serveur :  5.6.27-0ubuntu1
 -- Version de PHP :  5.6.11
 
@@ -73,7 +73,8 @@ INSERT INTO `commentaire` (`voiture`, `technicien`, `date`, `texte`) VALUES
 ('xyz-789-38', 7, '2016-01-11 22:47:34', 'lol'),
 ('xyz-789-38', 7, '2016-01-11 22:48:17', 'lol'),
 ('xyz-789-38', 7, '2016-01-12 08:45:15', 'lol'),
-('xyz-789-38', 7, '2016-01-12 11:09:07', 'lol');
+('xyz-789-38', 7, '2016-01-12 11:09:07', 'lol'),
+('xyz-789-38', 7, '2016-01-13 10:14:56', 'lol');
 
 -- --------------------------------------------------------
 
@@ -84,7 +85,16 @@ INSERT INTO `commentaire` (`voiture`, `technicien`, `date`, `texte`) VALUES
 CREATE TABLE IF NOT EXISTS `facture` (
   `idFacture` int(11) NOT NULL,
   `prixTotal` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `facture`
+--
+
+INSERT INTO `facture` (`idFacture`, `prixTotal`) VALUES
+(3, 150),
+(4, 0),
+(5, 0);
 
 -- --------------------------------------------------------
 
@@ -98,47 +108,54 @@ CREATE TABLE IF NOT EXISTS `facture_intervention` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Contenu de la table `facture_intervention`
+--
+
+INSERT INTO `facture_intervention` (`idFacture`, `idIntervention`) VALUES
+(3, 4);
+
+--
 -- Déclencheurs `facture_intervention`
 --
 DELIMITER $$
-CREATE TRIGGER `repare_intervention_AFTER_DELETE` AFTER DELETE ON `facture_intervention`
+CREATE TRIGGER `facture_intervention_AFTER_DELETE` AFTER DELETE ON `facture_intervention`
  FOR EACH ROW BEGIN
-	UPDATE `atelier_garage`.`repare`
+	UPDATE `atelier_garage`.`facture`
     SET prixTotal =
 		(SELECT SUM(`prix`)
-		FROM `repare_intervention` INNER JOIN `intervention`
-        ON `repare_intervention`.`idIntervention` = `intervention`.`id`
-        WHERE `repare_intervention`.`idFacture` = OLD.`idFacture`
+		FROM `facture_intervention` INNER JOIN `intervention`
+        ON `facture_intervention`.`idIntervention` = `intervention`.`id`
+        WHERE `facture_intervention`.`idFacture` = OLD.`idFacture`
         )
-	WHERE `repare`.`idFacture` = OLD.`idFacture`;
+	WHERE `facture`.`idFacture` = OLD.`idFacture`;
 END
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `repare_intervention_AFTER_INSERT` AFTER INSERT ON `facture_intervention`
+CREATE TRIGGER `facture_intervention_AFTER_INSERT` AFTER INSERT ON `facture_intervention`
  FOR EACH ROW BEGIN
-	UPDATE `atelier_garage`.`repare`
+	UPDATE `atelier_garage`.`facture`
     SET prixTotal =
 		(SELECT SUM(`prix`)
-		FROM `repare_intervention` INNER JOIN `intervention`
-        ON `repare_intervention`.`idIntervention` = `intervention`.`id`
-        WHERE `repare_intervention`.`idFacture` = NEW.`idFacture`
+		FROM `facture_intervention` INNER JOIN `intervention`
+        ON `facture_intervention`.`idIntervention` = `intervention`.`id`
+        WHERE `facture_intervention`.`idFacture` = NEW.`idFacture`
         )
-	WHERE `repare`.`idFacture` = NEW.`idFacture`;
+	WHERE `facture`.`idFacture` = NEW.`idFacture`;
 END
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `repare_intervention_AFTER_UPDATE` AFTER UPDATE ON `facture_intervention`
+CREATE TRIGGER `facture_intervention_AFTER_UPDATE` AFTER UPDATE ON `facture_intervention`
  FOR EACH ROW BEGIN
-	UPDATE `atelier_garage`.`repare`
+	UPDATE `atelier_garage`.`facture`
     SET prixTotal =
 		(SELECT SUM(`prix`)
-		FROM `repare_intervention` INNER JOIN `intervention`
-        ON `repare_intervention`.`idIntervention` = `intervention`.`id`
-        WHERE `repare_intervention`.`idFacture` = NEW.`idFacture`
+		FROM `facture_intervention` INNER JOIN `intervention`
+        ON `facture_intervention`.`idIntervention` = `intervention`.`id`
+        WHERE `facture_intervention`.`idFacture` = NEW.`idFacture`
         )
-	WHERE `repare`.`idFacture` = NEW.`idFacture`;
+	WHERE `facture`.`idFacture` = NEW.`idFacture`;
 END
 $$
 DELIMITER ;
@@ -332,6 +349,11 @@ ALTER TABLE `voiture`
 --
 
 --
+-- AUTO_INCREMENT pour la table `facture`
+--
+ALTER TABLE `facture`
+  MODIFY `idFacture` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
 -- AUTO_INCREMENT pour la table `intervention`
 --
 ALTER TABLE `intervention`
@@ -356,8 +378,8 @@ ALTER TABLE `commentaire`
 -- Contraintes pour la table `facture_intervention`
 --
 ALTER TABLE `facture_intervention`
-  ADD CONSTRAINT `ri_facture` FOREIGN KEY (`idFacture`) REFERENCES `facture` (`idFacture`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `ri_intervention` FOREIGN KEY (`idIntervention`) REFERENCES `intervention` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fi_facture` FOREIGN KEY (`idFacture`) REFERENCES `facture` (`idFacture`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fi_intervention` FOREIGN KEY (`idIntervention`) REFERENCES `intervention` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `repare`
