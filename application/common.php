@@ -106,6 +106,9 @@ switch($page){
 	case 'modifierClient':
 		$out = $display->modifierClient();
 		break;
+	case 'supprimerClient':
+		$out = $display->supprimerClient();
+		break;
 
 
 	default:	//cas où le nom de la page ne correspond à aucun cas precedent.

@@ -304,7 +304,12 @@ class Display{
 		$this->_clientControleur->editClient();
 	}
 	
-	
+	public function supprimerClient(){
+		//[TODO] msg de confirmation
+		$client = $this->_clientControleur->get($_GET['numero']);
+		print_r($client);
+		$this->_clientControleur->deleteClient($client);
+	}
 	
 }
 ?>

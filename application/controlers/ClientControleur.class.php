@@ -59,5 +59,9 @@ class ClientControleur{
 		exit();
 	}
 	
+	public function deleteClient($client){		
+		return $this->_clientManager->delete($client);
+	}
+	
 }
 ?>
