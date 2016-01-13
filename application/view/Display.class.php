@@ -6,14 +6,16 @@ class Display{
 	private $_technicienControleur;
 	private $_repareControleur;
 	private $_factureControleur;
+	private $_interventionControleur;
 	
-	public function __construct(UtilisateurControleur $utilisateurControleur, VoitureControleur $voitureControleur, ClientControleur $clientControleur, TechnicienControleur $technicienControleur, RepareControleur $repareControleur, FactureControleur $factureControleur){
+	public function __construct(UtilisateurControleur $utilisateurControleur, VoitureControleur $voitureControleur, ClientControleur $clientControleur, TechnicienControleur $technicienControleur, RepareControleur $repareControleur, FactureControleur $factureControleur, InterventionControleur $interventionControleur){
 		$this->_voitureControleur=$voitureControleur;
 		$this->_utilisateurControleur=$utilisateurControleur;
 		$this->_clientControleur=$clientControleur;
 		$this->_technicienControleur=$technicienControleur;
 		$this->_repareControleur=$repareControleur;
 		$this->_factureControleur=$factureControleur;
+		$this->_interventionControleur=$interventionControleur;
 		
 	}
 	
@@ -57,6 +59,7 @@ class Display{
 					<a href="?page=afficherTechniciens">Techniciens</a>
 					<a href="?page=afficherRepares">Réparations</a>
 					<a href="?page=afficherFactures">Factures</a>
+					<a href="?page=afficherInterventions">Interventions</a>
 				</div>';
 		print_r($_SESSION);
 		return $out;
@@ -172,7 +175,7 @@ class Display{
 				<div class="pageRecherche">
 					<form action="?page=modifierVoiture" id="getListVoitures_form" method="post" >
 						<div class="table">
-							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " value="'.$voiture->immatriculation().'" required="required" disabled="disabled" >
+							<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " value="'.$voiture->immatriculation().'" required="required" readonly="readonly" >
 							<input type="text" class="table-cell" name="marque" placeholder="Marque : " value="'.$voiture->marque().'" >
 							<input type="text" class="table-cell" name="type" placeholder="Type : " value="'.$voiture->type().'" ></div><div>
 							<input type="text" class="table-cell" name="annee" placeholder="Année : " value="'.$voiture->annee().'" >
@@ -191,7 +194,7 @@ class Display{
 		$out.='				</select>';
 		$out.='			<div rel="other_client" class="table"><div>
 							<p>Nouveau client : </p>
-							<input  type="text" class="table-cell" name="numero" placeholder="Numero : " required="required" disabled="disabled" ></div><div>
+							<input  type="text" class="table-cell" name="numero" placeholder="Numero : " required="required" readonly="readonly" ></div><div>
 							<input  type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
 							<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " required="required" ></div><div>
 							<input  type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
@@ -291,7 +294,7 @@ class Display{
 				<div class="pageRecherche">
 					<form action="?page=modifierClient" id="getListClients_form" method="post" >
 						<div class="table">
-							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$client->numero().'" required="required"  disabled="disabled" >
+							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$client->numero().'" required="required"  readonly="readonly" >
 							<input type="text" class="table-cell" name="nom" placeholder="Nom : " value="'.$client->nom().'" required="required" >
 							<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " value="'.$client->prenom().'" required="required" ></div><div>
 							<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " value="'.$client->adresse().'">
@@ -381,7 +384,7 @@ class Display{
 				<div class="pageRecherche">
 					<form action="?page=modifierTechnicien" id="getListTechniciens_form" method="post" >
 						<div class="table">
-							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$technicien->numero().'" required="required"  disabled="disabled" >
+							<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$technicien->numero().'" required="required"  readonly="readonly" >
 							<input type="text" class="table-cell" name="nom" placeholder="Nom : " value="'.$technicien->nom().'" required="required" >
 							<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " value="'.$technicien->prenom().'" required="required" >
 						</div>
@@ -477,9 +480,9 @@ class Display{
 					<form action="?page=modifierRepare" id="getListRepares_form" method="post" >
 						<div class="table">
 							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " value="'.$repare->idFacture().'">
-							<input type="text" class="table-cell" name="technicien" placeholder="Technicien : " value="'.$repare->technicien().'" required="required"  disabled="disabled"  >
-							<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " value="'.$repare->voiture().'" required="required"   disabled="disabled" ></div><div>
-							<input type="date" class="table-cell" name="dateDebut" placeholder="Date de début : " value="'.$repare->dateDebut().'" required="required"   disabled="disabled" >
+							<input type="text" class="table-cell" name="technicien" placeholder="Technicien : " value="'.$repare->technicien().'" required="required"  readonly="readonly"  >
+							<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " value="'.$repare->voiture().'" required="required"   readonly="readonly" ></div><div>
+							<input type="date" class="table-cell" name="dateDebut" placeholder="Date de début : " value="'.$repare->dateDebut().'" required="required"   readonly="readonly" >
 							<input type="date" class="table-cell" name="dateFin" placeholder="Date de fin : " value="'.$repare->dateFin().'" >
 						</div>
 						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
@@ -561,7 +564,7 @@ class Display{
 				<div class="pageRecherche">
 					<form action="?page=modifierFacture" id="getListFactures_form" method="post" >
 						<div class="table">
-							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " required="required" value="'.$facture->idFacture().'"  disabled="disabled"  >
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " required="required" value="'.$facture->idFacture().'"  readonly="readonly"  >
 							<input type="text" class="table-cell" name="prixTotal" placeholder="Prix Total : " value="'.$facture->prixTotal().'">
 						</div>
 						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
@@ -579,6 +582,90 @@ class Display{
 		return $this->_factureControleur->deleteFacture($facture);
 	}
 	
+	
+	//Interventions
+	public function afficherInterventions(){
+		$out='	<h1>Recherche parmi les interventions</h1>
+				<div class="pageRecherche">
+					<form action="?page=afficherInterventions" id="getListInterventions_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="id" placeholder="Id : " >
+							<input type="text" class="table-cell" name="nom" placeholder="Nom : " >
+							<input type="text" class="table-cell" name="prix" placeholder="Prix : " >
+						<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
+					</form>
+					<div class="alignRight">
+						<form action="?page=formAjouterIntervention" method="post" >
+							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+						</form>
+					</div>
+				</div>';
+		$liste_interventions=$this->_interventionControleur->getList();
+		$out.='		<h1>Liste des interventions</h1>
+					<table>
+						<tr>
+							<th>Id</th>
+							<th>Nom</th>
+							<th>Prix</th>
+							<th></th>
+							<th></th>
+						</tr>';
+		foreach ($liste_interventions as $intervention){
+		$out.='			<tr>
+							<td>'.$intervention->id().'</td>
+							<td>'.$intervention->nom().'</td>
+							<td>'.$intervention->prix().'</td>
+							<td><a href="?page=formModifierIntervention&id='.$intervention->id().'">Modifier</a></td>
+							<td><a href="?page=supprimerIntervention&id='.$intervention->id().'" onclick="return verifjs_suppr();">Supprimer</a></td>
+						</tr>';
+		}
+		$out.='		</table>
+				</div>';
+		return $out;		
+	}
+	
+	public function formAjouterIntervention(){	
+		$out='	<h1>Ajouter un intervention</h1>
+				<div class="pageRecherche">
+					<form action="?page=ajouterIntervention" id="getListInterventions_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="nom" placeholder="Nom : " required="required"   >
+							<input type="text" class="table-cell" name="prix" placeholder="Prix : " required="required"   >
+						</div>
+						<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function ajouterIntervention(){
+		return $this->_interventionControleur->addIntervention();
+	}
+	
+	public function formModifierIntervention(){
+		$intervention = $this->_interventionControleur->get($_GET['id']);
+		$out='	<h1>Modifier un intervention</h1>
+				<div class="pageRecherche">
+					<form action="?page=modifierIntervention" id="getListInterventions_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="id" placeholder="Id : " required="required" value="'.$intervention->id().'"  readonly="readonly"  >
+							<input type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" value="'.$intervention->nom().'">
+							<input type="text" class="table-cell" name="prix" placeholder="Prix : " required="required" value="'.$intervention->prix().'">
+						</div>
+						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+					</form>
+				</div>';
+		return $out;
+	}
+	
+	public function modifierIntervention(){
+		return $this->_interventionControleur->editIntervention();
+	}
+	
+	public function supprimerIntervention(){
+		$intervention = $this->_interventionControleur->get($_GET['id']);
+		return $this->_interventionControleur->deleteIntervention($intervention);
+	}
 	
 	
 	
