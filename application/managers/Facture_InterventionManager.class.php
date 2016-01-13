@@ -1,5 +1,5 @@
 <?php
-class FactureManager
+class Facture_InterventionManager
 {
 	private $_db;
 

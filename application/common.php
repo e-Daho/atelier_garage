@@ -171,7 +171,7 @@ switch($page){
 		break;
 		
 	//factures
-	/*case 'afficherFactures':
+	case 'afficherFactures':
 		$out = $display->afficherFactures();
 		break;
 	case 'formAjouterFacture':
@@ -180,15 +180,9 @@ switch($page){
 	case 'ajouterFacture':
 		$out = $display->ajouterFacture();
 		break;
-	case 'formModifierFacture':
-		$out = $display->formModifierFacture();
-		break;
-	case 'modifierFacture':
-		$out = $display->modifierFacture();
-		break;
 	case 'supprimerFacture':
 		$out = $display->supprimerFacture();
-		break;*/
+		break;
 		
 	//interventions
 	case 'afficherInterventions':

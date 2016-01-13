@@ -442,8 +442,8 @@ class Display{
 							<td>'.$repare->voiture().'</td>
 							<td>'.$repare->dateDebut().'</td>
 							<td>'.$repare->dateFin().'</td>
-							<td><a href="?page=formModifierRepare&technicien='.$repare->technicien().'&voiture='.$repare->voiture().'">Modifier</a></td>
-							<td><a href="?page=supprimerRepare&technicien='.$repare->technicien().'&voiture='.$repare->voiture().'" onclick="return verifjs_suppr();">Supprimer</a></td>
+							<td><a href="?page=formModifierRepare&technicien='.$repare->technicien().'&voiture='.$repare->voiture().'&dateDebut='.$repare->dateDebut().'">Modifier</a></td>
+							<td><a href="?page=supprimerRepare&technicien='.$repare->technicien().'&voiture='.$repare->voiture().'&dateDebut='.$repare->dateDebut().'" onclick="return verifjs_suppr();">Supprimer</a></td>
 						</tr>';
 		}
 		$out.='		</table>
@@ -524,13 +524,11 @@ class Display{
 							<th>Id Facture</th>
 							<th>Prix Total</th>
 							<th></th>
-							<th></th>
 						</tr>';
 		foreach ($liste_factures as $facture){
 		$out.='			<tr>
 							<td>'.$facture->idFacture().'</td>
 							<td>'.$facture->prixTotal().'</td>
-							<td><a href="?page=formModifierFacture&idFacture='.$facture->idFacture().'">Modifier</a></td>
 							<td><a href="?page=supprimerFacture&idFacture='.$facture->idFacture().'" onclick="return verifjs_suppr();">Supprimer</a></td>
 						</tr>';
 		}
@@ -557,31 +555,40 @@ class Display{
 		return $this->_factureControleur->addFacture();
 	}
 	
-	public function formModifierFacture(){
-		$facture = $this->_factureControleur->get($_GET['numero']);
-		print_r($facture);
-		$out='	<h1>Modifier un facture</h1>
-				<div class="pageRecherche">
-					<form action="?page=modifierFacture" id="getListFactures_form" method="post" >
-						<div class="table">
-							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " required="required" value="'.$facture->idFacture().'"  readonly="readonly"  >
-							<input type="text" class="table-cell" name="prixTotal" placeholder="Prix Total : " value="'.$facture->prixTotal().'">
-						</div>
-						<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
-					</form>
-				</div>';
-		return $out;
-	}
-	
-	public function modifierFacture(){
-		return $this->_factureControleur->editFacture();
-	}
-	
 	public function supprimerFacture(){
 		$facture = $this->_factureControleur->get($_GET['idFacture']);
 		return $this->_factureControleur->deleteFacture($facture);
 	}
 	
+	public function ficheFacture(){
+		$facture = $this->_factureControleur->get($_GET['idFacture']);
+		$out='	<h1>Facture détaillée</h1>
+				<div class="pageRecherche">
+					<table>
+						<tr><th>Id Facture : </th><td>'.$facture->idFacture().'</td></tr>
+						<tr><th>Prix Total : </th><td>'.$facture->prixTotal().'</td></tr>
+					</table>';
+				
+		/*$liste_factures_detail=$this->_factureControleur->getList();
+		$out.='		<h1>Liste des factures</h1>
+					<table>
+						<tr>
+							<th>Id Facture</th>
+							<th>Prix Total</th>
+							<th></th>
+						</tr>';
+		foreach ($liste_factures as $facture){
+		$out.='			<tr>
+							<td>'.$facture->idFacture().'</td>
+							<td>'.$facture->prixTotal().'</td>
+							<td><a href="?page=supprimerFacture&idFacture='.$facture->idFacture().'" onclick="return verifjs_suppr();">Supprimer</a></td>
+						</tr>';
+		}
+		$out.='		</table>
+				
+				</div>';*/
+		
+	}
 	
 	//Interventions
 	public function afficherInterventions(){
