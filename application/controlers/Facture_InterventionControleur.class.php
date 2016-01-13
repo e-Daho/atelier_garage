@@ -13,10 +13,7 @@ class Facture_InterventionControleur{
 	
 	public function getList(){
 		$idFacture = '%';
-		if (!empty($_POST['idFacture'])) {$idFacture.=$_POST['idFacture'].'%';}
-		
-		$idIntervention = '%';
-		if (!empty($_POST['idIntervention'])) {$idIntervention.=$_POST['idIntervention'].'%';}
+		if (!empty($_GET['idFacture'])) {$idFacture.=$_GET['idFacture'].'%';}
 					
 		$liste_factures_detail = $this->_facture_interventionManager->getList($idFacture);
 		return $liste_factures_detail;
@@ -26,6 +23,7 @@ class Facture_InterventionControleur{
 		$out='';
 		if (!empty($_POST['idFacture']) AND !empty($_POST['idIntervention']) ) {
 			$facture_intervention = new Facture_Intervention($_POST);
+			print_r($facture_intervention);
 			
 			if (!$this->_facture_interventionManager->exists($facture_intervention)) {
 				if($this->_facture_interventionManager->add($facture_intervention)){
@@ -43,7 +41,7 @@ class Facture_InterventionControleur{
 	}
 		
 	public function deleteFacture_Intervention($facture_intervention){
-		return ($this->_facture_interventionManager->delete($facture_intervention))?'Le facture_intervention immatriculée '.$facture_intervention->numero().' a bien été supprimé.':'OUPS ! Il y a eu un problème.'; 
+		return ($this->_facture_interventionManager->delete($facture_intervention))?'La facture_intervention entre '.$facture_intervention->idFacture().' et '.$facture_intervention->idIntervention().' a bien été supprimé.':'OUPS ! Il y a eu un problème.'; 
 	}
 	
 }

@@ -189,6 +189,9 @@ switch($page){
 	case 'supprimerFacture':
 		$out = $display->supprimerFacture();
 		break;
+	case 'ficheFacture':
+		$out = $display->ficheFacture();
+		break;
 		
 	//interventions
 	case 'afficherInterventions':
@@ -209,7 +212,17 @@ switch($page){
 	case 'supprimerIntervention':
 		$out = $display->supprimerIntervention();
 		break;
+		
+	//facture_intervention
+	case 'ajouterFacture_Intervention':
+		$out = $display->ajouterFacture_Intervention();
+		break;
+	case 'supprimerFacture_Intervention':
+		$out = $display->supprimerFacture_Intervention();
+		break;
 
+		
+		
 
 	default:	//cas où le nom de la page ne correspond à aucun cas precedent.
 		$out = 'la page '.$page.' n\'éxiste pas';

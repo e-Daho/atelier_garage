@@ -529,7 +529,7 @@ class Display{
 						</tr>';
 		foreach ($liste_factures as $facture){
 		$out.='			<tr>
-							<td>'.$facture->idFacture().'</td>
+							<td><a href="?page=ficheFacture&idFacture='.$facture->idFacture().'">'.$facture->idFacture().'</a></td>
 							<td>'.$facture->prixTotal().'</td>
 							<td><a href="?page=supprimerFacture&idFacture='.$facture->idFacture().'" onclick="return verifjs_suppr();">Supprimer</a></td>
 						</tr>';
@@ -569,26 +569,41 @@ class Display{
 					<table>
 						<tr><th>Id Facture : </th><td>'.$facture->idFacture().'</td></tr>
 						<tr><th>Prix Total : </th><td>'.$facture->prixTotal().'</td></tr>
-					</table>';
-				
-		/*$liste_factures_detail=$this->_factureControleur->getList();
-		$out.='		<h1>Liste des factures</h1>
+					</table>
+					<h1>Ajouter une intervention : </h1>
+					<form action="?page=ajouterFacture_Intervention" id="getListFactures_Intervention_form" method="post" >
+						<div class="table">
+							<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " required="required" value="'.$facture->idFacture().'" readonly="readonly">
+							<input type="text" class="table-cell" name="idIntervention" placeholder="Prix Total : " required="required" >
+						</div>
+						<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+					</form>	';
+					
+		$liste_factures_detail=$this->_facture_interventionControleur->getList($facture->idFacture());
+		$out.='		<h1>Liste des interventions</h1>
 					<table>
 						<tr>
 							<th>Id Facture</th>
+							<th>Id Intervention</th>
 							<th>Prix Total</th>
+							<th>Nom</th>
+							<th>prix</th>
 							<th></th>
 						</tr>';
-		foreach ($liste_factures as $facture){
+		foreach ($liste_factures_detail as $facture_detail){
 		$out.='			<tr>
-							<td>'.$facture->idFacture().'</td>
-							<td>'.$facture->prixTotal().'</td>
-							<td><a href="?page=supprimerFacture&idFacture='.$facture->idFacture().'" onclick="return verifjs_suppr();">Supprimer</a></td>
+							<td>'.$facture_detail->idFacture().'</td>
+							<td>'.$facture_detail->idIntervention().'</td>
+							<td>'.$facture_detail->prixTotal().'</td>
+							<td>'.$facture_detail->nom().'</td>
+							<td>'.$facture_detail->prix().'</td>
+							<td><a href="?page=supprimerFacture_Intervention&idFacture='.$facture_detail->idFacture().'&idIntervention='.$facture_detail->idIntervention().'" onclick="return verifjs_suppr();">Supprimer</a></td>
 						</tr>';
 		}
 		$out.='		</table>
 				
-				</div>';*/
+				</div>';
+		return $out;
 		
 	}
 	
@@ -676,7 +691,19 @@ class Display{
 		return $this->_interventionControleur->deleteIntervention($intervention);
 	}
 	
+	//Facture_InterventionControleur
+	public function ajouterFacture_Intervention(){
+		$this->_facture_interventionControleur->addFacture_Intervention($_POST['idFacture'],$_POST['idIntervention']);
+		header('Location:?page=ficheFacture&idFacture='.$_POST['idFacture'].'');
+		exit();
+	}
 	
+	public function supprimerFacture_Intervention(){
+		$facture_intervention = $this->_facture_interventionControleur->get($_GET['idFacture'],$_GET['idIntervention']);
+		$this->_facture_interventionControleur->deleteFacture_Intervention($facture_intervention);
+		header('Location:?page=ficheFacture&idFacture='.$_GET['idFacture'].'');
+		exit();
+	}
 	
 }
 ?>
