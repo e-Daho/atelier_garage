@@ -115,7 +115,7 @@ class TechnicienManager
 			WHERE numero LIKE :numero
 			AND nom LIKE :nom
 			AND prenom LIKE :prenom
-			ORDER BY nom
+			ORDER BY numero
 		');
 
 

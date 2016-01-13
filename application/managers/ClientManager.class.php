@@ -65,22 +65,22 @@ class ClientManager
 	{
 		$clients = [];
 
-		$q = $this->_db->prepare('SELECT numero, nom, prenom, adresse, referent
+		$q = $this->_db->prepare('
+			SELECT numero, nom, prenom, adresse, referent
 			FROM client
 			WHERE numero LIKE :numero
 			AND nom LIKE :nom
 			AND prenom LIKE :prenom 
 			AND adresse LIKE :adresse 
 			AND referent LIKE :referent
-			ORDER BY :critereTri
-		');
+			ORDER BY '. $critereTri
+		);
 
     	$q->bindParam(':numero', $numero, PDO::PARAM_INT);
     	$q->bindParam(':nom', $nom, PDO::PARAM_STR);
 		$q->bindParam(':prenom', $prenom, PDO::PARAM_STR);
 		$q->bindParam(':adresse', $adresse, PDO::PARAM_STR);
 		$q->bindParam(':referent', $referent, PDO::PARAM_STR);
-		$q->bindParam(':critereTri', $critereTri, PDO::PARAM_STR);
 
 		$q->execute();
 	    

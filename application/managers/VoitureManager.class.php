@@ -81,11 +81,11 @@ class VoitureManager
 			AND vo.proprietaire LIKE :proprietaire
 			AND ((re.technicien LIKE :technicien) '.$bonus.')
 			ORDER BY date_arrivee DESC
-');
+		');
 
 
-    		$q->bindParam(':immatriculation', $immatriculation, PDO::PARAM_STR);
-    		$q->bindParam(':marque', $marque, PDO::PARAM_STR);
+    	$q->bindParam(':immatriculation', $immatriculation, PDO::PARAM_STR);
+    	$q->bindParam(':marque', $marque, PDO::PARAM_STR);
 		$q->bindParam(':type', $type, PDO::PARAM_STR);
 		$q->bindParam(':annee', $annee, PDO::PARAM_INT);
 		$q->bindParam(':kilometrage', $kilometrage, PDO::PARAM_STR); 
