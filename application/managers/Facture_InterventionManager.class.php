@@ -1,5 +1,5 @@
 <?php
-class FactureManager
+class Facture_InterventionManager
 {
 	private $_db;
 
@@ -12,6 +12,7 @@ class FactureManager
 
 	public function add(Facture_Intervention $fi)
 	{
+		print_r($fi);
 		$q = $this->_db->prepare('
 			INSERT INTO facture_intervention 
 			SET idFacture = :idFacture, idIntervention = :idIntervention
@@ -68,26 +69,30 @@ class FactureManager
 			WHERE idFacture = :idFacture AND idIntervention = :idIntervention
 		');
 
-		$q->bindValue(':idFacture',$fi->idFacture(),PDO::PARAM_INT);
-		$q->bindValue(':idIntervention',$fi->idIntervention(),PDO::PARAM_INT);
+		$q->bindValue(':idFacture',$idFacture,PDO::PARAM_INT);
+		$q->bindValue(':idIntervention',$idIntervention,PDO::PARAM_INT);
 
-		$facture = $q->fetch(PDO::FETCH_ASSOC);
+		$q->execute();
 		
-		return empty($facture) ? null : new Facture_Intervention($idFacture, $idIntervention);
+		$facture = $q->fetch(PDO::FETCH_ASSOC);
+		return empty($facture) ? null : new Facture_Intervention($facture);
 	}
 	
   
-	public function getList($idFacture)
+	public function getList($idFacture){
+		print_r($idFacture);
 		$factures_details = [];
 		
 		$q = $this->_db->prepare('
-			SELECT idFacture, prixTotal, idIntervention, nom, prix
+			SELECT T.idFacture, prixTotal, idIntervention, nom, prix
 			FROM (
-				SELECT idFacture, prixTotal, idIntervention
+				SELECT facture.idFacture, prixTotal, idIntervention
 				FROM facture INNER JOIN facture_intervention
-				WHERE idFacture LIKE :idFacture
+				ON facture.idFacture = facture_intervention.idFacture
 			) T 
 			INNER JOIN intervention
+			ON T.idIntervention = intervention.id
+			WHERE T.idFacture LIKE :idFacture
 		');
 
     		$q->bindParam(':idFacture', $idFacture, PDO::PARAM_INT);
@@ -98,7 +103,7 @@ class FactureManager
 		{
 			$factures_details[] = new Facture_Detail($donnees); 
 		}
-		return $factures;
+		return $factures_details;
 	}
 
   

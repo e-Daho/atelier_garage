@@ -94,7 +94,7 @@ class RepareManager
 	public function getList($technicien, $voiture, $idFacture, $dateDebut, $dateFin)
 	{
 		$repares = [];
-
+		
 		$bonus = empty($dateFin) ? '' : 'AND dateFin LIKE :dateFin';
 
 		$q = $this->_db->prepare('
@@ -113,7 +113,7 @@ class RepareManager
     	$q->bindParam(':voiture', $voiture, PDO::PARAM_STR);
 		$q->bindParam(':idFacture', $idFacture, PDO::PARAM_INT);
 		$q->bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
-		$q->bindParam(':dateFin', $dateFin, PDO::PARAM_STR); 
+		if (!empty($dateFin)) {$q->bindParam(':dateFin', $dateFin, PDO::PARAM_STR); }
 		
 		$q->execute();
 	    
