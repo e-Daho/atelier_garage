@@ -91,6 +91,30 @@ class ClientManager
 		return $clients;
 	}
 	
+	# retourne un tableau de villes
+	public function getVilles($nom, $nombre){
+		$villes = [];
+		
+		$q = $this->_db->prepare('
+			SELECT adresse as nom, count(*) as nombre
+			FROM client
+			GROUP BY adresse
+			HAVING nom LIKE :nom
+			AND nombre LIKE :nombre
+		');
+		
+    	$q->bindParam(':nom', $nom, PDO::PARAM_STR);
+    	$q->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+		
+		$q->execute();
+	    
+		while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+		{
+			$villes[] = new Ville($donnees); 
+		}
+		return $villes;
+	}
+	
   	# prend un client en argument, retourne 1 si l'action est réussie, 0 sinon
 	public function update(Client $client)
 	{
