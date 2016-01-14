@@ -12,7 +12,6 @@ class Facture_InterventionManager
 
 	public function add(Facture_Intervention $fi)
 	{
-		print_r($fi);
 		$q = $this->_db->prepare('
 			INSERT INTO facture_intervention 
 			SET idFacture = :idFacture, idIntervention = :idIntervention
@@ -80,7 +79,6 @@ class Facture_InterventionManager
 	
   
 	public function getList($idFacture){
-		print_r($idFacture);
 		$factures_details = [];
 		
 		$q = $this->_db->prepare('

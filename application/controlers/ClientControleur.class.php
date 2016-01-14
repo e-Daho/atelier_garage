@@ -75,5 +75,14 @@ class ClientControleur{
 		return ($this->_clientManager->delete($client))?'Le client immatriculée '.$client->numero().' a bien été supprimé.':'OUPS ! Il y a eu un problème.'; 
 	}
 	
+	public function getVilles(){
+		
+		$nom = '%';
+		if (!empty($_POST['nomVille'])) {$nom.=$_POST['nomVille'].'%';}
+		
+		$nombre = '%';
+		if (!empty($_POST['nombre'])) {$nombre.=$_POST['nombre'].'%';}
+		return $this->_clientManager->getVilles($nom,$nombre);
+	}
 }
 ?>

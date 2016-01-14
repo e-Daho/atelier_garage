@@ -19,6 +19,7 @@ require_once ROOT_PATH.'/application/objects/Intervention.class.php';
 require_once ROOT_PATH.'/application/objects/Facture_Detail.class.php';
 require_once ROOT_PATH.'/application/objects/Facture_Intervention.class.php';
 require_once ROOT_PATH.'/application/objects/Commentaire.class.php';
+require_once ROOT_PATH.'/application/objects/Ville.class.php';
 
 require_once ROOT_PATH.'/application/managers/VoitureManager.class.php';
 require_once ROOT_PATH.'/application/managers/ClientManager.class.php';
@@ -39,6 +40,14 @@ require_once ROOT_PATH.'/application/controlers/Facture_InterventionControleur.c
 require_once ROOT_PATH.'/application/controlers/CommentaireControleur.class.php';
 
 require_once ROOT_PATH.'/application/view/Display.class.php';
+require_once ROOT_PATH.'/application/view/DisplayVoiture.class.php';
+require_once ROOT_PATH.'/application/view/DisplayClient.class.php';
+require_once ROOT_PATH.'/application/view/DisplayTechnicien.class.php';
+require_once ROOT_PATH.'/application/view/DisplayRepare.class.php';
+require_once ROOT_PATH.'/application/view/DisplayFacture.class.php';
+require_once ROOT_PATH.'/application/view/DisplayIntervention.class.php';
+require_once ROOT_PATH.'/application/view/DisplayFacture_Intervention.class.php';
+require_once ROOT_PATH.'/application/view/DisplayCommentaire.class.php';
 
 require_once ROOT_PATH.'/application/connexion.php';
 
@@ -69,7 +78,15 @@ $interventionControleur = new InterventionControleur($interventionManager);
 $facture_interventionControleur = new Facture_InterventionControleur($facture_interventionManager);
 $commentaireControleur = new CommentaireControleur($commentaireManager);
 
-$display = new Display($utilisateurControleur, $voitureControleur, $clientControleur, $technicienControleur, $repareControleur, $factureControleur, $interventionControleur, $facture_interventionControleur, $commentaireControleur);
+$display = new Display($utilisateurControleur);
+$displayVoiture = new DisplayVoiture($voitureControleur, $clientControleur, $repareControleur, $commentaireControleur, $technicienControleur);
+$displayClient = new DisplayClient($clientControleur);
+$displayTechnicien = new DisplayTechnicien($technicienControleur);
+$displayRepare = new DisplayRepare($repareControleur);
+$displayFacture = new DisplayFacture($factureControleur, $facture_interventionControleur);
+$displayIntervention = new DisplayIntervention($interventionControleur);
+$displayFacture_Intervention = new DisplayFacture_Intervention($facture_interventionControleur);
+$displayCommentaire = new DisplayCommentaire($commentaireControleur);
 	
 	
 //recupère le nom de la page demandee, ou redirige vers accueil s'il n'y en a pas
@@ -103,138 +120,138 @@ switch($page){
 		
 	//voitures
 	case 'afficherVoitures':
-		$out = $display->afficherVoitures();
+		$out = $displayVoiture->afficherVoitures();
 		break;
 	case 'formAjouterVoiture':
-		$out = $display->formAjouterVoiture();
+		$out = $displayVoiture->formAjouterVoiture();
 		break;
 	case 'ajouterVoiture':
-		$out = $display->ajouterVoiture();
+		$out = $displayVoiture->ajouterVoiture();
 		break;
 	case 'formModifierVoiture':
-		$out = $display->formModifierVoiture();
+		$out = $displayVoiture->formModifierVoiture();
 		break;
 	case 'modifierVoiture':
-		$out = $display->modifierVoiture();
+		$out = $displayVoiture->modifierVoiture();
 		break;
 	case 'supprimerVoiture':
-		$out = $display->supprimerVoiture();
+		$out = $displayVoiture->supprimerVoiture();
 		break;
 	case 'ficheVoiture':
-		$out = $display->ficheVoiture();
+		$out = $displayVoiture->ficheVoiture();
 		break;
 		
 	//clients
 	case 'afficherClients':
-		$out = $display->afficherClients();
+		$out = $displayClient->afficherClients();
 		break;
 	case 'formAjouterClient':
-		$out = $display->formAjouterClient();
+		$out = $displayClient->formAjouterClient();
 		break;
 	case 'ajouterClient':
-		$out = $display->ajouterClient();
+		$out = $displayClient->ajouterClient();
 		break;
 	case 'formModifierClient':
-		$out = $display->formModifierClient();
+		$out = $displayClient->formModifierClient();
 		break;
 	case 'modifierClient':
-		$out = $display->modifierClient();
+		$out = $displayClient->modifierClient();
 		break;
 	case 'supprimerClient':
-		$out = $display->supprimerClient();
+		$out = $displayClient->supprimerClient();
 		break;
 		
 	//techniciens
 	case 'afficherTechniciens':
-		$out = $display->afficherTechniciens();
+		$out = $displayTechnicien->afficherTechniciens();
 		break;
 	case 'formAjouterTechnicien':
-		$out = $display->formAjouterTechnicien();
+		$out = $displayTechnicien->formAjouterTechnicien();
 		break;
 	case 'ajouterTechnicien':
-		$out = $display->ajouterTechnicien();
+		$out = $displayTechnicien->ajouterTechnicien();
 		break;
 	case 'formModifierTechnicien':
-		$out = $display->formModifierTechnicien();
+		$out = $displayTechnicien->formModifierTechnicien();
 		break;
 	case 'modifierTechnicien':
-		$out = $display->modifierTechnicien();
+		$out = $displayTechnicien->modifierTechnicien();
 		break;
 	case 'supprimerTechnicien':
-		$out = $display->supprimerTechnicien();
+		$out = $displayTechnicien->supprimerTechnicien();
 		break;
 		
 	//repares
 	case 'afficherRepares':
-		$out = $display->afficherRepares();
+		$out = $displayRepare->afficherRepares();
 		break;
 	case 'formAjouterRepare':
-		$out = $display->formAjouterRepare();
+		$out = $displayRepare->formAjouterRepare();
 		break;
 	case 'ajouterRepare':
-		$out = $display->ajouterRepare();
+		$out = $displayRepare->ajouterRepare();
 		break;
 	case 'formModifierRepare':
-		$out = $display->formModifierRepare();
+		$out = $displayRepare->formModifierRepare();
 		break;
 	case 'modifierRepare':
-		$out = $display->modifierRepare();
+		$out = $displayRepare->modifierRepare();
 		break;
 	case 'supprimerRepare':
-		$out = $display->supprimerRepare();
+		$out = $displayRepare->supprimerRepare();
 		break;
 		
 	//factures
 	case 'afficherFactures':
-		$out = $display->afficherFactures();
+		$out = $displayFacture->afficherFactures();
 		break;
 	case 'formAjouterFacture':
-		$out = $display->formAjouterFacture();
+		$out = $displayFacture->formAjouterFacture();
 		break;
 	case 'ajouterFacture':
-		$out = $display->ajouterFacture();
+		$out = $displayFacture->ajouterFacture();
 		break;
 	case 'supprimerFacture':
-		$out = $display->supprimerFacture();
+		$out = $displayFacture->supprimerFacture();
 		break;
 	case 'ficheFacture':
-		$out = $display->ficheFacture();
+		$out = $displayFacture->ficheFacture();
 		break;
 		
 	//interventions
 	case 'afficherInterventions':
-		$out = $display->afficherInterventions();
+		$out = $displayIntervention->afficherInterventions();
 		break;
 	case 'formAjouterIntervention':
-		$out = $display->formAjouterIntervention();
+		$out = $displayIntervention->formAjouterIntervention();
 		break;
 	case 'ajouterIntervention':
-		$out = $display->ajouterIntervention();
+		$out = $displayIntervention->ajouterIntervention();
 		break;
 	case 'formModifierIntervention':
-		$out = $display->formModifierIntervention();
+		$out = $displayIntervention->formModifierIntervention();
 		break;
 	case 'modifierIntervention':
-		$out = $display->modifierIntervention();
+		$out = $displayIntervention->modifierIntervention();
 		break;
 	case 'supprimerIntervention':
-		$out = $display->supprimerIntervention();
+		$out = $displayIntervention->supprimerIntervention();
 		break;
 		
 	//facture_intervention
 	case 'ajouterFacture_Intervention':
-		$out = $display->ajouterFacture_Intervention();
+		$out = $displayFacture_Intervention->ajouterFacture_Intervention();
 		break;
 	case 'supprimerFacture_Intervention':
-		$out = $display->supprimerFacture_Intervention();
+		$out = $displayFacture_Intervention->supprimerFacture_Intervention();
 		break;
 		
 	//commentaire
 	case 'ajouterCommentaire':
-		$out = $display->ajouterCommentaire();
+		$out = $displayCommentaire->ajouterCommentaire();
 		break;
 	case 'supprimerCommentaire':
-		$out = $display->supprimerCommentaire();
+		$out = $displayCommentaire->supprimerCommentaire();
 		break;
 
 		
