@@ -95,7 +95,7 @@ class RepareManager
 	{
 		$repares = [];
 
-		$bonus = empty($dateFin) ? '' : 'AND dateFin LIKE :dateFin'
+		$bonus = empty($dateFin) ? '' : 'AND dateFin LIKE :dateFin';
 
 		$q = $this->_db->prepare('
 			SELECT technicien, voiture, idFacture, dateDebut, dateFin

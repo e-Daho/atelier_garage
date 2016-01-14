@@ -45,18 +45,18 @@ print_r($repare);
 //echo $repareManager->exists($repare);
 
 //on test le get
-$repare = $repareManager->get(213456,'123-456');
+/*$repare = $repareManager->get(213456,'123-456');
 if(empty($repare))
 {echo "c'est vide";}
 else
-{print_r($repare);}
+{print_r($repare);}*/
 
 echo $repareManager->exists($repare);
 
 //on test update
-$repare->setTechnicien(7);
+/*$repare->setTechnicien(7);
 $resultat = $repareManager->update($repare);
-echo (string)$resultat;
+echo (string)$resultat;*/
 
 ?>
 
