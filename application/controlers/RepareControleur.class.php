@@ -27,7 +27,7 @@ class RepareControleur{
 		$_dateFin = '';
 		if (!empty($_POST['dateFin'])) {'%'.$_dateFin.=$_POST['dateFin'].'%';}
 					
-		$liste_repares = $this->_repareManager->getList($idFacture, $technicien, $voiture, $dateDebut, $_dateFin);
+		$liste_repares = $this->_repareManager->getList($technicien, $voiture, $idFacture, $dateDebut, $_dateFin);
 		return $liste_repares;
 	}
 	
