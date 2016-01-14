@@ -26,19 +26,26 @@ class DisplayVoiture{
 							<div class="table">
 								<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " >
 								<input type="text" class="table-cell" name="marque" placeholder="Marque : " >
-								<input type="text" class="table-cell" name="type" placeholder="Type : " >
+								<input type="text" class="table-cell" name="type" placeholder="Type : " ></div><div>
 								<input type="text" class="table-cell" name="annee" placeholder="Année : " >
 								<input type="text" class="table-cell" name="kilometrage" placeholder="Kilométrage : " >
-								<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " >
+								<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " ></div><div>
+								<label for="proprietaire"> Propriétaire : </label>
 								<select name="proprietaire">
 									<option value="" >Non sélectionné</option>';
 			$liste_clients = $this->_clientControleur->getList('numero');	#On récuprère la liste des client pour la charger dans un select
 			foreach ($liste_clients as $client){
 				$out.='				<option value="'.$client->numero().'" >'.$client->numero().'</option>';
 			}
-			$out.='				</select>';
-			$out.='
-								<input type="text" class="table-cell" name="reparateur" placeholder="Réparateur : " >
+			$out.='				</select>
+								<label for="reparateur"> Réparateur : </label>
+								<select name="reparateur">
+									<option value="" >Non sélectionné</option>';
+			$liste_techniciens = $this->_technicienControleur->getList();	#On récuprère la liste des techniciens pour la charger dans un select
+			foreach ($liste_techniciens as $technicien){
+				$out.='				<option value="'.$technicien->numero().'" >'.$technicien->numero().'</option>';
+			}
+			$out.='				</select>
 							</div>
 							<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
 						</form>';
@@ -83,9 +90,9 @@ class DisplayVoiture{
 				#Lien vers la modification et la suppression disponibles uniquement aux référents et l'admin
 				if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
 				$out.='			<td><a href="?page=formModifierVoiture&immatriculation='.$voiture->immatriculation().'">Modifier</a></td>
-								<td><a href="?page=supprimerVoiture&immatriculation='.$voiture->immatriculation().'" onclick="return verifjs_suppr();">Supprimer</a></td>
-							</tr>';
+								<td><a href="?page=supprimerVoiture&immatriculation='.$voiture->immatriculation().'" onclick="return verifjs_suppr();">Supprimer</a></td>';
 				}
+				$out.='		</tr>';
 			}
 			$out.='		</table>
 					</div>';
@@ -286,8 +293,9 @@ class DisplayVoiture{
 				$out.='		<h1>Ajouter un commentaire : </h1>
 							<form action="?page=ajouterCommentaire" id="getListCommentaire_form" method="post" >
 								<div class="table">
+									<label for="voiture"> Immatriculation : </label>
 									<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " required="required" value="'.$voiture->immatriculation().'" readonly="readonly">
-									
+									<label for="technicien"> Technicien : </label>
 									<select name="technicien" required="required" >
 										<option value="" >Non sélectionné</option>';
 				$liste_techniciens = $this->_technicienControleur->getList();		#On charge la liste des techniciens dans un select
