@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost:3307
--- Généré le :  Mer 13 Janvier 2016 à 11:41
+-- Généré le :  Mer 13 Janvier 2016 à 22:39
 -- Version du serveur :  5.6.27-0ubuntu1
 -- Version de PHP :  5.6.11
 
@@ -28,11 +28,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `client` (
   `numero` int(11) NOT NULL,
-  `nom` varchar(45) NOT NULL,
-  `prenom` varchar(45) NOT NULL,
-  `adresse` varchar(45) DEFAULT NULL,
-  `referent` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `nom` varchar(45) CHARACTER SET latin1 NOT NULL,
+  `prenom` varchar(45) CHARACTER SET latin1 NOT NULL,
+  `adresse` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
+  `referent` varchar(45) CHARACTER SET latin1 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Contenu de la table `client`
@@ -52,17 +52,21 @@ INSERT INTO `client` (`numero`, `nom`, `prenom`, `adresse`, `referent`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `commentaire` (
-  `voiture` varchar(10) NOT NULL,
+  `voiture` varchar(10) CHARACTER SET latin1 NOT NULL,
   `technicien` int(11) NOT NULL,
   `date` datetime NOT NULL,
-  `texte` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `texte` varchar(45) CHARACTER SET latin1 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Contenu de la table `commentaire`
 --
 
 INSERT INTO `commentaire` (`voiture`, `technicien`, `date`, `texte`) VALUES
+('abc-789-38', 213456, '2016-01-13 17:21:32', 'bonjour'),
+('abc-789-38', 213456, '2016-01-13 17:21:33', 'Cette voiture a l''air en salle Ã©tat'),
+('abc-789-38', 213456, '2016-01-13 17:39:27', 'Cette voiture a l''air en salle Ã©tat'),
+('abc-789-38', 213456, '2016-01-13 22:03:57', 'Cette voiture a l''air en salle Ã©tat'),
 ('xyz-789-38', 7, '2016-01-11 22:36:35', 'Cette voiture a l''air en salle Ã©tat'),
 ('xyz-789-38', 7, '2016-01-11 22:37:11', 'Cette voiture a l''air en salle Ã©tat'),
 ('xyz-789-38', 7, '2016-01-11 22:41:47', 'Cette voiture a l''air en salle Ã©tat'),
@@ -74,7 +78,10 @@ INSERT INTO `commentaire` (`voiture`, `technicien`, `date`, `texte`) VALUES
 ('xyz-789-38', 7, '2016-01-11 22:48:17', 'lol'),
 ('xyz-789-38', 7, '2016-01-12 08:45:15', 'lol'),
 ('xyz-789-38', 7, '2016-01-12 11:09:07', 'lol'),
-('xyz-789-38', 7, '2016-01-13 10:14:56', 'lol');
+('xyz-789-38', 7, '2016-01-13 10:14:56', 'lol'),
+('xyz-789-38', 7, '2016-01-13 15:40:11', 'lol'),
+('xyz-789-38', 7, '2016-01-13 15:41:00', 'lol'),
+('xyz-789-38', 7, '2016-01-13 15:41:03', 'lol');
 
 -- --------------------------------------------------------
 
@@ -85,15 +92,15 @@ INSERT INTO `commentaire` (`voiture`, `technicien`, `date`, `texte`) VALUES
 CREATE TABLE IF NOT EXISTS `facture` (
   `idFacture` int(11) NOT NULL,
   `prixTotal` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Contenu de la table `facture`
 --
 
 INSERT INTO `facture` (`idFacture`, `prixTotal`) VALUES
-(3, 150),
-(4, 0),
+(3, 340),
+(4, 190),
 (5, 0);
 
 -- --------------------------------------------------------
@@ -105,14 +112,16 @@ INSERT INTO `facture` (`idFacture`, `prixTotal`) VALUES
 CREATE TABLE IF NOT EXISTS `facture_intervention` (
   `idFacture` int(11) NOT NULL DEFAULT '0',
   `idIntervention` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Contenu de la table `facture_intervention`
 --
 
 INSERT INTO `facture_intervention` (`idFacture`, `idIntervention`) VALUES
-(3, 4);
+(3, 4),
+(4, 11),
+(3, 14);
 
 --
 -- Déclencheurs `facture_intervention`
@@ -168,9 +177,9 @@ DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `intervention` (
   `id` int(11) NOT NULL,
-  `nom` varchar(45) NOT NULL,
+  `nom` varchar(45) CHARACTER SET latin1 NOT NULL,
   `prix` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Contenu de la table `intervention`
@@ -204,11 +213,19 @@ INSERT INTO `intervention` (`id`, `nom`, `prix`) VALUES
 
 CREATE TABLE IF NOT EXISTS `repare` (
   `technicien` int(11) NOT NULL,
-  `voiture` varchar(10) NOT NULL,
+  `voiture` varchar(10) CHARACTER SET latin1 NOT NULL,
   `dateDebut` date NOT NULL,
   `dateFin` date DEFAULT NULL,
   `idFacture` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Contenu de la table `repare`
+--
+
+INSERT INTO `repare` (`technicien`, `voiture`, `dateDebut`, `dateFin`, `idFacture`) VALUES
+(7, '123-456', '0000-00-00', NULL, 3),
+(213456, 'abc', '2016-01-14', NULL, 5);
 
 -- --------------------------------------------------------
 
@@ -218,9 +235,9 @@ CREATE TABLE IF NOT EXISTS `repare` (
 
 CREATE TABLE IF NOT EXISTS `technicien` (
   `numero` int(11) NOT NULL,
-  `nom` varchar(25) NOT NULL,
-  `prenom` varchar(25) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `nom` varchar(25) CHARACTER SET latin1 NOT NULL,
+  `prenom` varchar(25) CHARACTER SET latin1 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Contenu de la table `technicien`
@@ -238,10 +255,10 @@ INSERT INTO `technicien` (`numero`, `nom`, `prenom`) VALUES
 
 CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `id` int(11) NOT NULL,
-  `Pseudo` varchar(45) DEFAULT NULL,
-  `Pass` varchar(45) DEFAULT NULL,
+  `Pseudo` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
+  `Pass` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
   `Privileges` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Contenu de la table `utilisateurs`
@@ -257,14 +274,14 @@ INSERT INTO `utilisateurs` (`id`, `Pseudo`, `Pass`, `Privileges`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `voiture` (
-  `immatriculation` varchar(10) NOT NULL,
-  `marque` varchar(25) NOT NULL,
-  `type` varchar(45) DEFAULT NULL,
+  `immatriculation` varchar(10) CHARACTER SET latin1 NOT NULL,
+  `marque` varchar(25) CHARACTER SET latin1 NOT NULL,
+  `type` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
   `annee` int(11) DEFAULT NULL,
-  `kilometrage` varchar(45) NOT NULL,
+  `kilometrage` varchar(45) CHARACTER SET latin1 NOT NULL,
   `date_arrivee` date DEFAULT NULL,
   `proprietaire` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Contenu de la table `voiture`
@@ -320,7 +337,7 @@ ALTER TABLE `intervention`
 -- Index pour la table `repare`
 --
 ALTER TABLE `repare`
-  ADD PRIMARY KEY (`technicien`,`voiture`),
+  ADD PRIMARY KEY (`technicien`,`voiture`,`dateDebut`),
   ADD KEY `repare_voiture_idx` (`voiture`),
   ADD KEY `repare_technicien_idx` (`technicien`),
   ADD KEY `repare_facture_idx` (`idFacture`);
@@ -352,7 +369,7 @@ ALTER TABLE `voiture`
 -- AUTO_INCREMENT pour la table `facture`
 --
 ALTER TABLE `facture`
-  MODIFY `idFacture` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+  MODIFY `idFacture` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT pour la table `intervention`
 --
