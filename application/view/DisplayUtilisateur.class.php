@@ -118,7 +118,7 @@ class DisplayUtilisateur{
 									<input type="text" class="table-cell" name="pseudo" placeholder="Pseudo : "  value="'.$utilisateur->pseudo().'"  required="required" >
 									<select name="pass" required="required" >
 										<option value="'.$utilisateur->pass().'" rel="none">Pass éxistant</option>
-										<option value="" rel="newpass">New Password</option>
+										<option value="newpass" rel="newpass">New Password</option>
 									</select>
 									<select name="privileges" required="required" >
 										<option value="" >Non sélectionné</option>
