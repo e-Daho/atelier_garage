@@ -6,13 +6,15 @@ class DisplayVoiture{
 	private $_repareControleur;
 	private $_commentaireControleur;
 	private $_technicienControleur;
+	private $_utilisateurControleur;
 	
-	public function __construct(VoitureControleur $voitureControleur, ClientControleur $clientControleur, RepareControleur $repareControleur, CommentaireControleur $commentaireControleur, TechnicienControleur $technicienControleur){
+	public function __construct(VoitureControleur $voitureControleur, ClientControleur $clientControleur, RepareControleur $repareControleur, CommentaireControleur $commentaireControleur, TechnicienControleur $technicienControleur, UtilisateurControleur $utilisateurControleur){
 		$this->_voitureControleur=$voitureControleur;
 		$this->_clientControleur=$clientControleur;
 		$this->_repareControleur=$repareControleur;
 		$this->_commentaireControleur=$commentaireControleur;
 		$this->_technicienControleur=$technicienControleur;
+		$this->_utilisateurControleur=$utilisateurControleur;
 	}
 	
 	#Affiche la liste des voitures précédée d'un formulaire de recherche et d'un lien vers le formulaire d'ajout
@@ -136,8 +138,16 @@ class DisplayVoiture{
 								<input  type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
 								<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " required="required" ></div><div>
 								<input  type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
-								<input  type="text" class="table-cell" name="referent" placeholder="Referent : " ></div>
-							</div>
+								<label for="referent">Référent : </label>
+								<select name="referent" >
+									<option value="" >Non sélectionné</option>';
+			$_POST['privileges']=2;
+			$liste_utilisateurs = $this->_utilisateurControleur->getList();
+			foreach ($liste_utilisateurs as $utilisateur){
+				$out.='				<option value="'.$utilisateur->id().'" >'.$utilisateur->id().'</option>';
+			}
+			$out.='				</select>';
+			$out.='			</div>
 							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
 						</form>
 					</div>';
@@ -172,7 +182,7 @@ class DisplayVoiture{
 								<input type="text" class="table-cell" name="annee" placeholder="Année : " value="'.$voiture->annee().'" >
 								<input type="text" class="table-cell" name="kilometrage" placeholder="Kilométrage : " value="'.$voiture->kilometrage().'" >
 								<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " value="'.$voiture->date_arrivee().'" >
-							</div>
+							</div><div>
 								<label for="proprietaire">Propriétaire : </label>
 								<select name="proprietaire" required="required" >
 									<option value="" rel="none">Non sélectionné</option>
@@ -183,14 +193,22 @@ class DisplayVoiture{
 				$out.='				<option value="'.$client->numero().'" rel="none" '.$selector.'>'.$client->numero().'</option>';
 			}
 			$out.='				</select>';
-			$out.='			<div rel="other_client" class="table"><div>
+			$out.='			</div><div rel="other_client" class="table"><div>
 								<p>Nouveau client : </p>
 								<input  type="text" class="table-cell" name="numero" placeholder="Numero : " required="required" readonly="readonly" ></div><div>
 								<input  type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
 								<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " required="required" ></div><div>
 								<input  type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
-								<input  type="text" class="table-cell" name="referent" placeholder="Referent : " ></div>
-							</div>
+								<label for="referent">Référent : </label>
+								<select name="referent" >
+									<option value="" >Non sélectionné</option>';
+			$_POST['privileges']=2;
+			$liste_utilisateurs = $this->_utilisateurControleur->getList();
+			foreach ($liste_utilisateurs as $utilisateur){
+				$out.='				<option value="'.$utilisateur->id().'" >'.$utilisateur->id().'</option>';
+			}
+			$out.='				</select>';
+			$out.='			</div>
 							<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
 						</form>
 					</div>';

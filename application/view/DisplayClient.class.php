@@ -2,8 +2,10 @@
 class DisplayClient{
 	
 	private $_clientControleur;
+	private $_utilisateurControleur;
 	
-	public function __construct(ClientControleur $clientControleur){
+	public function __construct(ClientControleur $clientControleur, UtilisateurControleur $utilisateurControleur){
+		$this->_utilisateurControleur=$utilisateurControleur;
 		$this->_clientControleur=$clientControleur;
 	}
 	
@@ -20,8 +22,16 @@ class DisplayClient{
 								<input type="text" class="table-cell" name="nom" placeholder="Nom : " >
 								<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " ></div><div>
 								<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
-								<input type="text" class="table-cell" name="referent" placeholder="Référent : " >
-								<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
+								<label for="referent">Référent : </label>
+								<select name="referent" >
+									<option value="" >Non sélectionné</option>';
+			$_POST['privileges']=2;
+			$liste_utilisateurs = $this->_utilisateurControleur->getList();
+			foreach ($liste_utilisateurs as $utilisateur){
+				$out.='				<option value="'.$utilisateur->id().'" >'.$utilisateur->id().'</option>';
+			}
+			$out.='				</select>';
+			$out.='			<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
 							</div>
 						</form>';
 						
@@ -112,8 +122,16 @@ class DisplayClient{
 								<input type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
 								<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " required="required" ></div><div>
 								<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
-								<input type="text" class="table-cell" name="referent" placeholder="Référent : " >
-							</div>
+								<label for="referent">Référent : </label>
+								<select name="referent" >
+									<option value="" >Non sélectionné</option>';
+			$_POST['privileges']=2;
+			$liste_utilisateurs = $this->_utilisateurControleur->getList();
+			foreach ($liste_utilisateurs as $utilisateur){
+				$out.='				<option value="'.$utilisateur->id().'" >'.$utilisateur->id().'</option>';
+			}
+			$out.='				</select>';
+			$out.='			</div>
 							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
 						</form>
 					</div>';
@@ -146,8 +164,17 @@ class DisplayClient{
 								<input type="text" class="table-cell" name="nom" placeholder="Nom : " value="'.$client->nom().'" required="required" >
 								<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " value="'.$client->prenom().'" required="required" ></div><div>
 								<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " value="'.$client->adresse().'">
-								<input type="text" class="table-cell" name="referent" placeholder="Référent : " value="'.$client->referent().'">
-							</div>
+								<label for="referent">Référent : </label>
+								<select name="referent" >
+									<option value="" >Non sélectionné</option>';
+			$_POST['privileges']=2;
+			$liste_utilisateurs = $this->_utilisateurControleur->getList();
+			foreach ($liste_utilisateurs as $utilisateur){
+				$selector = ($client->referent()==$utilisateur->id())?'selected':'';
+				$out.='				<option value="'.$utilisateur->id().'" '.$selector.' >'.$utilisateur->id().'</option>';
+			}
+			$out.='				</select>';
+			$out.='			</div>
 							<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
 						</form>
 					</div>';

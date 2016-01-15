@@ -2,9 +2,11 @@
 class DisplayTechnicien{
 	
 	private $_technicienControleur;
+	private $_utilisateurControleur;
 	
-	public function __construct(TechnicienControleur $technicienControleur){
+	public function __construct(TechnicienControleur $technicienControleur, UtilisateurControleur $utilisateurControleur){
 		$this->_technicienControleur=$technicienControleur;		
+		$this->_utilisateurControleur=$utilisateurControleur;		
 	}
 	
 	
@@ -79,8 +81,16 @@ class DisplayTechnicien{
 					<div class="pageRecherche">
 						<form action="?page=ajouterTechnicien" id="getListTechniciens_form" method="post" >
 							<div class="table">
-								<input type="text" class="table-cell" name="numero" placeholder="Numéro : " required="required"  >
-								<input type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
+								<label for="numero">Utilisateur : </label>
+								<select name="numero" >
+									<option value="" >Non sélectionné</option>';
+			$_POST['privileges']=0;
+			$liste_utilisateurs = $this->_utilisateurControleur->getList();
+			foreach ($liste_utilisateurs as $utilisateur){
+				$out.='				<option value="'.$utilisateur->id().'" >'.$utilisateur->id().'</option>';
+			}
+			$out.='				</select>';
+			$out.='				<input type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
 								<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " required="required" >
 							</div>
 							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
@@ -95,6 +105,13 @@ class DisplayTechnicien{
 	#Ajoute un technicien
 	public function ajouterTechnicien(){
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
+			$_POST['id']=$_POST['numero'];
+			$utilisateur = $this->_utilisateurControleur->get($_POST['numero']);
+			$_POST['pseudo']=$utilisateur->pseudo();
+			$_POST['pass']=$utilisateur->pass();
+			$_POST['privileges']=1;
+			
+			$this->_utilisateurControleur->editUtilisateur();
 			return $this->_technicienControleur->addTechnicien();
 		}else{
 			return 'Vous ne devriez pas être ici';

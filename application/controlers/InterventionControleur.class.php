@@ -47,7 +47,6 @@ class InterventionControleur{
 	
 	public function editIntervention(){		
 		$out='';
-		print_r($_POST);
 		if (!empty($_POST['id']) AND !empty($_POST['nom']) AND !empty($_POST['prix'])) {
 			$intervention = new Intervention($_POST);
 			
