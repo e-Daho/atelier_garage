@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.12
+-- version 4.1.14
 -- http://www.phpmyadmin.net
 --
--- Client :  localhost:3307
--- Généré le :  Jeu 14 Janvier 2016 à 22:10
--- Version du serveur :  5.6.27-0ubuntu1
--- Version de PHP :  5.6.11
+-- Client :  127.0.0.1
+-- Généré le :  Ven 15 Janvier 2016 à 10:38
+-- Version du serveur :  5.6.17
+-- Version de PHP :  5.5.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Base de données :  `atelier_garage`
@@ -31,7 +31,10 @@ CREATE TABLE IF NOT EXISTS `client` (
   `nom` varchar(45) CHARACTER SET latin1 NOT NULL,
   `prenom` varchar(45) CHARACTER SET latin1 NOT NULL,
   `adresse` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
-  `referent` int(11) NOT NULL
+  `referent` int(11) NOT NULL,
+  PRIMARY KEY (`numero`),
+  KEY `client-commune_idx` (`adresse`),
+  KEY `referent` (`referent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -52,7 +55,9 @@ CREATE TABLE IF NOT EXISTS `commentaire` (
   `voiture` varchar(10) CHARACTER SET latin1 NOT NULL,
   `technicien` int(11) NOT NULL,
   `date` datetime NOT NULL,
-  `texte` varchar(45) CHARACTER SET latin1 NOT NULL
+  `texte` varchar(45) CHARACTER SET latin1 NOT NULL,
+  PRIMARY KEY (`voiture`,`technicien`,`date`),
+  KEY `commente-technicien_idx` (`technicien`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -62,9 +67,10 @@ CREATE TABLE IF NOT EXISTS `commentaire` (
 --
 
 CREATE TABLE IF NOT EXISTS `facture` (
-  `idFacture` int(11) NOT NULL,
-  `prixTotal` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `idFacture` int(11) NOT NULL AUTO_INCREMENT,
+  `prixTotal` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idFacture`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=6 ;
 
 --
 -- Contenu de la table `facture`
@@ -83,7 +89,10 @@ INSERT INTO `facture` (`idFacture`, `prixTotal`) VALUES
 
 CREATE TABLE IF NOT EXISTS `facture_intervention` (
   `idFacture` int(11) NOT NULL DEFAULT '0',
-  `idIntervention` int(11) NOT NULL
+  `idIntervention` int(11) NOT NULL,
+  PRIMARY KEY (`idIntervention`,`idFacture`),
+  KEY `ri_intervention_idx` (`idIntervention`),
+  KEY `ri_repare_idx` (`idFacture`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -98,7 +107,8 @@ INSERT INTO `facture_intervention` (`idFacture`, `idIntervention`) VALUES
 --
 -- Déclencheurs `facture_intervention`
 --
-DELIMITER $$
+DROP TRIGGER IF EXISTS `facture_intervention_AFTER_DELETE`;
+DELIMITER //
 CREATE TRIGGER `facture_intervention_AFTER_DELETE` AFTER DELETE ON `facture_intervention`
  FOR EACH ROW BEGIN
 	UPDATE `atelier_garage`.`facture`
@@ -110,9 +120,10 @@ CREATE TRIGGER `facture_intervention_AFTER_DELETE` AFTER DELETE ON `facture_inte
         )
 	WHERE `facture`.`idFacture` = OLD.`idFacture`;
 END
-$$
+//
 DELIMITER ;
-DELIMITER $$
+DROP TRIGGER IF EXISTS `facture_intervention_AFTER_INSERT`;
+DELIMITER //
 CREATE TRIGGER `facture_intervention_AFTER_INSERT` AFTER INSERT ON `facture_intervention`
  FOR EACH ROW BEGIN
 	UPDATE `atelier_garage`.`facture`
@@ -124,9 +135,10 @@ CREATE TRIGGER `facture_intervention_AFTER_INSERT` AFTER INSERT ON `facture_inte
         )
 	WHERE `facture`.`idFacture` = NEW.`idFacture`;
 END
-$$
+//
 DELIMITER ;
-DELIMITER $$
+DROP TRIGGER IF EXISTS `facture_intervention_AFTER_UPDATE`;
+DELIMITER //
 CREATE TRIGGER `facture_intervention_AFTER_UPDATE` AFTER UPDATE ON `facture_intervention`
  FOR EACH ROW BEGIN
 	UPDATE `atelier_garage`.`facture`
@@ -138,7 +150,7 @@ CREATE TRIGGER `facture_intervention_AFTER_UPDATE` AFTER UPDATE ON `facture_inte
         )
 	WHERE `facture`.`idFacture` = NEW.`idFacture`;
 END
-$$
+//
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -148,10 +160,11 @@ DELIMITER ;
 --
 
 CREATE TABLE IF NOT EXISTS `intervention` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(45) CHARACTER SET latin1 NOT NULL,
-  `prix` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `prix` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=29 ;
 
 --
 -- Contenu de la table `intervention`
@@ -172,7 +185,11 @@ CREATE TABLE IF NOT EXISTS `repare` (
   `voiture` varchar(10) CHARACTER SET latin1 NOT NULL,
   `dateDebut` date NOT NULL,
   `dateFin` date DEFAULT NULL,
-  `idFacture` int(11) NOT NULL
+  `idFacture` int(11) NOT NULL,
+  PRIMARY KEY (`technicien`,`voiture`,`dateDebut`),
+  KEY `repare_voiture_idx` (`voiture`),
+  KEY `repare_technicien_idx` (`technicien`),
+  KEY `repare_facture_idx` (`idFacture`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -191,7 +208,8 @@ INSERT INTO `repare` (`technicien`, `voiture`, `dateDebut`, `dateFin`, `idFactur
 CREATE TABLE IF NOT EXISTS `technicien` (
   `numero` int(11) NOT NULL,
   `nom` varchar(25) CHARACTER SET latin1 NOT NULL,
-  `prenom` varchar(25) CHARACTER SET latin1 NOT NULL
+  `prenom` varchar(25) CHARACTER SET latin1 NOT NULL,
+  PRIMARY KEY (`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -208,18 +226,19 @@ INSERT INTO `technicien` (`numero`, `nom`, `prenom`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `utilisateurs` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `Pseudo` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
   `Pass` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
-  `Privileges` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `Privileges` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=6 ;
 
 --
 -- Contenu de la table `utilisateurs`
 --
 
 INSERT INTO `utilisateurs` (`id`, `Pseudo`, `Pass`, `Privileges`) VALUES
-(2, 'thib', '428c7871dd6adbdc20a11fdac0dfe6a015f06403', 3),
+(2, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 3),
 (3, 'daho', '403926033d001b5279df37cbbe5287b7c7c267fa', 2),
 (4, 'gus', '22b4468ae6dcf46c36c9622e292c7a3506bb0db4', 1),
 (5, 'nala', 'ada41ed3cb167a74ff219441faec9e94c2142e95', 0);
@@ -237,7 +256,9 @@ CREATE TABLE IF NOT EXISTS `voiture` (
   `annee` int(11) DEFAULT NULL,
   `kilometrage` varchar(45) CHARACTER SET latin1 NOT NULL,
   `date_arrivee` date DEFAULT NULL,
-  `proprietaire` int(11) NOT NULL
+  `proprietaire` int(11) NOT NULL,
+  PRIMARY KEY (`immatriculation`),
+  KEY `voiture-client_idx` (`proprietaire`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -248,92 +269,6 @@ INSERT INTO `voiture` (`immatriculation`, `marque`, `type`, `annee`, `kilometrag
 ('abc-123-38', 'peugeot', 'sport', 1993, '150000', '2016-01-01', 1),
 ('def-456-38', 'renault', 'sport', 2002, '100000', '2016-01-04', 2);
 
---
--- Index pour les tables exportées
---
-
---
--- Index pour la table `client`
---
-ALTER TABLE `client`
-  ADD PRIMARY KEY (`numero`),
-  ADD KEY `client-commune_idx` (`adresse`),
-  ADD KEY `referent` (`referent`);
-
---
--- Index pour la table `commentaire`
---
-ALTER TABLE `commentaire`
-  ADD PRIMARY KEY (`voiture`,`technicien`,`date`),
-  ADD KEY `commente-technicien_idx` (`technicien`);
-
---
--- Index pour la table `facture`
---
-ALTER TABLE `facture`
-  ADD PRIMARY KEY (`idFacture`);
-
---
--- Index pour la table `facture_intervention`
---
-ALTER TABLE `facture_intervention`
-  ADD PRIMARY KEY (`idIntervention`,`idFacture`),
-  ADD KEY `ri_intervention_idx` (`idIntervention`),
-  ADD KEY `ri_repare_idx` (`idFacture`);
-
---
--- Index pour la table `intervention`
---
-ALTER TABLE `intervention`
-  ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `repare`
---
-ALTER TABLE `repare`
-  ADD PRIMARY KEY (`technicien`,`voiture`,`dateDebut`),
-  ADD KEY `repare_voiture_idx` (`voiture`),
-  ADD KEY `repare_technicien_idx` (`technicien`),
-  ADD KEY `repare_facture_idx` (`idFacture`);
-
---
--- Index pour la table `technicien`
---
-ALTER TABLE `technicien`
-  ADD PRIMARY KEY (`numero`);
-
---
--- Index pour la table `utilisateurs`
---
-ALTER TABLE `utilisateurs`
-  ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `voiture`
---
-ALTER TABLE `voiture`
-  ADD PRIMARY KEY (`immatriculation`),
-  ADD KEY `voiture-client_idx` (`proprietaire`);
-
---
--- AUTO_INCREMENT pour les tables exportées
---
-
---
--- AUTO_INCREMENT pour la table `facture`
---
-ALTER TABLE `facture`
-  MODIFY `idFacture` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT pour la table `intervention`
---
-ALTER TABLE `intervention`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
---
--- AUTO_INCREMENT pour la table `utilisateurs`
---
-ALTER TABLE `utilisateurs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- Contraintes pour les tables exportées
 --
