@@ -144,7 +144,7 @@ class DisplayUtilisateur{
 	#Modifie un utilisateur
 	public function modifierUtilisateur(){
 		if (!empty($_SESSION['id']) AND ($_SESSION['Privileges']==3)){
-			if (!empty($_POST['monCompte'])){
+			if ($_SESSION['id']==$_POST['id']){
 				$_SESSION['pseudo']=$_POST['pseudo'];
 			}
 			return $this->_utilisateurControleur->editUtilisateur();
@@ -184,7 +184,6 @@ class DisplayUtilisateur{
 						<div class="pageRecherche">
 							<form action="?page=modifierUtilisateur" id="getListUtilisateurs_form" method="post" >
 								<div class="table">
-									<input hidden type="text" class="table-cell" name="monCompte" value="1"  required="required" >
 									<input hidden type="text" class="table-cell" name="id" value="'.$utilisateur->id().'"  required="required" >
 									<input type="text" class="table-cell" name="pseudo" placeholder="Pseudo : "  value="'.$utilisateur->pseudo().'"  required="required" >
 									<select name="pass" required="required" >
