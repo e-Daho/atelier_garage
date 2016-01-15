@@ -14,8 +14,7 @@ class DisplayFacture_Intervention{
 	}
 	
 	public function supprimerFacture_Intervention(){
-		$facture_intervention = $this->_facture_interventionControleur->get($_GET['idFacture'],$_GET['idIntervention']);
-		$this->_facture_interventionControleur->deleteFacture_Intervention($facture_intervention);
+		$this->_facture_interventionControleur->deleteFacture_Intervention();
 		header('Location:?page=ficheFacture&idFacture='.$_GET['idFacture'].'');
 		exit();
 	}

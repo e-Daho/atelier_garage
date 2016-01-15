@@ -118,6 +118,7 @@ class ClientManager
   	# prend un client en argument, retourne 1 si l'action est réussie, 0 sinon
 	public function update(Client $client)
 	{
+		print_r($client);
 		if($this->exists($client))
 		{
 			$q = $this->_db->prepare('UPDATE client SET nom = :nom, prenom = :prenom, adresse= :adresse, referent = :referent WHERE numero = :numero');

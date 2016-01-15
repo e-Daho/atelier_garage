@@ -40,9 +40,9 @@ class UtilisateurControleur{
 			
 			// Hachage du mot de passe, c'est à dire son cryptage
 			$pass_hache = sha1($_POST['Password']);
-			print_r($_POST);
+			
 			//On recherche si le pseudo et le mot de passe correspondent à un utilisateur dans la base de donnee
-			$utilisateurs = $this->_utilisateurManager->getList('%','%'.$_POST['Pseudo'].'%', '%'.$pass_hache.'%', '%');
+			$utilisateurs = $this->_utilisateurManager->getList('%','%'.htmlspecialchars($_POST['Pseudo']).'%', '%'.htmlspecialchars($pass_hache).'%', '%');
 			
 			if (!empty($utilisateurs)) { //Si on trouve un utilisateur avec le pseudo et le mot de passe, on connecte et on redirige vers l'accueil
 				$_SESSION['id'] = $utilisateurs[0]->id();
@@ -73,19 +73,19 @@ class UtilisateurControleur{
 	}
 	
 	public function get($id){
-		return $this->_utilisateurManager->get($id);
+		return $this->_utilisateurManager->get(htmlspecialchars($id));
 	}
 	
 	public function getList(){
 	
 		$id = '%';
-		if (!empty($_POST['id'])) {$id.=$_POST['id'].'%';}
+		if (!empty($_POST['id'])) {$id.=htmlspecialchars($_POST['id']).'%';}
 		
 		$pseudo = '%';
-		if (!empty($_POST['pseudo'])) {$pseudo.=$_POST['pseudo'].'%';}	
+		if (!empty($_POST['pseudo'])) {$pseudo.=htmlspecialchars($_POST['pseudo']).'%';}	
 		
 		$privileges = '%';
-		if (!empty($_POST['privileges']) OR (isset($_POST['privileges'])AND($_POST['privileges']==0))) {$privileges.=$_POST['privileges'].'%';}
+		if (!empty($_POST['privileges']) OR (isset($_POST['privileges'])AND($_POST['privileges']==0))) {$privileges.=htmlspecialchars($_POST['privileges']).'%';}
 	
 		return $this->_utilisateurManager->getList($id, $pseudo, '%',$privileges);
 	}
@@ -94,11 +94,14 @@ class UtilisateurControleur{
 		$out='';
 		if ((!empty($_POST['pseudo']) ) AND (!empty($_POST['pass']) )) {
 			$_POST['pass'] = sha1($_POST['pass']);
+			foreach($_POST as $variable){
+				$variable=htmlspecialchars($variable);
+			}			
 			$utilisateur = new Utilisateur($_POST);
 			
 			if (!$this->_utilisateurManager->exists($utilisateur)) {
 				if($this->_utilisateurManager->add($utilisateur)){
-					$out='L\'utilisateur '.$_POST['pseudo'].' a bien été ajouté.';
+					$out='L\'utilisateur '.htmlspecialchars($_POST['pseudo']).' a bien été ajouté.';
 				}else{
 					$out='OUPS ! Il y a eu un problème.'; 
 				}
@@ -117,11 +120,14 @@ class UtilisateurControleur{
 			if (!empty($_POST['newpass'])){
 				$_POST['pass'] = sha1($_POST['newpass']);
 			}
+			foreach($_POST as $variable){
+				$variable=htmlspecialchars($variable);
+			}			
 			$utilisateur = new Utilisateur($_POST);
 			
 			if ($this->_utilisateurManager->exists($utilisateur)) {
 				if($this->_utilisateurManager->update($utilisateur)){
-					$out='L\'utilisateur '.$_POST['pseudo'].' a bien été  modifié.';
+					$out='L\'utilisateur '.htmlspecialchars($_POST['pseudo']).' a bien été  modifié.';
 				}else{
 					$out='OUPS ! Il y a eu un problème.'; 
 				}
@@ -134,7 +140,8 @@ class UtilisateurControleur{
 		return $out;
 	}
 	
-	public function deleteUtilisateur($utilisateur){
+	public function deleteUtilisateur(){
+		$utilisateur = $this->get($_GET['id']);
 		return ($this->_utilisateurManager->delete($utilisateur))?'L\'utilisateur '.$utilisateur->pseudo().' a bien été  supprimé.':'OUPS ! Il y a eu un problème.'; 
 	}
 	

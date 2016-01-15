@@ -82,7 +82,7 @@ $displayVoiture = new DisplayVoiture($voitureControleur, $clientControleur, $rep
 $displayClient = new DisplayClient($clientControleur, $utilisateurControleur);
 $displayTechnicien = new DisplayTechnicien($technicienControleur, $utilisateurControleur);
 $displayRepare = new DisplayRepare($repareControleur, $factureControleur, $technicienControleur, $voitureControleur);
-$displayFacture = new DisplayFacture($factureControleur, $facture_interventionControleur);
+$displayFacture = new DisplayFacture($factureControleur, $facture_interventionControleur, $interventionControleur);
 $displayIntervention = new DisplayIntervention($interventionControleur);
 $displayFacture_Intervention = new DisplayFacture_Intervention($facture_interventionControleur);
 $displayCommentaire = new DisplayCommentaire($commentaireControleur);
@@ -132,6 +132,9 @@ switch($page){
 		break;
 	case 'supprimerUtilisateur':
 		$out = $displayUtilisateur->supprimerUtilisateur();
+		break;
+	case 'monCompte':
+		$out = $displayUtilisateur->monCompte();
 		break;
 		
 	//voitures

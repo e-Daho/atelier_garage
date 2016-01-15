@@ -103,17 +103,21 @@ class DisplayIntervention{
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
 			#Formulaire de modification de voiture
 			$intervention = $this->_interventionControleur->get($_GET['id']);
-			$out='	<h1>Modifier un intervention</h1>
-					<div class="pageRecherche">
-						<form action="?page=modifierIntervention" id="getListInterventions_form" method="post" >
-							<div class="table">
-								<input type="text" class="table-cell" name="id" placeholder="Id : " required="required" value="'.$intervention->id().'"  readonly="readonly"  >
-								<input type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" value="'.$intervention->nom().'">
-								<input type="text" class="table-cell" name="prix" placeholder="Prix : " required="required" value="'.$intervention->prix().'">
-							</div>
-							<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
-						</form>
-					</div>';
+			if(!empty($intervention)){
+				$out='	<h1>Modifier un intervention</h1>
+						<div class="pageRecherche">
+							<form action="?page=modifierIntervention" id="getListInterventions_form" method="post" >
+								<div class="table">
+									<input type="text" class="table-cell" name="id" placeholder="Id : " required="required" value="'.$intervention->id().'"  readonly="readonly"  >
+									<input type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" value="'.$intervention->nom().'">
+									<input type="text" class="table-cell" name="prix" placeholder="Prix : " required="required" value="'.$intervention->prix().'">
+								</div>
+								<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+							</form>
+						</div>';
+			}else{
+				$out='Cette intervention n\'existe pas';
+			}
 		}else{
 			$out='Vous ne devriez pas être ici';
 		}
@@ -132,8 +136,7 @@ class DisplayIntervention{
 	#Supprime une intervention
 	public function supprimerIntervention(){
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
-			$intervention = $this->_interventionControleur->get($_GET['id']);
-			return $this->_interventionControleur->deleteIntervention($intervention);
+			return $this->_interventionControleur->deleteIntervention();
 		}else{
 			return 'Vous ne devriez pas être ici';
 		}

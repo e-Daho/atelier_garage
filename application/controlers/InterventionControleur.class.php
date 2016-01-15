@@ -8,18 +8,18 @@ class InterventionControleur{
 	}
 	
 	public function get($id){
-		return $this->_interventionManager->get($id);
+		return $this->_interventionManager->get(htmlspecialchars($id));
 	}
 	
 	public function getList(){
 		$id = '%';
-		if (!empty($_POST['id'])) {$id.=$_POST['id'].'%';}
+		if (!empty($_POST['id'])) {$id.=htmlspecialchars($_POST['id']).'%';}
 		
 		$nom = '%';
-		if (!empty($_POST['nom'])) {$nom.=$_POST['nom'].'%';}
+		if (!empty($_POST['nom'])) {$nom.=htmlspecialchars($_POST['nom']).'%';}
 		
 		$prix = '%';
-		if (!empty($_POST['prix'])) {$prix.=$_POST['prix'].'%';}
+		if (!empty($_POST['prix'])) {$prix.=htmlspecialchars($_POST['prix']).'%';}
 		
 		$liste_interventions = $this->_interventionManager->getList($id, $nom, $prix);
 		return $liste_interventions;
@@ -28,11 +28,14 @@ class InterventionControleur{
 	public function addIntervention(){
 		$out='';
 		if (!empty($_POST['nom']) AND !empty($_POST['prix'])) {
+			foreach($_POST as $variable){
+				$variable=htmlspecialchars($variable);
+			}			
 			$intervention = new Intervention($_POST);
 			
 			if (!$this->_interventionManager->exists($intervention)) {
 				if($this->_interventionManager->add($intervention)){
-					$out='L\'intervention '.$intervention->nom().' a bien été ajoutée avec comme id '.$intervention->id();
+					$out='L\'intervention '.htmlspecialchars($intervention->nom()).' a bien été ajoutée avec comme id '.htmlspecialchars($intervention->id());
 				}else{
 					$out='OUPS ! Il y a eu un problème.'; 
 				}
@@ -48,11 +51,14 @@ class InterventionControleur{
 	public function editIntervention(){		
 		$out='';
 		if (!empty($_POST['id']) AND !empty($_POST['nom']) AND !empty($_POST['prix'])) {
+			foreach($_POST as $variable){
+				$variable=htmlspecialchars($variable);
+			}			
 			$intervention = new Intervention($_POST);
 			
 			if ($this->_interventionManager->exists($intervention)) {
 				if($this->_interventionManager->update($intervention)){
-					$out='L\'intervention '.$_POST['nom'].' a bien été modifié.';
+					$out='L\'intervention '.htmlspecialchars($_POST['nom']).' a bien été modifié.';
 				}else{
 					$out='OUPS ! Il y a eu un problème.'; 
 				}
@@ -65,7 +71,8 @@ class InterventionControleur{
 		return $out;
 	}
 	
-	public function deleteIntervention($intervention){		
+	public function deleteIntervention(){
+		$intervention = $this->get($_GET['id']);		
 		return ($this->_interventionManager->delete($intervention))?'L\'intervention  '.$intervention->nom().' a bien été supprimée.':'OUPS ! Il y a eu un problème.'; 
 	}
 	

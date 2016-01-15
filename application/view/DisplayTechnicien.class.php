@@ -124,18 +124,21 @@ class DisplayTechnicien{
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
 			#Formulaire de modification de technicien
 			$technicien = $this->_technicienControleur->get($_GET['numero']);
-			print_r($technicien);
-			$out='	<h1>Modifier un technicien</h1>
-					<div class="pageRecherche">
-						<form action="?page=modifierTechnicien" id="getListTechniciens_form" method="post" >
-							<div class="table">
-								<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$technicien->numero().'" required="required"  readonly="readonly" >
-								<input type="text" class="table-cell" name="nom" placeholder="Nom : " value="'.$technicien->nom().'" required="required" >
-								<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " value="'.$technicien->prenom().'" required="required" >
-							</div>
-							<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
-						</form>
-					</div>';
+			if(!empty($technicien)){
+				$out='	<h1>Modifier un technicien</h1>
+						<div class="pageRecherche">
+							<form action="?page=modifierTechnicien" id="getListTechniciens_form" method="post" >
+								<div class="table">
+									<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$technicien->numero().'" required="required"  readonly="readonly" >
+									<input type="text" class="table-cell" name="nom" placeholder="Nom : " value="'.$technicien->nom().'" required="required" >
+									<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " value="'.$technicien->prenom().'" required="required" >
+								</div>
+								<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+							</form>
+						</div>';
+			}else{
+				$out='Ce technicien n\'existe pas';
+			}
 		}else{
 			return 'Vous ne devriez pas être ici';
 		}
@@ -154,8 +157,7 @@ class DisplayTechnicien{
 	#supprime un technicien
 	public function supprimerTechnicien(){
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
-			$technicien = $this->_technicienControleur->get($_GET['numero']);
-			return $this->_technicienControleur->deleteTechnicien($technicien);
+			return $this->_technicienControleur->deleteTechnicien();
 		}else{
 			return 'Vous ne devriez pas être ici';
 		}

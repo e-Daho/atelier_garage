@@ -123,7 +123,7 @@ class DisplayClient{
 								<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " required="required" ></div><div>
 								<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
 								<label for="referent">Référent : </label>
-								<select name="referent" >
+								<select name="referent" required="required" >
 									<option value="" >Non sélectionné</option>';
 			$_POST['privileges']=2;
 			$liste_utilisateurs = $this->_utilisateurControleur->getList();
@@ -156,28 +156,32 @@ class DisplayClient{
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
 			#Formulaire de modification de client
 			$client = $this->_clientControleur->get($_GET['numero']);
-			$out='	<h1>Modifier un client</h1>
-					<div class="pageRecherche">
-						<form action="?page=modifierClient" id="getListClients_form" method="post" >
-							<div class="table">
-								<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$client->numero().'" required="required"  readonly="readonly" >
-								<input type="text" class="table-cell" name="nom" placeholder="Nom : " value="'.$client->nom().'" required="required" >
-								<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " value="'.$client->prenom().'" required="required" ></div><div>
-								<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " value="'.$client->adresse().'">
-								<label for="referent">Référent : </label>
-								<select name="referent" >
-									<option value="" >Non sélectionné</option>';
-			$_POST['privileges']=2;
-			$liste_utilisateurs = $this->_utilisateurControleur->getList();
-			foreach ($liste_utilisateurs as $utilisateur){
-				$selector = ($client->referent()==$utilisateur->id())?'selected':'';
-				$out.='				<option value="'.$utilisateur->id().'" '.$selector.' >'.$utilisateur->id().'</option>';
+			if(!empty($client)){
+				$out='	<h1>Modifier un client</h1>
+						<div class="pageRecherche">
+							<form action="?page=modifierClient" id="getListClients_form" method="post" >
+								<div class="table">
+									<input type="text" class="table-cell" name="numero" placeholder="Numéro : " value="'.$client->numero().'" required="required"  readonly="readonly" >
+									<input type="text" class="table-cell" name="nom" placeholder="Nom : " value="'.$client->nom().'" required="required" >
+									<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " value="'.$client->prenom().'" required="required" ></div><div>
+									<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " value="'.$client->adresse().'">
+									<label for="referent">Référent : </label>
+									<select name="referent" required="required">
+										<option value="" >Non sélectionné</option>';
+				$_POST['privileges']=2;
+				$liste_utilisateurs = $this->_utilisateurControleur->getList();
+				foreach ($liste_utilisateurs as $utilisateur){
+					$selector = ($client->referent()==$utilisateur->id())?'selected':'';
+					$out.='				<option value="'.$utilisateur->id().'" '.$selector.' >'.$utilisateur->id().'</option>';
+				}
+				$out.='				</select>';
+				$out.='			</div>
+								<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+							</form>
+						</div>';
+			}else{
+				$out='Ce client n\'existe pas';
 			}
-			$out.='				</select>';
-			$out.='			</div>
-							<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
-						</form>
-					</div>';
 		}else{
 			$out='Vous ne devriez pas être ici';
 		}
@@ -196,8 +200,7 @@ class DisplayClient{
 	#supprime un client
 	public function supprimerClient(){
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
-			$client = $this->_clientControleur->get($_GET['numero']);
-			return $this->_clientControleur->deleteClient($client);
+			return $this->_clientControleur->deleteClient();
 		}else{
 			return 'Vous ne devriez pas être ici';
 		}

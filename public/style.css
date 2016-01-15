@@ -175,6 +175,7 @@ footer
 	background-color : white;
 	margin : 10px;
 	text-align : center;
+	padding-top: 8%;
 }
 
 .pageRecherche > form, table{
@@ -206,6 +207,12 @@ footer
 .pageRecherche tr:nth-child(even) {background: #DCC}
 .pageRecherche tr:nth-child(odd) {background: #FFF}
 
+.pageRecherche a, #tableau_de_bord a{
+  text-decoration: none;
+  color: green;
+  font-weight: bold;
+  padding-bottom: 3px;
+}
 .alignRight{
 	text-align : right;
 }

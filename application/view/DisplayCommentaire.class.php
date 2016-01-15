@@ -15,8 +15,7 @@ class DisplayCommentaire{
 	}
 	
 	public function supprimerCommentaire(){
-		$commentaire = $this->_commentaireControleur->get($_GET['voiture'],$_GET['technicien'],$_GET['datecommentaire']);
-		$this->_commentaireControleur->deleteCommentaire($commentaire);
+		$this->_commentaireControleur->deleteCommentaire();
 		header('Location:?page=ficheVoiture&immatriculation='.$_GET['voiture'].'');
 		exit();
 	}

@@ -8,24 +8,24 @@ class RepareControleur{
 	}
 	
 	public function get($technicien, $voiture, $dateDebut){
-		return $this->_repareManager->get($technicien, $voiture, $dateDebut);
+		return $this->_repareManager->get(htmlspecialchars($technicien), htmlspecialchars($voiture), htmlspecialchars($dateDebut));
 	}
 	
 	public function getList(){
 		$idFacture = '%';
-		if (!empty($_POST['idFacture'])) {$idFacture.=$_POST['idFacture'].'%';}
+		if (!empty($_POST['idFacture'])) {$idFacture.=htmlspecialchars($_POST['idFacture']).'%';}
 		
 		$technicien = '%';
-		if (!empty($_POST['technicien'])) {$technicien.=$_POST['technicien'].'%';}
+		if (!empty($_POST['technicien'])) {$technicien.=htmlspecialchars($_POST['technicien']).'%';}
 		
 		$voiture = '%';
-		if (!empty($_POST['voiture'])) {$voiture.=$_POST['voiture'].'%';}
+		if (!empty($_POST['voiture'])) {$voiture.=htmlspecialchars($_POST['voiture']).'%';}
 		
 		$dateDebut = '%';
-		if (!empty($_POST['dateDebut'])) {$dateDebut.=$_POST['dateDebut'].'%';}
+		if (!empty($_POST['dateDebut'])) {$dateDebut.=htmlspecialchars($_POST['dateDebut']).'%';}
 		
 		$_dateFin = '';
-		if (!empty($_POST['dateFin'])) {'%'.$_dateFin.=$_POST['dateFin'].'%';}
+		if (!empty($_POST['dateFin'])) {'%'.$_dateFin.=htmlspecialchars($_POST['dateFin']).'%';}
 					
 		$liste_repares = $this->_repareManager->getList($technicien, $voiture, $idFacture, $dateDebut, $_dateFin);
 		return $liste_repares;
@@ -34,11 +34,14 @@ class RepareControleur{
 	public function addRepare(){
 		$out='';
 		if (!empty($_POST['technicien']) AND !empty($_POST['voiture']) AND !empty($_POST['dateDebut'])) {
+			foreach($_POST as $variable){
+				$variable=htmlspecialchars($variable);
+			}			
 			$repare = new Repare($_POST);
 			
 			if (!$this->_repareManager->exists($repare)) {
 				if($this->_repareManager->add($repare)){
-					$out='La réparation de la voiture immatriculé '.$_POST['voiture'].' par le technicient numéro '.$_POST['technicien'].' en date du '.$_POST['dateDebut'].' a bien été ajoutée.';
+					$out='La réparation de la voiture immatriculé '.htmlspecialchars($_POST['voiture']).' par le technicient numéro '.htmlspecialchars($_POST['technicien']).' en date du '.htmlspecialchars($_POST['dateDebut']).' a bien été ajoutée.';
 				}else{
 					$out='OUPS ! Il y a eu un problème.'; 
 				}
@@ -54,11 +57,14 @@ class RepareControleur{
 	public function editRepare(){
 		$out='';
 		if (!empty($_POST['technicien']) AND !empty($_POST['voiture']) AND !empty($_POST['dateDebut'])) {
+			foreach($_POST as $variable){
+				$variable=htmlspecialchars($variable);
+			}			
 			$repare = new Repare($_POST);
 			
 			if ($this->_repareManager->exists($repare)) {
 				if($this->_repareManager->update($repare)){
-					$out='La réparation de la voiture immatriculé '.$_POST['voiture'].' par le technicient numéro '.$_POST['technicien'].' en date du '.$_POST['dateDebut'].' a bien été modifiée.';
+					$out='La réparation de la voiture immatriculé '.htmlspecialchars($_POST['voiture']).' par le technicient numéro '.htmlspecialchars($_POST['technicien']).' en date du '.htmlspecialchars($_POST['dateDebut']).' a bien été modifiée.';
 				}else{
 					$out='OUPS ! Il y a eu un problème.'; 
 				}
@@ -71,7 +77,8 @@ class RepareControleur{
 		return $out;
 	}
 	
-	public function deleteRepare($repare){
+	public function deleteRepare(){
+		$repare = $this->get($_GET['technicien'],$_GET['voiture'],$_GET['dateDebut']);
 		return ($this->_repareManager->delete($repare))?'La réparation de la voiture immatriculé '.$repare->voiture().' par le technicient numéro '.$repare->technicien().' en date du '.$repare->dateDebut().' a bien été supprimée.':'OUPS ! Il y a eu un problème.'; 
 	
 	}

@@ -109,28 +109,32 @@ class DisplayUtilisateur{
 		if (!empty($_SESSION['id']) AND ($_SESSION['Privileges']==3)){
 			#Formulaire de modification de utilisateur
 			$utilisateur = $this->_utilisateurControleur->get($_GET['id']);
-			$out='	<h1>Modifier un utilisateur</h1>
-					<div class="pageRecherche">
-						<form action="?page=modifierUtilisateur" id="getListUtilisateurs_form" method="post" >
-							<div class="table">
-								<input hidden type="text" class="table-cell" name="id" value="'.$utilisateur->id().'"  required="required" >
-								<input type="text" class="table-cell" name="pseudo" placeholder="Pseudo : "  value="'.$utilisateur->pseudo().'"  required="required" >
-								<select name="pass" required="required" >
-									<option value="'.$utilisateur->pass().'" rel="none">Pass éxistant</option>
-									<option value="" rel="newpass">New Password</option>
-								</select>
-								<select name="privileges" required="required" >
-									<option value="" >Non sélectionné</option>
-									<option value="0" ';	$out.=($utilisateur->privileges()==0)?'selected':'';	$out.=' >Visiteur (0)</option>
-									<option value="1" ';	$out.=($utilisateur->privileges()==1)?'selected':'';	$out.='  >Technicien (1)</option>
-									<option value="2" ';	$out.=($utilisateur->privileges()==2)?'selected':'';	$out.='  >Référent (2)</option>
-									<option value="3" ';	$out.=($utilisateur->privileges()==3)?'selected':'';	$out.='  >Admin (3)</option>
-								</select>
-								<div rel="newpass"><input type="text" class="table-cell" name="newpass" placeholder="New Pass : "  required="required" ></div>
-							</div>
-							<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
-						</form>
-					</div>';
+			if(!empty($utilisateur)){
+				$out='	<h1>Modifier un utilisateur</h1>
+						<div class="pageRecherche">
+							<form action="?page=modifierUtilisateur" id="getListUtilisateurs_form" method="post" >
+								<div class="table">
+									<input hidden type="text" class="table-cell" name="id" value="'.$utilisateur->id().'"  required="required" >
+									<input type="text" class="table-cell" name="pseudo" placeholder="Pseudo : "  value="'.$utilisateur->pseudo().'"  required="required" >
+									<select name="pass" required="required" >
+										<option value="'.$utilisateur->pass().'" rel="none">Pass éxistant</option>
+										<option value="" rel="newpass">New Password</option>
+									</select>
+									<select name="privileges" required="required" >
+										<option value="" >Non sélectionné</option>
+										<option value="0" ';	$out.=($utilisateur->privileges()==0)?'selected':'';	$out.=' >Visiteur (0)</option>
+										<option value="1" ';	$out.=($utilisateur->privileges()==1)?'selected':'';	$out.='  >Technicien (1)</option>
+										<option value="2" ';	$out.=($utilisateur->privileges()==2)?'selected':'';	$out.='  >Référent (2)</option>
+										<option value="3" ';	$out.=($utilisateur->privileges()==3)?'selected':'';	$out.='  >Admin (3)</option>
+									</select>
+									<div rel="newpass"><input type="text" class="table-cell" name="newpass" placeholder="New Pass : "  required="required" ></div>
+								</div>
+								<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+							</form>
+						</div>';
+			}else{
+				$out='Cet utilisateur n\'existe pas';
+			}
 		}else{
 			$out='Vous ne devriez pas être ici';
 		}
@@ -140,6 +144,9 @@ class DisplayUtilisateur{
 	#Modifie un utilisateur
 	public function modifierUtilisateur(){
 		if (!empty($_SESSION['id']) AND ($_SESSION['Privileges']==3)){
+			if (!empty($_POST['monCompte'])){
+				$_SESSION['pseudo']=$_POST['pseudo'];
+			}
 			return $this->_utilisateurControleur->editUtilisateur();
 		}else{
 			return 'Vous ne devriez pas être ici';
@@ -149,8 +156,7 @@ class DisplayUtilisateur{
 	#supprime un utilisateur
 	public function supprimerUtilisateur(){
 		if (!empty($_SESSION['id']) AND ($_SESSION['Privileges']==3)){
-			$utilisateur = $this->_utilisateurControleur->get($_GET['id']);
-			return $this->_utilisateurControleur->deleteUtilisateur($utilisateur);
+			return $this->_utilisateurControleur->deleteUtilisateur();
 		}else{
 			return 'Vous ne devriez pas être ici';
 		}
@@ -169,7 +175,35 @@ class DisplayUtilisateur{
 	}
 	
 	public function monCompte(){
-		
+		$out='';
+		if (!empty($_SESSION['id']) AND ($_SESSION['Privileges']==3)){
+			#Formulaire de modification de compte
+			$utilisateur = $this->_utilisateurControleur->get($_SESSION['id']);
+			if(!empty($utilisateur)){
+				$out='	<h1>Modifier mon compte</h1>
+						<div class="pageRecherche">
+							<form action="?page=modifierUtilisateur" id="getListUtilisateurs_form" method="post" >
+								<div class="table">
+									<input hidden type="text" class="table-cell" name="monCompte" value="1"  required="required" >
+									<input hidden type="text" class="table-cell" name="id" value="'.$utilisateur->id().'"  required="required" >
+									<input type="text" class="table-cell" name="pseudo" placeholder="Pseudo : "  value="'.$utilisateur->pseudo().'"  required="required" >
+									<select name="pass" required="required" >
+										<option value="'.$utilisateur->pass().'" rel="none">Pass éxistant</option>
+										<option value="" rel="newpass">New Password</option>
+									</select>
+									<input hidden type="text" class="table-cell" name="privileges" value="'.$utilisateur->privileges().'"  required="required" >
+									<div rel="newpass"><input type="text" class="table-cell" name="newpass" placeholder="New Pass : "  required="required" ></div>
+								</div>
+								<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+							</form>
+						</div>';
+			}else{
+				$out='Cet utilisateur n\'existe pas';
+			}
+		}else{
+			$out='Vous ne devriez pas être ici';
+		}
+		return $out;
 	}
 	
 }
