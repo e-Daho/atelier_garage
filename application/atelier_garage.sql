@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost:3307
--- Généré le :  Mer 13 Janvier 2016 à 22:39
+-- Généré le :  Jeu 14 Janvier 2016 à 22:10
 -- Version du serveur :  5.6.27-0ubuntu1
 -- Version de PHP :  5.6.11
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   `nom` varchar(45) CHARACTER SET latin1 NOT NULL,
   `prenom` varchar(45) CHARACTER SET latin1 NOT NULL,
   `adresse` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
-  `referent` varchar(45) CHARACTER SET latin1 NOT NULL
+  `referent` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
@@ -39,11 +39,8 @@ CREATE TABLE IF NOT EXISTS `client` (
 --
 
 INSERT INTO `client` (`numero`, `nom`, `prenom`, `adresse`, `referent`) VALUES
-(1, 'a', 'a', 'Ecully', 'a'),
-(2, 'b', 'b', 'b', 'b'),
-(19, 'Chataign', 'Thib', 'Paris', 'Thib'),
-(20, 'daho', 'Tb', 'Paris', 'daho'),
-(12345, 'PERROT', 'thomas', 'paris', 'marc');
+(1, 'PERROT', 'Thomas', 'Paris', 3),
+(2, 'CHATAIGNER', 'Thibault', 'Ecully', 3);
 
 -- --------------------------------------------------------
 
@@ -57,31 +54,6 @@ CREATE TABLE IF NOT EXISTS `commentaire` (
   `date` datetime NOT NULL,
   `texte` varchar(45) CHARACTER SET latin1 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Contenu de la table `commentaire`
---
-
-INSERT INTO `commentaire` (`voiture`, `technicien`, `date`, `texte`) VALUES
-('abc-789-38', 213456, '2016-01-13 17:21:32', 'bonjour'),
-('abc-789-38', 213456, '2016-01-13 17:21:33', 'Cette voiture a l''air en salle Ã©tat'),
-('abc-789-38', 213456, '2016-01-13 17:39:27', 'Cette voiture a l''air en salle Ã©tat'),
-('abc-789-38', 213456, '2016-01-13 22:03:57', 'Cette voiture a l''air en salle Ã©tat'),
-('xyz-789-38', 7, '2016-01-11 22:36:35', 'Cette voiture a l''air en salle Ã©tat'),
-('xyz-789-38', 7, '2016-01-11 22:37:11', 'Cette voiture a l''air en salle Ã©tat'),
-('xyz-789-38', 7, '2016-01-11 22:41:47', 'Cette voiture a l''air en salle Ã©tat'),
-('xyz-789-38', 7, '2016-01-11 22:45:53', 'Cette voiture a l''air en salle Ã©tat'),
-('xyz-789-38', 7, '2016-01-11 22:46:05', 'Cette voiture a l''air en salle Ã©tat'),
-('xyz-789-38', 7, '2016-01-11 22:46:07', 'Cette voiture a l''air en salle Ã©tat'),
-('xyz-789-38', 7, '2016-01-11 22:47:02', 'Cette voiture a l''air en salle Ã©tat'),
-('xyz-789-38', 7, '2016-01-11 22:47:34', 'lol'),
-('xyz-789-38', 7, '2016-01-11 22:48:17', 'lol'),
-('xyz-789-38', 7, '2016-01-12 08:45:15', 'lol'),
-('xyz-789-38', 7, '2016-01-12 11:09:07', 'lol'),
-('xyz-789-38', 7, '2016-01-13 10:14:56', 'lol'),
-('xyz-789-38', 7, '2016-01-13 15:40:11', 'lol'),
-('xyz-789-38', 7, '2016-01-13 15:41:00', 'lol'),
-('xyz-789-38', 7, '2016-01-13 15:41:03', 'lol');
 
 -- --------------------------------------------------------
 
@@ -99,8 +71,8 @@ CREATE TABLE IF NOT EXISTS `facture` (
 --
 
 INSERT INTO `facture` (`idFacture`, `prixTotal`) VALUES
-(3, 340),
-(4, 190),
+(3, 320),
+(4, 170),
 (5, 0);
 
 -- --------------------------------------------------------
@@ -119,9 +91,9 @@ CREATE TABLE IF NOT EXISTS `facture_intervention` (
 --
 
 INSERT INTO `facture_intervention` (`idFacture`, `idIntervention`) VALUES
-(3, 4),
-(4, 11),
-(3, 14);
+(3, 27),
+(3, 28),
+(4, 28);
 
 --
 -- Déclencheurs `facture_intervention`
@@ -179,31 +151,15 @@ CREATE TABLE IF NOT EXISTS `intervention` (
   `id` int(11) NOT NULL,
   `nom` varchar(45) CHARACTER SET latin1 NOT NULL,
   `prix` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Contenu de la table `intervention`
 --
 
 INSERT INTO `intervention` (`id`, `nom`, `prix`) VALUES
-(3, 'changeFrein', 100),
-(4, 'changeDisques', 150),
-(10, 'RÃ©paration du moteur', 170),
-(11, 'lol', 190),
-(12, 'Changement des pneus', 190),
-(13, 'Changement des pneus', 190),
-(14, 'Changement des pneus', 190),
-(15, 'Changement des pneus', 190),
-(16, 'Changement des pneus', 190),
-(17, 'Changement des pneus', 190),
-(18, 'Changement des pneus', 190),
-(19, 'Changement des pneus', 190),
-(20, 'Changement des pneus', 190),
-(21, 'Changement des pneus', 190),
-(22, 'Changement des pneus', 190),
-(23, 'Changement des pneus', 190),
-(24, 'Changement des pneus', 190),
-(26, 'Changement des pneus', 190);
+(27, 'pneu', 150),
+(28, 'freins', 170);
 
 -- --------------------------------------------------------
 
@@ -224,8 +180,7 @@ CREATE TABLE IF NOT EXISTS `repare` (
 --
 
 INSERT INTO `repare` (`technicien`, `voiture`, `dateDebut`, `dateFin`, `idFacture`) VALUES
-(7, '123-456', '0000-00-00', NULL, 3),
-(213456, 'abc', '2016-01-14', NULL, 5);
+(4, 'abc-123-38', '2016-01-08', NULL, 3);
 
 -- --------------------------------------------------------
 
@@ -244,8 +199,7 @@ CREATE TABLE IF NOT EXISTS `technicien` (
 --
 
 INSERT INTO `technicien` (`numero`, `nom`, `prenom`) VALUES
-(7, 'daho', 'thomas'),
-(213456, 'lol', 'cecile');
+(4, 'JACQUELIN', 'Augustin');
 
 -- --------------------------------------------------------
 
@@ -258,14 +212,17 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `Pseudo` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
   `Pass` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
   `Privileges` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Contenu de la table `utilisateurs`
 --
 
 INSERT INTO `utilisateurs` (`id`, `Pseudo`, `Pass`, `Privileges`) VALUES
-(1, 'thib', '428c7871dd6adbdc20a11fdac0dfe6a015f06403', 2);
+(2, 'thib', '428c7871dd6adbdc20a11fdac0dfe6a015f06403', 3),
+(3, 'daho', '403926033d001b5279df37cbbe5287b7c7c267fa', 2),
+(4, 'gus', '22b4468ae6dcf46c36c9622e292c7a3506bb0db4', 1),
+(5, 'nala', 'ada41ed3cb167a74ff219441faec9e94c2142e95', 0);
 
 -- --------------------------------------------------------
 
@@ -288,12 +245,8 @@ CREATE TABLE IF NOT EXISTS `voiture` (
 --
 
 INSERT INTO `voiture` (`immatriculation`, `marque`, `type`, `annee`, `kilometrage`, `date_arrivee`, `proprietaire`) VALUES
-('123-456', 'renau', 'ancien', 1500, '1990', '2016-01-01', 20),
-('abc', 'ford', 'sport', 1972, '18000', '0000-00-00', 19),
-('abc-789-38', 'peugeot', 'sport', 1993, '120000', '0000-00-00', 1),
-('def-789-38', 'peugeot', 'sport', 1993, '120000', '0000-00-00', 1),
-('gki-789-38', 'peugeot', 'sport', 1993, '120000', '2016-01-11', 1),
-('xyz-789-38', 'peugeot', 'sport', 1993, '120000', '0000-00-00', 19);
+('abc-123-38', 'peugeot', 'sport', 1993, '150000', '2016-01-01', 1),
+('def-456-38', 'renault', 'sport', 2002, '100000', '2016-01-04', 2);
 
 --
 -- Index pour les tables exportées
@@ -304,7 +257,8 @@ INSERT INTO `voiture` (`immatriculation`, `marque`, `type`, `annee`, `kilometrag
 --
 ALTER TABLE `client`
   ADD PRIMARY KEY (`numero`),
-  ADD KEY `client-commune_idx` (`adresse`);
+  ADD KEY `client-commune_idx` (`adresse`),
+  ADD KEY `referent` (`referent`);
 
 --
 -- Index pour la table `commentaire`
@@ -374,21 +328,27 @@ ALTER TABLE `facture`
 -- AUTO_INCREMENT pour la table `intervention`
 --
 ALTER TABLE `intervention`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- Contraintes pour les tables exportées
 --
 
 --
+-- Contraintes pour la table `client`
+--
+ALTER TABLE `client`
+  ADD CONSTRAINT `client_utilisateurs` FOREIGN KEY (`referent`) REFERENCES `utilisateurs` (`id`);
+
+--
 -- Contraintes pour la table `commentaire`
 --
 ALTER TABLE `commentaire`
-  ADD CONSTRAINT `commente-technicien` FOREIGN KEY (`technicien`) REFERENCES `technicien` (`numero`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `commente-technicien` FOREIGN KEY (`technicien`) REFERENCES `technicien` (`numero`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `commente-voiture` FOREIGN KEY (`voiture`) REFERENCES `voiture` (`immatriculation`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -402,15 +362,21 @@ ALTER TABLE `facture_intervention`
 -- Contraintes pour la table `repare`
 --
 ALTER TABLE `repare`
-  ADD CONSTRAINT `repare_facture` FOREIGN KEY (`idFacture`) REFERENCES `facture` (`idFacture`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `repare_technicien` FOREIGN KEY (`technicien`) REFERENCES `technicien` (`numero`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `repare_voiture` FOREIGN KEY (`voiture`) REFERENCES `voiture` (`immatriculation`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `repare_facture` FOREIGN KEY (`idFacture`) REFERENCES `facture` (`idFacture`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `repare_technicien` FOREIGN KEY (`technicien`) REFERENCES `technicien` (`numero`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `repare_voiture` FOREIGN KEY (`voiture`) REFERENCES `voiture` (`immatriculation`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `technicien`
+--
+ALTER TABLE `technicien`
+  ADD CONSTRAINT `technicien_utilisateurs` FOREIGN KEY (`numero`) REFERENCES `utilisateurs` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `voiture`
 --
 ALTER TABLE `voiture`
-  ADD CONSTRAINT `voiture-client` FOREIGN KEY (`proprietaire`) REFERENCES `client` (`numero`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `voiture-client` FOREIGN KEY (`proprietaire`) REFERENCES `client` (`numero`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
