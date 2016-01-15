@@ -22,14 +22,27 @@ function isInt(champ)
 	}
 }
 
-function verifForm(f)
+function verifFormClient(f)
 {
 	var intOk = isInt(f.numero);
 
 	if(intOk)
 			return true;
-		else
-		{
+	else
+	{
+		alert("Vous devez saisir un entier");
+		return false;
+	}
+}
+
+function verifFormFacture(f)
+{
+	var intOk = isInt(f.idFacture);
+
+	if(intOk)
+			return true;
+	else
+	{
 		alert("Vous devez saisir un entier");
 		return false;
 	}

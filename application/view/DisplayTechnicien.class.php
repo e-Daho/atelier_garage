@@ -19,7 +19,7 @@ class DisplayTechnicien{
 					<div class="pageRecherche">
 						<form action="?page=afficherTechniciens" id="getListTechniciens_form" method="post" >
 							<div class="table">
-								<input type="text" class="table-cell" name="numero" placeholder="Numéro : " >
+								<input type="text" class="table-cell" name="numero" onblur="isInt(this)" placeholder="Numéro : " >
 								<input type="text" class="table-cell" name="nom" placeholder="Nom : " >
 								<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " ></div><div>
 							<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>

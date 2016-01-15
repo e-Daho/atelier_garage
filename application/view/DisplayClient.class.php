@@ -18,7 +18,7 @@ class DisplayClient{
 					<div class="pageRecherche">
 						<form action="?page=afficherClients" id="getListClients_form" method="post" >
 							<div class="table">
-								<input type="text" class="table-cell" name="numero" placeholder="Numéro : " >
+								<input type="text" class="table-cell" name="numero" onblur="isInt(this)" placeholder="Numéro : " >
 								<input type="text" class="table-cell" name="nom" placeholder="Nom : " >
 								<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " ></div><div>
 								<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
@@ -116,9 +116,9 @@ class DisplayClient{
 			#Formulaire d'ajout de client
 			$out='	<h1>Ajouter un client</h1>
 					<div class="pageRecherche">
-						<form action="?page=ajouterClient" id="getListClients_form" method="post" >
+						<form action="?page=ajouterClient" id="getListClients_form" onsubmit="return verifFormClient(this)" method="post" >
 							<div class="table">
-								<input type="text" class="table-cell" name="numero" placeholder="Numéro : " required="required"  >
+								<input type="text" class="table-cell" name="numero" onblur="isInt(this)" placeholder="Numéro : " required="required"  >
 								<input type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
 								<input type="text" class="table-cell" name="prenom" placeholder="Prénom : " required="required" ></div><div>
 								<input type="text" class="table-cell" name="adresse" placeholder="Adresse : " >

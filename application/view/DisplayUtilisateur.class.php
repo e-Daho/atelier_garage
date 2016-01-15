@@ -16,7 +16,7 @@ class DisplayUtilisateur{
 					<div class="pageRecherche">
 						<form action="?page=afficherUtilisateurs" id="getListUtilisateurs_form" method="post" >
 							<div class="table">
-								<input type="text" class="table-cell" name="id" placeholder="Id : " >
+								<input type="text" class="table-cell" name="id" onblur="isInt(this)" placeholder="Id : " >
 								<input type="text" class="table-cell" name="pseudo" placeholder="Pseudo : " >
 								<select name="privileges">
 									<option value="" >Non sélectionné</option>

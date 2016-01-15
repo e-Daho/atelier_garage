@@ -21,7 +21,7 @@ class DisplayFacture{
 					<div class="pageRecherche">
 						<form action="?page=afficherFactures" id="getListFactures_form" method="post" >
 							<div class="table">
-								<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " >
+								<input type="text" class="table-cell" name="idFacture" onblur="isInt(this)" placeholder="Id Facture : " >
 								<input type="text" class="table-cell" name="prixTotal" placeholder="Prix Total : " >
 								<p><input type="submit" class="ok" name="Rechercher" value="Rechercher"></p>
 							</div>
@@ -75,9 +75,9 @@ class DisplayFacture{
 			#Formulaire d'ajout de voiture
 			$out='	<h1>Ajouter un facture</h1>
 					<div class="pageRecherche">
-						<form action="?page=ajouterFacture" id="getListFactures_form" method="post" >
+						<form action="?page=ajouterFacture" id="getListFactures_form" onsubmit="return verifFormFacture(this)" method="post" >
 							<div class="table">
-								<input type="text" class="table-cell" name="idFacture" placeholder="Id Facture : " required="required"  >
+								<input type="text" class="table-cell" name="idFacture" placeholder="Id" onblur="verifPseudo(this) Facture : " required="required"  >
 								<input hidden type="text" class="table-cell" name="prixTotal" value="0" placeholder="Prix Total : ">
 							</div>
 							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
