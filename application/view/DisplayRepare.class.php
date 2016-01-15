@@ -164,27 +164,31 @@ class DisplayRepare{
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
 			#Formulaire de modification de voiture
 			$repare = $this->_repareControleur->get($_GET['technicien'],$_GET['voiture'],$_GET['dateDebut']);
-			$out='	<h1>Modifier une réparation</h1>
-					<div class="pageRecherche">
-						<form action="?page=modifierRepare" id="getListRepares_form" method="post" >
-							<div class="table">
-								<label for="idFacture"> Id Facture : </label>
-								<select name="idFacture">
-									<option value="" >Non sélectionné</option>';
-			$liste_factures = $this->_factureControleur->getList();	#On récuprère la liste des factures pour la charger dans un select
-			foreach ($liste_factures as $facture){
-				$selector = ($facture->idFacture()==$repare->idFacture())?'selected':'';
-				$out.='				<option value="'.$facture->idFacture().'"  '.$selector.'>'.$facture->idFacture().'</option>';
+			if(!empty($repare)){
+				$out='	<h1>Modifier une réparation</h1>
+						<div class="pageRecherche">
+							<form action="?page=modifierRepare" id="getListRepares_form" method="post" >
+								<div class="table">
+									<label for="idFacture"> Id Facture : </label>
+									<select name="idFacture">
+										<option value="" >Non sélectionné</option>';
+				$liste_factures = $this->_factureControleur->getList();	#On récuprère la liste des factures pour la charger dans un select
+				foreach ($liste_factures as $facture){
+					$selector = ($facture->idFacture()==$repare->idFacture())?'selected':'';
+					$out.='				<option value="'.$facture->idFacture().'"  '.$selector.'>'.$facture->idFacture().'</option>';
+				}
+				$out.='				</select>
+									<input type="text" class="table-cell" name="technicien" placeholder="Technicien : " value="'.$repare->technicien().'" required="required"  readonly="readonly"  >
+									<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " value="'.$repare->voiture().'" required="required"   readonly="readonly" ></div><div>
+									<input type="date" class="table-cell" name="dateDebut" placeholder="Date de début : " value="'.$repare->dateDebut().'" required="required"   readonly="readonly" >
+									<input type="date" class="table-cell" name="dateFin" placeholder="Date de fin : " value="'.$repare->dateFin().'" >
+								</div>
+								<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+							</form>
+						</div>';
+			}else{
+				$out='Cette réparation n\'existe pas';
 			}
-			$out.='				</select>
-								<input type="text" class="table-cell" name="technicien" placeholder="Technicien : " value="'.$repare->technicien().'" required="required"  readonly="readonly"  >
-								<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " value="'.$repare->voiture().'" required="required"   readonly="readonly" ></div><div>
-								<input type="date" class="table-cell" name="dateDebut" placeholder="Date de début : " value="'.$repare->dateDebut().'" required="required"   readonly="readonly" >
-								<input type="date" class="table-cell" name="dateFin" placeholder="Date de fin : " value="'.$repare->dateFin().'" >
-							</div>
-							<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
-						</form>
-					</div>';
 		}else{
 			$out='Vous ne devriez pas être ici';
 		}
@@ -203,8 +207,7 @@ class DisplayRepare{
 	#Supprime une réparation
 	public function supprimerRepare(){
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
-			$repare = $this->_repareControleur->get($_GET['technicien'],$_GET['voiture'],$_GET['dateDebut']);
-			return $this->_repareControleur->deleteRepare($repare);
+			return $this->_repareControleur->deleteRepare();
 		}else{
 			return 'Vous ne devriez pas être ici';
 		}

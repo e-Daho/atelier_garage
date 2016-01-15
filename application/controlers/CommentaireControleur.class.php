@@ -8,21 +8,21 @@ class CommentaireControleur{
 	}
 	
 	public function get($voiture, $technicien, $datecommentaire){
-		return $this->_commentaireManager->get($voiture, $technicien, $datecommentaire);
+		return $this->_commentaireManager->get(htmlspecialchars($voiture), htmlspecialchars($technicien), htmlspecialchars($datecommentaire));
 	}
 	
 	public function getList(){
 		$voiture = '%';
-		if (!empty($_GET['immatriculation'])) {$voiture.=$_GET['immatriculation'].'%';}
+		if (!empty($_GET['immatriculation'])) {$voiture.=htmlspecialchars($_GET['immatriculation']).'%';}
 		
 		$technicien = '%';
-		if (!empty($_POST['technicien'])) {$technicien.=$_POST['technicien'].'%';}
+		if (!empty($_POST['technicien'])) {$technicien.=htmlspecialchars($_POST['technicien']).'%';}
 		
 		$datecommentaire = '%';
-		if (!empty($_POST['datecommentaire'])) {$datecommentaire.=$_POST['datecommentaire'].'%';}
+		if (!empty($_POST['datecommentaire'])) {$datecommentaire.=htmlspecialchars($_POST['datecommentaire']).'%';}
 		
 		$texte = '%';
-		if (!empty($_POST['texte'])) {$texte.=$_POST['texte'].'%';}
+		if (!empty($_POST['texte'])) {$texte.=htmlspecialchars($_POST['texte']).'%';}
 					
 		$liste_commentaires = $this->_commentaireManager->getList($voiture, $technicien, $datecommentaire, $texte);
 		return $liste_commentaires;
@@ -31,9 +31,10 @@ class CommentaireControleur{
 	public function addCommentaire(){
 		$out='';
 		if (!empty($_POST['voiture']) AND !empty($_POST['technicien']) ) {
-			print_r($_POST);
+			foreach($_POST as $variable){
+				$variable=htmlspecialchars($variable);
+			}		
 			$commentaire = new Commentaire($_POST);
-			print_r($commentaire);
 			
 			if (!$this->_commentaireManager->exists($commentaire)) {
 				if($this->_commentaireManager->add($commentaire)){
@@ -50,7 +51,8 @@ class CommentaireControleur{
 		return $out;
 	}
 	
-	public function deleteCommentaire($commentaire){
+	public function deleteCommentaire(){
+		$commentaire = $this->get($_GET['voiture'],$_GET['technicien'],$_GET['datecommentaire']);
 		return ($this->_commentaireManager->delete($commentaire))?'Le commentaire a bien été supprimé.':'OUPS ! Il y a eu un problème.'; 
 	}
 	

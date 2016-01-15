@@ -172,46 +172,50 @@ class DisplayVoiture{
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
 			#Formulaire de modification de voiture
 			$voiture = $this->_voitureControleur->get($_GET['immatriculation']);
-			$out='	<h1>Modifier une voiture</h1>
-					<div class="pageRecherche">
-						<form action="?page=modifierVoiture" id="getListVoitures_form" method="post" >
-							<div class="table">
-								<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " value="'.$voiture->immatriculation().'" required="required" readonly="readonly" >
-								<input type="text" class="table-cell" name="marque" placeholder="Marque : " value="'.$voiture->marque().'" >
-								<input type="text" class="table-cell" name="type" placeholder="Type : " value="'.$voiture->type().'" ></div><div>
-								<input type="text" class="table-cell" name="annee" placeholder="Année : " value="'.$voiture->annee().'" >
-								<input type="text" class="table-cell" name="kilometrage" placeholder="Kilométrage : " value="'.$voiture->kilometrage().'" >
-								<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " value="'.$voiture->date_arrivee().'" >
-							</div><div>
-								<label for="proprietaire">Propriétaire : </label>
-								<select name="proprietaire" required="required" >
-									<option value="" rel="none">Non sélectionné</option>
-									<option value="" rel="other_client">Autre</option>';
-			$liste_clients = $this->_clientControleur->getList('numero');
-			foreach ($liste_clients as $client){
-				$selector = ($voiture->proprietaire()==$client->numero())?'selected':'';
-				$out.='				<option value="'.$client->numero().'" rel="none" '.$selector.'>'.$client->numero().'</option>';
+			if(!empty($voiture)){
+				$out='	<h1>Modifier une voiture</h1>
+						<div class="pageRecherche">
+							<form action="?page=modifierVoiture" id="getListVoitures_form" method="post" >
+								<div class="table">
+									<input type="text" class="table-cell" name="immatriculation" placeholder="Immatriculation : " value="'.$voiture->immatriculation().'" required="required" readonly="readonly" >
+									<input type="text" class="table-cell" name="marque" placeholder="Marque : " value="'.$voiture->marque().'" >
+									<input type="text" class="table-cell" name="type" placeholder="Type : " value="'.$voiture->type().'" ></div><div>
+									<input type="text" class="table-cell" name="annee" placeholder="Année : " value="'.$voiture->annee().'" >
+									<input type="text" class="table-cell" name="kilometrage" placeholder="Kilométrage : " value="'.$voiture->kilometrage().'" >
+									<input type="date" class="table-cell" name="date_arrivee" placeholder="Date d\'arrivée : " value="'.$voiture->date_arrivee().'" >
+								</div><div>
+									<label for="proprietaire">Propriétaire : </label>
+									<select name="proprietaire" required="required" >
+										<option value="" rel="none">Non sélectionné</option>
+										<option value="" rel="other_client">Autre</option>';
+				$liste_clients = $this->_clientControleur->getList('numero');
+				foreach ($liste_clients as $client){
+					$selector = ($voiture->proprietaire()==$client->numero())?'selected':'';
+					$out.='				<option value="'.$client->numero().'" rel="none" '.$selector.'>'.$client->numero().'</option>';
+				}
+				$out.='				</select>';
+				$out.='			</div><div rel="other_client" class="table"><div>
+									<p>Nouveau client : </p>
+									<input  type="text" class="table-cell" name="numero" placeholder="Numero : " required="required" readonly="readonly" ></div><div>
+									<input  type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
+									<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " required="required" ></div><div>
+									<input  type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
+									<label for="referent">Référent : </label>
+									<select name="referent" >
+										<option value="" >Non sélectionné</option>';
+				$_POST['privileges']=2;
+				$liste_utilisateurs = $this->_utilisateurControleur->getList();
+				foreach ($liste_utilisateurs as $utilisateur){
+					$out.='				<option value="'.$utilisateur->id().'" >'.$utilisateur->id().'</option>';
+				}
+				$out.='				</select>';
+				$out.='			</div>
+								<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
+							</form>
+						</div>';
+			}else{
+				$out='Cette voiture n\'existe pas';
 			}
-			$out.='				</select>';
-			$out.='			</div><div rel="other_client" class="table"><div>
-								<p>Nouveau client : </p>
-								<input  type="text" class="table-cell" name="numero" placeholder="Numero : " required="required" readonly="readonly" ></div><div>
-								<input  type="text" class="table-cell" name="nom" placeholder="Nom : " required="required" >
-								<input  type="text" class="table-cell" name="prenom" placeholder="Prenom : " required="required" ></div><div>
-								<input  type="text" class="table-cell" name="adresse" placeholder="Adresse : " >
-								<label for="referent">Référent : </label>
-								<select name="referent" >
-									<option value="" >Non sélectionné</option>';
-			$_POST['privileges']=2;
-			$liste_utilisateurs = $this->_utilisateurControleur->getList();
-			foreach ($liste_utilisateurs as $utilisateur){
-				$out.='				<option value="'.$utilisateur->id().'" >'.$utilisateur->id().'</option>';
-			}
-			$out.='				</select>';
-			$out.='			</div>
-							<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
-						</form>
-					</div>';
 		}else{
 			$out='Vous ne devriez pas être ici';
 		}
@@ -230,8 +234,7 @@ class DisplayVoiture{
 	#supprime une voiture
 	public function supprimerVoiture(){
 		if (($_SESSION['Privileges']==2)OR($_SESSION['Privileges']==3)){
-			$voiture = $this->_voitureControleur->get($_GET['immatriculation']);
-			return $this->_voitureControleur->deleteVoiture($voiture);
+			return $this->_voitureControleur->deleteVoiture();
 		}else{
 			return 'Vous ne devriez pas être ici';
 		}
@@ -243,92 +246,96 @@ class DisplayVoiture{
 		if (!empty($_SESSION['id'])){
 			#Affiche les informations sur la voiture
 			$voiture = $this->_voitureControleur->get($_GET['immatriculation']);
-			$out='	<h1>Fiche voiture</h1>
-					<div class="pageRecherche">
-						<table>
-							<tr><th>Immatriculation : </th><td>'.$voiture->immatriculation().'</td></tr>
-							<tr><th>Marque : </th><td>'.$voiture->marque().'</td></tr>
-							<tr><th>Type : </th><td>'.$voiture->type().'</td></tr>
-							<tr><th>Année : </th><td>'.$voiture->annee().'</td></tr>
-							<tr><th>Kilométrage : </th><td>'.$voiture->kilometrage().'</td></tr>
-							<tr><th>Date d\'arrivée : </th><td>'.$voiture->date_arrivee().'</td></tr>
-							<tr><th>Propriétaire : </th><td>'.$voiture->proprietaire().'</td></tr>
-						</table>';
-						
-						
-			#Récupère et affiche la liste des factures associées
-			$_POST['voiture']=$voiture->immatriculation();
-			$liste_repares=$this->_repareControleur->getList();
-			$out.='		<h1>Liste des factures</h1>
-						<table>
-							<tr>
-								<th>Id facture</th>
-								<th>Technicien</th>
-								<th>Date de début</th>
-								<th>Date de fin</th>
-							</tr>';
-			foreach ($liste_repares as $repare){
-				$out.='		<tr>
-								<td><a href="?page=ficheFacture&idFacture='.$repare->idFacture().'">'.$repare->idFacture().'</a></td>
-								<td>'.$repare->technicien().'</td>
-								<td>'.$repare->dateDebut().'</td>
-								<td>'.$repare->dateFin().'</td>
-							</tr>';
-			}
-			$out.='		</table>';
-			
-			
-			#Récupère et affiche la liste des commentaires associés
-			$liste_commentaires=$this->_commentaireControleur->getList();
-			$out.='		<h1>Liste des commentaires</h1>
-						<table>
-							<tr>
-								<th>Immatriculation</th>
-								<th>Technicien</th>
-								<th>Date</th>
-								<th>Texte</th>
-								<th></th>
-							</tr>';
-			foreach ($liste_commentaires as $commentaire){
-				$out.='			<tr>
-								<td>'.$commentaire->voiture().'</td>
-								<td>'.$commentaire->technicien().'</td>
-								<td>'.$commentaire->datecommentaire().'</td>
-								<td>'.$commentaire->texte().'</td>';
-			
-				#Lien vers la modification et la suppression disponibles uniquement aux référents et l'admin
+			if(!empty($voiture)){
+				$out='	<h1>Fiche voiture</h1>
+						<div class="pageRecherche">
+							<table>
+								<tr><th>Immatriculation : </th><td>'.$voiture->immatriculation().'</td></tr>
+								<tr><th>Marque : </th><td>'.$voiture->marque().'</td></tr>
+								<tr><th>Type : </th><td>'.$voiture->type().'</td></tr>
+								<tr><th>Année : </th><td>'.$voiture->annee().'</td></tr>
+								<tr><th>Kilométrage : </th><td>'.$voiture->kilometrage().'</td></tr>
+								<tr><th>Date d\'arrivée : </th><td>'.$voiture->date_arrivee().'</td></tr>
+								<tr><th>Propriétaire : </th><td>'.$voiture->proprietaire().'</td></tr>
+							</table>';
+							
+							
+				#Récupère et affiche la liste des factures associées
+				$_POST['voiture']=$voiture->immatriculation();
+				$liste_repares=$this->_repareControleur->getList();
+				$out.='		<h1>Liste des factures</h1>
+							<table>
+								<tr>
+									<th>Id facture</th>
+									<th>Technicien</th>
+									<th>Date de début</th>
+									<th>Date de fin</th>
+								</tr>';
+				foreach ($liste_repares as $repare){
+					$out.='		<tr>
+									<td><a href="?page=ficheFacture&idFacture='.$repare->idFacture().'">'.$repare->idFacture().'</a></td>
+									<td>'.$repare->technicien().'</td>
+									<td>'.$repare->dateDebut().'</td>
+									<td>'.$repare->dateFin().'</td>
+								</tr>';
+				}
+				$out.='		</table>';
+				
+				
+				#Récupère et affiche la liste des commentaires associés
+				$liste_commentaires=$this->_commentaireControleur->getList();
+				$out.='		<h1>Liste des commentaires</h1>
+							<table>
+								<tr>
+									<th>Immatriculation</th>
+									<th>Technicien</th>
+									<th>Date</th>
+									<th>Texte</th>
+									<th></th>
+								</tr>';
+				foreach ($liste_commentaires as $commentaire){
+					$out.='			<tr>
+									<td>'.$commentaire->voiture().'</td>
+									<td>'.$commentaire->technicien().'</td>
+									<td>'.$commentaire->datecommentaire().'</td>
+									<td>'.$commentaire->texte().'</td>';
+				
+					#Lien vers la modification et la suppression disponibles uniquement aux référents et l'admin
+					if (($_SESSION['Privileges']==1)OR($_SESSION['Privileges']==3)){
+					$out.='			<td><a href="?page=supprimerCommentaire&voiture='.$commentaire->voiture().'&technicien='.$commentaire->technicien().'&datecommentaire='.$commentaire->datecommentaire().'" onclick="return verifjs_suppr();">Supprimer</a></td>';
+					}
+					$out.='		</tr>';
+				}
+				$out.='		</table>';
+				
+				
+				#Formulaire d'ajout de comentaire
+				#Disponible qu'aux techniciens et à l'admin
 				if (($_SESSION['Privileges']==1)OR($_SESSION['Privileges']==3)){
-				$out.='			<td><a href="?page=supprimerCommentaire&voiture='.$commentaire->voiture().'&technicien='.$commentaire->technicien().'&datecommentaire='.$commentaire->datecommentaire().'" onclick="return verifjs_suppr();">Supprimer</a></td>';
+					$out.='		<h1>Ajouter un commentaire : </h1>
+								<form action="?page=ajouterCommentaire" id="getListCommentaire_form" method="post" >
+									<div class="table">
+										<label for="voiture"> Immatriculation : </label>
+										<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " required="required" value="'.$voiture->immatriculation().'" readonly="readonly">
+										<label for="technicien"> Technicien : </label>
+										<select name="technicien" required="required" >
+											<option value="" >Non sélectionné</option>';
+					$liste_techniciens = $this->_technicienControleur->getList();		#On charge la liste des techniciens dans un select
+					foreach ($liste_techniciens as $technicien){
+						$out.='				<option value="'.$technicien->numero().'">'.$technicien->numero().'</option>';
+					}
+					$out.='				</select></div><div>
+										<input hidden type="text" class="table-cell" name="datecommentaire" placeholder="datecommentaire : " value="" ></div><div>
+										<textarea rows="4" cols="50" name="texte" placeholder="Commentaire : " required="required" ></textarea>
+									</div>
+									<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
+								</form>';
 				}
-				$out.='		</tr>';
+				
+				$out.='		</div>';
+			}else{
+				$out='Cette voiture n\'existe pas';
 			}
-			$out.='		</table>';
-			
-			
-			#Formulaire d'ajout de comentaire
-			#Disponible qu'aux techniciens et à l'admin
-			if (($_SESSION['Privileges']==1)OR($_SESSION['Privileges']==3)){
-				$out.='		<h1>Ajouter un commentaire : </h1>
-							<form action="?page=ajouterCommentaire" id="getListCommentaire_form" method="post" >
-								<div class="table">
-									<label for="voiture"> Immatriculation : </label>
-									<input type="text" class="table-cell" name="voiture" placeholder="Voiture : " required="required" value="'.$voiture->immatriculation().'" readonly="readonly">
-									<label for="technicien"> Technicien : </label>
-									<select name="technicien" required="required" >
-										<option value="" >Non sélectionné</option>';
-				$liste_techniciens = $this->_technicienControleur->getList();		#On charge la liste des techniciens dans un select
-				foreach ($liste_techniciens as $technicien){
-					$out.='				<option value="'.$technicien->numero().'">'.$technicien->numero().'</option>';
-				}
-				$out.='				</select></div><div>
-									<input hidden type="text" class="table-cell" name="datecommentaire" placeholder="datecommentaire : " value="" ></div><div>
-									<textarea rows="4" cols="50" name="texte" placeholder="Commentaire : " required="required" ></textarea>
-								</div>
-								<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
-							</form>';
-			}
-			
-			$out.='		</div>';
 		}else{
 			return 'Vous ne devriez pas être ici';
 		}
