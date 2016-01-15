@@ -2,13 +2,7 @@
 session_start();
 
 // appel des fichiers de classes :
-function chargerClasse($classe){
-	require_once ROOT_PATH.'/application/.'.$classe.'.php';
-}
-spl_autoload_register('chargerClasse');
 
-
-require_once ROOT_PATH.'/application/controlers/UtilisateurControleur.class.php';
 
 require_once ROOT_PATH.'/application/objects/Voiture.class.php';
 require_once ROOT_PATH.'/application/objects/Client.class.php';
@@ -20,6 +14,7 @@ require_once ROOT_PATH.'/application/objects/Facture_Detail.class.php';
 require_once ROOT_PATH.'/application/objects/Facture_Intervention.class.php';
 require_once ROOT_PATH.'/application/objects/Commentaire.class.php';
 require_once ROOT_PATH.'/application/objects/Ville.class.php';
+require_once ROOT_PATH.'/application/objects/Utilisateur.class.php';
 
 require_once ROOT_PATH.'/application/managers/VoitureManager.class.php';
 require_once ROOT_PATH.'/application/managers/ClientManager.class.php';
@@ -29,6 +24,7 @@ require_once ROOT_PATH.'/application/managers/FactureManager.class.php';
 require_once ROOT_PATH.'/application/managers/InterventionManager.class.php';
 require_once ROOT_PATH.'/application/managers/Facture_InterventionManager.class.php';
 require_once ROOT_PATH.'/application/managers/CommentaireManager.class.php';
+require_once ROOT_PATH.'/application/managers/UtilisateurManager.class.php';
 
 require_once ROOT_PATH.'/application/controlers/VoitureControleur.class.php';
 require_once ROOT_PATH.'/application/controlers/ClientControleur.class.php';
@@ -38,6 +34,7 @@ require_once ROOT_PATH.'/application/controlers/FactureControleur.class.php';
 require_once ROOT_PATH.'/application/controlers/InterventionControleur.class.php';
 require_once ROOT_PATH.'/application/controlers/Facture_InterventionControleur.class.php';
 require_once ROOT_PATH.'/application/controlers/CommentaireControleur.class.php';
+require_once ROOT_PATH.'/application/controlers/UtilisateurControleur.class.php';
 
 require_once ROOT_PATH.'/application/view/Display.class.php';
 require_once ROOT_PATH.'/application/view/DisplayVoiture.class.php';
@@ -48,6 +45,7 @@ require_once ROOT_PATH.'/application/view/DisplayFacture.class.php';
 require_once ROOT_PATH.'/application/view/DisplayIntervention.class.php';
 require_once ROOT_PATH.'/application/view/DisplayFacture_Intervention.class.php';
 require_once ROOT_PATH.'/application/view/DisplayCommentaire.class.php';
+require_once ROOT_PATH.'/application/view/DisplayUtilisateur.class.php';
 
 require_once ROOT_PATH.'/application/connexion.php';
 
@@ -58,7 +56,6 @@ try {
 	$bdd = new PDO('mysql:host=localhost;dbname=atelier_garage', $identifiant, $motdepasse);
 
 //instancie les managers, les controleurs, et la vue
-$utilisateurControleur = new UtilisateurControleur($bdd);
 
 $clientManager = new ClientManager($bdd);
 $voitureManager = new VoitureManager($bdd);
@@ -68,6 +65,7 @@ $factureManager = new FactureManager($bdd);
 $interventionManager = new InterventionManager($bdd);
 $facture_interventionManager = new Facture_InterventionManager($bdd);
 $commentaireManager = new CommentaireManager($bdd);
+$utilisateurManager = new UtilisateurManager($bdd);
 
 $clientControleur = new ClientControleur($clientManager);
 $voitureControleur = new VoitureControleur($voitureManager, $clientControleur);
@@ -77,16 +75,18 @@ $factureControleur = new FactureControleur($factureManager);
 $interventionControleur = new InterventionControleur($interventionManager);
 $facture_interventionControleur = new Facture_InterventionControleur($facture_interventionManager);
 $commentaireControleur = new CommentaireControleur($commentaireManager);
+$utilisateurControleur = new UtilisateurControleur($utilisateurManager);
 
 $display = new Display($utilisateurControleur);
-$displayVoiture = new DisplayVoiture($voitureControleur, $clientControleur, $repareControleur, $commentaireControleur, $technicienControleur);
-$displayClient = new DisplayClient($clientControleur);
-$displayTechnicien = new DisplayTechnicien($technicienControleur);
-$displayRepare = new DisplayRepare($repareControleur);
+$displayVoiture = new DisplayVoiture($voitureControleur, $clientControleur, $repareControleur, $commentaireControleur, $technicienControleur, $utilisateurControleur);
+$displayClient = new DisplayClient($clientControleur, $utilisateurControleur);
+$displayTechnicien = new DisplayTechnicien($technicienControleur, $utilisateurControleur);
+$displayRepare = new DisplayRepare($repareControleur, $factureControleur, $technicienControleur, $voitureControleur);
 $displayFacture = new DisplayFacture($factureControleur, $facture_interventionControleur);
 $displayIntervention = new DisplayIntervention($interventionControleur);
 $displayFacture_Intervention = new DisplayFacture_Intervention($facture_interventionControleur);
 $displayCommentaire = new DisplayCommentaire($commentaireControleur);
+$displayUtilisateur = new DisplayUtilisateur($utilisateurControleur);
 	
 	
 //recupère le nom de la page demandee, ou redirige vers accueil s'il n'y en a pas
@@ -104,18 +104,34 @@ switch($page){
 	case 'accueil': //"Dans le cas où $page==accueil, faire ce qui suit jusqu'au prochain break;
 		$out = $display->accueil();
 		break;
-	case 'tableau_de_bord':
-		$out = $display->tableau_de_bord();
-		break;
 		
+	//utilisateurs
 	case 'connexion_form':
-		$out = $display->connexion_form();
+		$out = $displayUtilisateur->connexion_form();
 		break;
 	case 'connexion':
-		$out = $utilisateurControleur->connexion();
+		$out = $displayUtilisateur->connexion();
 		break;
 	case 'deconnexion':
-		$out = $utilisateurControleur->deconnexion();
+		$out = $displayUtilisateur->deconnexion();
+		break;
+	case 'afficherUtilisateurs':
+		$out = $displayUtilisateur->afficherUtilisateurs();
+		break;
+	case 'formAjouterUtilisateur':
+		$out = $displayUtilisateur->formAjouterUtilisateur();
+		break;
+	case 'ajouterUtilisateur':
+		$out = $displayUtilisateur->ajouterUtilisateur();
+		break;
+	case 'formModifierUtilisateur':
+		$out = $displayUtilisateur->formModifierUtilisateur();
+		break;
+	case 'modifierUtilisateur':
+		$out = $displayUtilisateur->modifierUtilisateur();
+		break;
+	case 'supprimerUtilisateur':
+		$out = $displayUtilisateur->supprimerUtilisateur();
 		break;
 		
 	//voitures

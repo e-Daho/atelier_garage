@@ -1,15 +1,15 @@
 			<header>
 				<div id="titre_principal">
-                    <img src="src/img/logo_garage.png" alt="Logo du garage" id="logo" />
+                    <a href="?"><img src="src/img/logo_garage.png" alt="Logo du garage" id="logo" /></a>
                     <h1>Atelier Garage 3A</h1>
 				</div>
 				<nav id="navigation">
 					<ul>
-						<li><a href="?page=accueil">Accueil</a></li>
 						<li><a href="?page=afficherVoitures">Voitures</a></li>
 						<li><a href="?page=afficherClients">Clients</a></li>
 						<li><a href="?page=afficherTechniciens">Techniciens</a></li>
 						<li><a href="?page=afficherRepares">Réparations</a></li>
+						<li><a href="?page=afficherFactures">Factures</a></li>
 					</ul>
 				</nav>
 				<nav id="utilisateur">
