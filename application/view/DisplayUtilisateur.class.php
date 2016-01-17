@@ -176,7 +176,7 @@ class DisplayUtilisateur{
 	
 	public function monCompte(){
 		$out='';
-		if (!empty($_SESSION['id']) AND ($_SESSION['Privileges']==3)){
+		if (!empty($_SESSION['id'])){
 			#Formulaire de modification de compte
 			$utilisateur = $this->_utilisateurControleur->get($_SESSION['id']);
 			if(!empty($utilisateur)){

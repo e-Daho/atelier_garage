@@ -146,7 +146,7 @@ class DisplayVoiture{
 			foreach ($liste_utilisateurs as $utilisateur){
 				$out.='				<option value="'.$utilisateur->id().'" >'.$utilisateur->id().'</option>';
 			}
-			$out.='				</select>';
+			$out.='				</select></div>';
 			$out.='			</div>
 							<p><input type="submit" class="ok" name="Ajouter" value="Ajouter"></p>
 						</form>
@@ -208,7 +208,7 @@ class DisplayVoiture{
 				foreach ($liste_utilisateurs as $utilisateur){
 					$out.='				<option value="'.$utilisateur->id().'" >'.$utilisateur->id().'</option>';
 				}
-				$out.='				</select>';
+				$out.='				</select></div>';
 				$out.='			</div>
 								<p><input type="submit" class="ok" name="Modifier" value="Modifier"></p>
 							</form>
