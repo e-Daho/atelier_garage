@@ -10,6 +10,6 @@ Programmation orientée objet avec architecture MVC
 * HTML
 * CSS
 * PHP
-* SQL)
+* SQL
 
 Pour plus d'images ou de détails, se référer au rapport (pdf).
